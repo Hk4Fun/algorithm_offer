@@ -2,12 +2,12 @@ __author__ = 'Hk4Fun'
 __date__ = '2018/1/7 1:49'
 
 '''题目描述：
-给一个链表，判断该链表是否成环
+给一个链表，判断该链表是否含环
 '''
 '''主要思路：
 定义两个指针，同时从链表的头结点出发，一个指针一次走一步，另一个一次走两步。
-如果走得快的指针追上了走得慢的指针说明链表成环；
-如果快指针来到了链表末尾都没有追上第一个指针，那么链表不成环
+如果走得快的指针追上了走得慢的指针说明链表含环；
+如果快指针来到了链表末尾都没有追上第一个指针，那么链表不含环
 '''
 
 
@@ -21,16 +21,16 @@ class Solution:
     def isCircle(self, head):
         if not head:
             return
-        pNode1 = pNode2 = head  # 两个指针同时从头结点出发
-        while pNode1.next:  # 走得快的指针走到链表末尾时结束遍历
-            pNode1 = pNode1.next
-            if pNode1 == pNode2:  # 第一个指针每走一步都要判断一下是否走到了第二个指针的位置
-                return True
-            if pNode1.next:  # 第一个指针一次走两步，但如果来到倒数第二个结点时就只能走一步了
-                pNode1 = pNode1.next
-            else:  # 说明来到了倒数第一个结点，可以判断是单向链表了，直接返回
+        fast = slow = head  # 两个指针同时从头结点出发
+        while fast.next:  # fast走到链表末尾时结束遍历
+            fast = fast.next
+            if fast.next:  # fast一次走两步，但如果来到倒数第二个结点时就只能走一步了
+                fast = fast.next
+            else:  # 说明fast来到了倒数第一个结点，可以判断是单向链表了，直接返回
                 return False
-            pNode2 = pNode2.next  # 第二个指针一次只走一步
+            slow = slow.next  # slow一次只走一步
+            if fast == slow:  # fast判断一下是否走到了slow的位置
+                return True
         return False
 
 
