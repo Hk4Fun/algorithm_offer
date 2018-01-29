@@ -10,8 +10,9 @@ __date__ = '2018/1/1 16:28'
 思路2：创建新字符串，不需要移动替换位置之后的字符，所以可以从左到右扫描字符串，
        遇到空格直接写入‘20%’即可，其他情况下直接复制
 思路3:原地替换，需要移动替换位置之后的字符，若从左到右扫描，一边移动一边替换，时间复杂度为O（n^2）
-      可以考虑从右到左扫描，使用两个索引，一个指向源字符串的末尾P1，另一个指向新字符串的末尾P2，
+      可以考虑从右到左扫描，使用两个索引，一个指向源字符串的末尾P1，另一个指向替换后字符串的末尾P2，
       没碰到空格时直接复制，碰到空格时P2左移3格写入‘20%’，P1左移一格
+      （每替换一个空格，长度增加2，因此替换后字符串的长度=原来长度+2*空格数目）
       注：如果是c/c++可以实现原地替换，但python中的str为不可变对象，只能返回新的字符串，
       所以这里的原地替换只是模拟书中的方法，实际上还是返回一个新的字符串
 '''
@@ -46,7 +47,7 @@ class Solution:
                 numberOfBlank += 1
         newLength = originalLength + numberOfBlank * 2
         newStr = [None] * newLength  # 不能为字符串，因为后面要进行赋值原地修改
-        indexOfOriginal, indexOfNew = originalLength - 1, newLength - 1
+        indexOfOriginal, indexOfNew = originalLength - 1, newLength - 1 # 这里需要减一，因为python中字符串不用‘\0’结尾
         while indexOfOriginal >= 0 and indexOfNew > indexOfOriginal:
             if s[indexOfOriginal] == ' ':
                 newStr[indexOfNew - 2:indexOfNew + 1] = ['%', '2', '0']
@@ -67,7 +68,7 @@ import traceback
 import timeit
 
 pass_num = 0  # 通过测试的数量
-test_num = 0  # 中的测试数量
+test_num = 0  # 总的测试数量
 time_pool = []  # 耗时
 
 

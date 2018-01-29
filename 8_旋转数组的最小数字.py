@@ -41,7 +41,7 @@ import traceback
 import timeit
 
 pass_num = 0  # 通过测试的数量
-test_num = 0  # 中的测试数量
+test_num = 0  # 总的测试数量
 time_pool = []  # 耗时
 
 
@@ -69,7 +69,7 @@ def Test(testName, rotateArray, expected):
 
 Test('Test1', [3, 4, 5, 1, 2], 1)  # 典型输入，单调升序的数组的一个旋转
 Test('Test2', [3, 4, 5, 1, 1, 2], 1)  # 有重复数字，并且重复的数字为最小的数字
-Test('Test3', [3, 3, 4, 5, 1, 2], 1)  # 有重复数字，并且重复的数字为最大的数字
+Test('Test3', [3, 4, 5, 5, 1, 2], 1)  # 有重复数字，并且重复的数字为最大的数字
 Test('Test4', [3, 4, 5, 1, 2, 2], 1)  # 有重复数字，但重复的数字不是最小数字和最大数字
 Test('Test5', [1, 0, 1, 1, 1], 0)  # 特殊情况，测试顺序顺序查找
 Test('Test6', [1, 1, 1, 0, 1], 0)  # 同上

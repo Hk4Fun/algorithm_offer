@@ -40,7 +40,7 @@ class Solution:
             ListHead.delete()
             ToBeDeleted.delete()
 
-        else:
+        else: # 要删除的结点是尾结点
             Node = ListHead
             while Node.next != ToBeDeleted:
                 Node = Node.next

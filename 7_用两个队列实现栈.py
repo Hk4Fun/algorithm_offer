@@ -26,14 +26,14 @@ class Solution:
     def Pop(self):
         if not self.queue1 and not self.queue2:
             return
-        if not self.queue1:
+        if not self.queue1: # queue1为空
             for i in range(len(self.queue2) - 1):
-                self.queue1.append(self.queue2.pop(0))
-            return self.queue2.pop()
-        if not self.queue2:
+                self.queue1.append(self.queue2.pop(0)) # 则queue2除了最后一个全部出队并入队queue1
+            return self.queue2.pop() # 最后一个弹出
+        if not self.queue2: # queue2为空
             for i in range(len(self.queue1) - 1):
-                self.queue2.append(self.queue1.pop(0))
-            return self.queue1.pop()
+                self.queue2.append(self.queue1.pop(0)) # 则queue1除了最后一个全部出队并入队queue2
+            return self.queue1.pop() # 最后一个弹出
 
 
 # ================================测试代码================================
@@ -41,7 +41,7 @@ import traceback
 import timeit
 
 pass_num = 0  # 通过测试的数量
-test_num = 0  # 中的测试数量
+test_num = 0  # 总的测试数量
 time_pool = []  # 耗时
 
 

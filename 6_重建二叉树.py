@@ -26,8 +26,8 @@ class Solution:
             return None
         if set(pre_order) != set(in_order):  # 鲁棒性，错误序列
             return None
-        index = in_order.index(pre_order[0])  # 先序第一个为根节点
-        root = TreeNode(pre_order[0])  # 在中序中找到根节点位置
+        index = in_order.index(pre_order[0])  # 先序第一个为根节点,在中序中找到根节点位置
+        root = TreeNode(pre_order[0])  # 创建根节点
         root.left = self.reConstructBinaryTree(pre_order[1:index + 1], in_order[:index])  # 构建左子树
         root.right = self.reConstructBinaryTree(pre_order[index + 1:], in_order[index + 1:])  # 构建右子树
         return root
@@ -38,7 +38,7 @@ import traceback
 import timeit
 
 pass_num = 0  # 通过测试的数量
-test_num = 0  # 中的测试数量
+test_num = 0  # 总的测试数量
 time_pool = []  # 耗时
 
 
