@@ -5,9 +5,10 @@ __date__ = '2018/1/30 17:11'
 合并两个单调递增的链表，使得合并后的链表仍然单调递增
 '''
 '''主要思路：
-递归实现原地合并，将两个链表中值较小的头结点链接到已经合并的链表之后，
-两个链表剩余的结点依然是排序的，因此合并的步骤和之前的步骤一致，可以递归实现，
-注意，合并到最后，必有一个链表不为None，此时将头结点直接链接到最后即可       
+思路1：递归实现原地合并，将两个链表中值较小的头结点链接到已经合并的链表之后，
+       两个链表剩余的结点依然是排序的，因此合并的步骤和之前的步骤一致，可以递归实现，
+       注意，合并到最后，必有一个链表不为None，此时将头结点直接链接到最后即可       
+思路2：非递归，循环实现，非原地合并，记得最后将剩余的链表链接到新链表中
 '''
 
 
@@ -18,7 +19,7 @@ class ListNode:
 
 
 class Solution:
-    def Merge(self, pHead1, pHead2):
+    def Merge1(self, pHead1, pHead2):
         if not pHead1:
             return pHead2  # 此时如果pHead2也为None也正好直接返回
         elif not pHead2:
@@ -27,21 +28,37 @@ class Solution:
         pMergedHead = None
         if pHead1.val < pHead2.val:
             pMergedHead = pHead1
-            pMergedHead.next = self.Merge(pHead1.next, pHead2)
+            pMergedHead.next = self.Merge1(pHead1.next, pHead2)
         else:
             pMergedHead = pHead2
-            pMergedHead.next = self.Merge(pHead1, pHead2.next)
+            pMergedHead.next = self.Merge1(pHead1, pHead2.next)
 
         return pMergedHead
 
-    # ================================测试代码================================
+    def Merge2(self, pHead1, pHead2):
+        mergeHead = mergeTail = ListNode(0) # 这个头结点只是用来创建新的链表，真正的合并链表头结点是它的下一个
+        while pHead1 and pHead2: # 只要有一个链表合并结束就结束整个合并
+            if pHead1.val >= pHead2.val:
+                mergeTail.next = pHead2 # 将较小的结点合并到新链表中
+                pHead2 = pHead2.next # 已合并的链表指针往后移动
+            else:
+                mergeTail.next = pHead1
+                pHead1 = pHead1.next
+            mergeTail = mergeTail.next
+        # 将剩下的不为空的链表直接链接到新链表后面
+        if pHead1:
+            mergeTail.next = pHead1
+        elif pHead2:
+            mergeTail.next = pHead2
+        return mergeHead.next # 返回真正的头结点
 
 
+# ================================测试代码================================
 import traceback
 import timeit
 
 pass_num = 0  # 通过测试的数量
-test_num = 0  # 中的测试数量
+test_num = 0  # 总的测试数量
 time_pool = []  # 耗时
 
 
@@ -63,16 +80,24 @@ def listNodes(pHead):  # 将链表的值按顺序放进列表中
     return l
 
 
-def Test(testName, listNode1, listNode2, expected):
+def Test(testName, methodType, listNode1, listNode2, expected):
     global pass_num, test_num
     if testName is not None:
         print('{} begins:'.format(testName))
     test_num += 1
     test = Solution()
+    result = None
+    start = end = 0
     try:
-        start = timeit.default_timer()
-        result = listNodes(test.Merge(listNode1, listNode2))
-        end = timeit.default_timer()
+        if methodType == 1 or methodType == '1':
+            start = timeit.default_timer()
+            result = listNodes(test.Merge1(listNode1, listNode2))
+            end = timeit.default_timer()
+        elif methodType == 2 or methodType == '2':
+            start = timeit.default_timer()
+            result = listNodes(test.Merge2(listNode1, listNode2))
+            end = timeit.default_timer()
+
     except Exception as e:
         print('Failed:语法错误！')
         print(traceback.format_exc())
@@ -85,14 +110,19 @@ def Test(testName, listNode1, listNode2, expected):
         print('Failed:测试不通过！\n')
 
 
-Test('Test1', linkNodes([1, 3, 5]), linkNodes([2, 4, 6]), [1, 2, 3, 4, 5, 6]) # 两个链表交叉递增
-Test('Test2', linkNodes([1, 3, 5]), linkNodes([1, 3, 5]), [1, 1, 3, 3, 5, 5]) # 两个链表中有重复的数字
-Test('Test3', linkNodes([1, 2, 3]), linkNodes([4, 5, 6]), [1, 2, 3, 4, 5, 6]) # 两个链表不交叉
-Test('Test4', linkNodes([1]), linkNodes([2]), [1, 2]) # 两个链表都只有一个数字
-Test('Test5', linkNodes([1, 2, 3]), linkNodes([]), [1, 2, 3]) # 一个链表为空链表
-Test('Test6', linkNodes([]), linkNodes([]), []) #  两个链表都为空链表
+# Test('Test1_1', 1, linkNodes([1, 3, 5]), linkNodes([2, 4, 6]), [1, 2, 3, 4, 5, 6]) # 两个链表交叉递增
+# Test('Test1_2', 1, linkNodes([1, 3, 5]), linkNodes([1, 3, 5]), [1, 1, 3, 3, 5, 5]) # 两个链表中有重复的数字
+# Test('Test1_3', 1, linkNodes([1, 2, 3]), linkNodes([4, 5, 6]), [1, 2, 3, 4, 5, 6]) # 两个链表不交叉
+# Test('Test1_4', 1, linkNodes([1]), linkNodes([2]), [1, 2]) # 两个链表都只有一个数字
+# Test('Test1_5', 1, linkNodes([1, 2, 3]), linkNodes([]), [1, 2, 3]) # 一个链表为空链表
+# Test('Test1_6', 1, linkNodes([]), linkNodes([]), []) #  两个链表都为空链表
 
-
+Test('Test2_1', 2, linkNodes([1, 3, 5]), linkNodes([2, 4, 6]), [1, 2, 3, 4, 5, 6])  # 两个链表交叉递增
+Test('Test2_2', 2, linkNodes([1, 3, 5]), linkNodes([1, 3, 5]), [1, 1, 3, 3, 5, 5])  # 两个链表中有重复的数字
+Test('Test2_3', 2, linkNodes([1, 2, 3]), linkNodes([4, 5, 6]), [1, 2, 3, 4, 5, 6])  # 两个链表不交叉
+Test('Test2_4', 2, linkNodes([1]), linkNodes([2]), [1, 2])  # 两个链表都只有一个数字
+Test('Test2_5', 2, linkNodes([1, 2, 3]), linkNodes([]), [1, 2, 3])  # 一个链表为空链表
+Test('Test2_6', 2, linkNodes([]), linkNodes([]), [])  # 两个链表都为空链表
 
 print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
 print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
