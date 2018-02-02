@@ -16,37 +16,40 @@ __date__ = '2018/2/1 18:04'
 
 
 class Solution:
-    def VerifySquenceOfBST(self, sequence):
-        if not sequence:
+    def VerifySquenceOfBST(self, post_sequence):
+        if not post_sequence:
             return False
 
-        root = sequence[-1]  # 取出根节点
-        length = len(sequence)
+        root = post_sequence[-1]  # 取出根节点
+        length = len(post_sequence)
 
         i = 0
         # 在二叉搜索树中左子树结点小于根节点
-        for i in range(length - 1):
-            if sequence[i] > root:
+        # 注意：这里不能用
+        # for i in range(length - 1)：
+        #     if post_sequence[i] > root:
+        #         break
+        # 因为我们要让i在循环结束后指向左子树区域右边界元素的右边那个元素
+        # 体会一下test2和test7的特殊性就明白了
+        while i < length - 1:
+            if post_sequence[i] > root:
                 break
+            i += 1
 
         # 在二叉搜索树中右子树结点大于根结点
-        # 注意这里是 i + 1,而不是 i，因为当前面元素都小于根节点时，i指向倒数第二个元素
-        # range(i + 1, length - 1)=range(length - 2, length - 1), 会进入该循环
-        # 而此时sequence[j] = sequence[length - 2] < root,所以会False，而事实上为True
-        # 根本原因就在于进入了该循环，j应该始终从比根节点大的元素开始索引
-        for j in range(i + 1, length - 1):
-            if sequence[j] < root:
+        for j in range(i, length - 1):
+            if post_sequence[j] < root:
                 return False
 
         # 判断左子树是不是二叉搜索树
         left = True
         if i > 0:
-            left = self.VerifySquenceOfBST(sequence[:i])
+            left = self.VerifySquenceOfBST(post_sequence[:i])
 
         # 判断右子树是不是二叉搜索树
         right = True
         if i < length - 1:
-            right = self.VerifySquenceOfBST(sequence[i:length - 1])
+            right = self.VerifySquenceOfBST(post_sequence[i:length - 1])
 
         return left and right
 
@@ -60,7 +63,7 @@ test_num = 0  # 总的测试数量
 time_pool = []  # 耗时
 
 
-def Test(testName, sequence, expected):
+def Test(testName, post_sequence, expected):
     global pass_num, test_num
     if testName is not None:
         print('{} begins:'.format(testName))
@@ -68,7 +71,7 @@ def Test(testName, sequence, expected):
     test = Solution()
     try:
         start = timeit.default_timer()
-        result = test.VerifySquenceOfBST(sequence)
+        result = test.VerifySquenceOfBST(post_sequence)
         end = timeit.default_timer()
 
     except Exception as e:
@@ -89,8 +92,9 @@ Test('Tset3', [1, 2, 3, 4, 5], True)
 Test('Tset4', [5, 4, 3, 2, 1], True)
 Test('Tset5', [5], True)
 Test('Tset6', [7, 4, 6, 5], False)
-Test('Tset7', [4, 6, 12, 8, 16, 14, 10], False)
-Test('Tset8', [], False)
+Test('Tset7', [7, 5, 6, 8], False)
+Test('Tset8', [4, 6, 12, 8, 16, 14, 10], False)
+Test('Tset9', [], False)
 
 print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
 print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
