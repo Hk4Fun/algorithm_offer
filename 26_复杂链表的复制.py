@@ -82,7 +82,7 @@ class Solution:
         pCloned = pCloneHead
         while pNode:
             if pNode.random:
-                pCloned.random = dict[pNode.random] # dict[S]=S'
+                pCloned.random = dict[pNode.random]  # dict[S]=S'
             pNode = pNode.next
             pCloned = pCloned.next
         return pCloneHead
@@ -127,3 +127,142 @@ class Solution:
 
         return pClonedHead
 
+
+# ================================测试代码================================
+import traceback
+import timeit
+
+pass_num = 0  # 通过测试的数量
+test_num = 0  # 总的测试数量
+time_pool = []  # 耗时
+
+
+def ConnectNode(node, next, random):
+    node.next = next
+    node.random = random
+
+
+# 将复杂链表转换成三元组，例如Test1的复杂链表转换后为：
+# [[1,2,3],[2,3,5],[3,4,None],[4,5,2],[5,None,None]]
+def Convert(pHead, pClonedHead):
+    if pHead == pClonedHead:  # 防止答题者直接返回pHead
+        return
+    result = []
+    pClonedNode = pClonedHead
+    while pClonedNode:
+        l = [pClonedNode.label]
+        if pClonedNode.next:
+            l.append(pClonedNode.next.label)
+        else:
+            l.append(None)
+        if pClonedNode.random:
+            l.append(pClonedNode.random.label)
+        else:
+            l.append(None)
+        result.append(l)
+        pClonedNode = pClonedNode.next
+    return result
+
+
+def Test(testName, methodType, pHead, expected):
+    global pass_num, test_num
+    if testName is not None:
+        print('{} begins:'.format(testName))
+    test_num += 1
+    test = Solution()
+    result = None
+    start = end = 0
+    try:
+        if methodType == 1 or methodType == '1':
+            start = timeit.default_timer()
+            result = Convert(pHead, test.Clone1(pHead))
+            end = timeit.default_timer()
+        elif methodType == 2 or methodType == '2':
+            start = timeit.default_timer()
+            result = Convert(pHead, test.Clone2(pHead))
+            end = timeit.default_timer()
+        elif methodType == 3 or methodType == '3':
+            start = timeit.default_timer()
+            result = Convert(pHead, test.Clone3(pHead))
+            end = timeit.default_timer()
+    except Exception as e:
+        print('Failed:语法错误！')
+        print(traceback.format_exc())
+        return
+    if (result == expected):
+        print('Passed.\n')
+        pass_num += 1
+        time_pool.append(end - start)
+    else:
+        print('Failed:测试不通过！\n')
+
+
+def StartTest(methodType):
+    global pass_num, test_num, time_pool
+    pass_num = test_num = 0
+    time_pool = []
+    methodType = str(methodType)
+
+    pNode1 = RandomListNode(1)
+    pNode2 = RandomListNode(2)
+    pNode3 = RandomListNode(3)
+    pNode4 = RandomListNode(4)
+    pNode5 = RandomListNode(5)
+
+    #         -----------------
+    #        \|/              |
+    # 1-------2-------3-------4-------5
+    # |       |      /|\             /|\
+    # --------+--------               |
+    #         -------------------------
+    ConnectNode(pNode1, pNode2, pNode3)
+    ConnectNode(pNode2, pNode3, pNode5)
+    ConnectNode(pNode3, pNode4, None)
+    ConnectNode(pNode4, pNode5, pNode2)
+    Test('Test' + methodType + '_1', methodType, pNode1,
+         [[1, 2, 3], [2, 3, 5], [3, 4, None], [4, 5, 2], [5, None, None]])
+
+    # random指向结点自身
+    #          -----------------
+    #         \|/              |
+    #  1-------2-------3-------4-------5
+    #         |       | /|\           /|\
+    #         |       | --             |
+    #         |------------------------|
+    ConnectNode(pNode1, pNode2, None)
+    ConnectNode(pNode2, pNode3, pNode5)
+    ConnectNode(pNode3, pNode4, pNode3)
+    ConnectNode(pNode4, pNode5, pNode2)
+    Test('Test' + methodType + '_2', methodType, pNode1,
+         [[1, 2, None], [2, 3, 5], [3, 4, 3], [4, 5, 2], [5, None, None]])
+
+    # random形成环
+    #          -----------------
+    #         \|/              |
+    #  1-------2-------3-------4-------5
+    #          |              /|\
+    #          |               |
+    #          |---------------|
+    ConnectNode(pNode1, pNode2, None)
+    ConnectNode(pNode2, pNode3, pNode4)
+    ConnectNode(pNode3, pNode4, None)
+    ConnectNode(pNode4, pNode5, pNode2)
+    Test('Test' + methodType + '_3', methodType, pNode1,
+         [[1, 2, None], [2, 3, 4], [3, 4, None], [4, 5, 2], [5, None, None]])
+
+    # 只有一个结点，且其random指向自己
+    ConnectNode(pNode1, None, pNode1)
+    Test('Test' + methodType + '_4', methodType, pNode1, [[1, None, 1]])
+
+    # 鲁棒性测试
+    ConnectNode(pNode1, None, pNode1)
+    Test('Test' + methodType + '_5', methodType, None, None)
+
+    print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
+    if pass_num:
+        print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+
+
+StartTest(1)
+StartTest(2)
+StartTest(3)
