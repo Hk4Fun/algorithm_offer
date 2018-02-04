@@ -47,7 +47,7 @@ class Solution:
                 numberOfBlank += 1
         newLength = originalLength + numberOfBlank * 2
         newStr = [None] * newLength  # 不能为字符串，因为后面要进行赋值原地修改
-        indexOfOriginal, indexOfNew = originalLength - 1, newLength - 1 # 这里需要减一，因为python中字符串不用‘\0’结尾
+        indexOfOriginal, indexOfNew = originalLength - 1, newLength - 1  # 这里需要减一，因为python中字符串不用‘\0’结尾
         while indexOfOriginal >= 0 and indexOfNew > indexOfOriginal:
             if s[indexOfOriginal] == ' ':
                 newStr[indexOfNew - 2:indexOfNew + 1] = ['%', '2', '0']
@@ -64,80 +64,26 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def Test(testName, methodType, string, expected):
-    # methodType表示要测试的方法，
-    # 1表示replaceSpace1， 2表示replaceSpace2，3表示1表示replaceSpace3
-
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    result = None
-    start = end = 0
-
-    try:
-        if methodType == 1 or methodType == '1':
-            start = timeit.default_timer()
-            result = test.replaceSpace1(string)
-            end = timeit.default_timer()
-        elif methodType == 2 or methodType == '2':
-            start = timeit.default_timer()
-            result = test.replaceSpace2(string)
-            end = timeit.default_timer()
-        elif methodType == 3 or methodType == '3':
-            start = timeit.default_timer()
-            result = test.replaceSpace3(string)
-            end = timeit.default_timer()
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
+class MyTest(Test):
+    def my_test_code(self):
+        # 在此处填写测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        testArgs = []
+        testArgs.append(['hello world', 'hello%20world'])  # 空格在句子中间
+        testArgs.append([' helloworld', '%20helloworld'])  # 空格在句子开头
+        testArgs.append(['helloworld ', "helloworld%20"])  # 空格在句子末尾
+        testArgs.append(['hello  world', "hello%20%20world"])  # 连续有两个空格
+        testArgs.append([None, None])  # 传入None
+        testArgs.append(['', ''])  # 传入内容为空的字符串
+        testArgs.append([' ', "%20"])  # 传入内容为一个空格的字符串
+        testArgs.append(['helloworld', "helloworld"])  # 传入的字符串没有空格
+        testArgs.append(['   ', "%20%20%20"])  # 传入的字符串全是空格
+        self.start_test(testArgs)
 
 
-# Test("Test1_1", 1, 'hello world', "hello%20world")  # 空格在句子中间
-# Test("Test1_2", 1, ' helloworld', "%20helloworld")  # 空格在句子开头
-# Test("Test1_3", 1, 'helloworld ', "helloworld%20")  # 空格在句子末尾
-# Test("Test1_4", 1, 'hello  world', "hello%20%20world")  # 连续有两个空格
-# Test("Test1_5", 1, None, None)  # 传入None
-# Test("Test1_6", 1, '', '')  # 传入内容为空的字符串
-# Test("Test1_7", 1, ' ', "%20")  # 传入内容为一个空格的字符串
-# Test("Test1_8", 1, 'helloworld', "helloworld")  # 传入的字符串没有空格
-# Test("Test1_9", 1, '   ', "%20%20%20")  # 传入的字符串全是空格
-#
-# Test("Test2_1", 2, 'hello world', "hello%20world")  # 空格在句子中间
-# Test("Test2_2", 2, ' helloworld', "%20helloworld")  # 空格在句子开头
-# Test("Test2_3", 2, 'helloworld ', "helloworld%20")  # 空格在句子末尾
-# Test("Test2_4", 2, 'hello  world', "hello%20%20world")  # 连续有两个空格
-# Test("Test2_5", 2, None, None)  # 传入None
-# Test("Test2_6", 2, '', '')  # 传入内容为空的字符串
-# Test("Test2_7", 2, ' ', "%20")  # 传入内容为一个空格的字符串
-# Test("Test2_8", 2, 'helloworld', "helloworld")  # 传入的字符串没有空格
-# Test("Test2_9", 2, '   ', "%20%20%20")  # 传入的字符串全是空格
-#
-Test("Test3_1", 3, 'hello world', "hello%20world")  # 空格在句子中间
-Test("Test3_2", 3, ' helloworld', "%20helloworld")  # 空格在句子开头
-Test("Test3_3", 3, 'helloworld ', "helloworld%20")  # 空格在句子末尾
-Test("Test3_4", 3, 'hello  world', "hello%20%20world")  # 连续有两个空格
-Test("Test3_5", 3, None, None)  # 传入None
-Test("Test3_6", 3, '', '')  # 传入内容为空的字符串
-Test("Test3_7", 3, ' ', "%20")  # 传入内容为一个空格的字符串
-Test("Test3_8", 3, 'helloworld', "helloworld")  # 传入的字符串没有空格
-Test("Test3_9", 3, '   ', "%20%20%20")  # 传入的字符串全是空格
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    MyTest(Solution=Solution, methodNum=3).my_test_code()
