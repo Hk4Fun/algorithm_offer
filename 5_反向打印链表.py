@@ -18,14 +18,14 @@ class listNode(object):
 
 class Solution:
     # 返回从尾部到头部的列表值序列
-    def ListReverse_Stack(self, listNode):
+    def ListReverse1(self, listNode):
         l = []  # 用列表模拟栈
         while listNode:
             l.insert(0, listNode.val)
             listNode = listNode.next
         return l
 
-    def ListReverse_Recursive(self, listNode):
+    def ListReverse2(self, listNode):
         l = []
 
         def recursive(listNode):
@@ -38,60 +38,31 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 中的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def linkNodes(values):
-    head = listNode(None)
-    lastNode = head
-    for val in values:
-        newNode = listNode(val)
-        lastNode.next = newNode
-        lastNode = newNode
-    return head.next
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        def linkNodes(values):
+            head = listNode(None)
+            lastNode = head
+            for val in values:
+                newNode = listNode(val)
+                lastNode.next = newNode
+                lastNode = newNode
+            return head.next
+
+        testArgs = []
+        testArgs.append([linkNodes([1, 2, 3, 4, 5]), [5, 4, 3, 2, 1]])  # 1->2->3->4->5
+        testArgs.append([linkNodes([1]), [1]])  # 只有一个结点的链表: 1
+        testArgs.append([[], []])  # 空链表
+
+        return testArgs
 
 
-def Test(testName, methodType, listNode, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    result = None
-    start = end = 0
-    try:
-        if methodType == 1 or methodType == '1':
-            start = timeit.default_timer()
-            result = test.ListReverse_Stack(listNode)
-            end = timeit.default_timer()
-        elif methodType == 2 or methodType == '2':
-            start = timeit.default_timer()
-            result = test.ListReverse_Recursive(listNode)
-            end = timeit.default_timer()
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
-
-
-# Test('Test1_1', 1, linkNodes([1, 2, 3, 4, 5]), [5, 4, 3, 2, 1])  # 1->2->3->4->5
-# Test('Test1_2', 1, linkNodes([1]), [1])  # 只有一个结点的链表: 1
-# Test('Test1_3', 1, [], [])  # 空链表
-
-Test('Test2_1', 2, linkNodes([1, 2, 3, 4, 5]), [5, 4, 3, 2, 1])  # 1->2->3->4->5
-Test('Test2_2', 2, linkNodes([1]), [1])  # 只有一个结点的链表: 1
-Test('Test2_3', 2, [], [])  # 空链表
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

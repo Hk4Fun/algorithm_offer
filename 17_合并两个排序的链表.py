@@ -36,11 +36,11 @@ class Solution:
         return pMergedHead
 
     def Merge2(self, pHead1, pHead2):
-        mergeHead = mergeTail = ListNode(0) # 这个头结点只是用来创建新的链表，真正的合并链表头结点是它的下一个
-        while pHead1 and pHead2: # 只要有一个链表合并结束就结束整个合并
+        mergeHead = mergeTail = ListNode(0)  # 这个头结点只是用来创建新的链表，真正的合并链表头结点是它的下一个
+        while pHead1 and pHead2:  # 只要有一个链表合并结束就结束整个合并
             if pHead1.val >= pHead2.val:
-                mergeTail.next = pHead2 # 将较小的结点合并到新链表中
-                pHead2 = pHead2.next # 已合并的链表指针往后移动
+                mergeTail.next = pHead2  # 将较小的结点合并到新链表中
+                pHead2 = pHead2.next  # 已合并的链表指针往后移动
             else:
                 mergeTail.next = pHead1
                 pHead1 = pHead1.next
@@ -50,79 +50,50 @@ class Solution:
             mergeTail.next = pHead1
         elif pHead2:
             mergeTail.next = pHead2
-        return mergeHead.next # 返回真正的头结点
+        return mergeHead.next  # 返回真正的头结点
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def linkNodes(values):  # 根据给的值创建链表
-    head = ListNode(None)
-    lastNode = head
-    for val in values:
-        newNode = ListNode(val)
-        lastNode.next = newNode
-        lastNode = newNode
-    return head.next
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        def linkNodes(values):
+            head = ListNode(None)
+            lastNode = head
+            for val in values:
+                newNode = ListNode(val)
+                lastNode.next = newNode
+                lastNode = newNode
+            return head.next
+
+        testArgs = []
+
+        testArgs.append([linkNodes([1, 3, 5]), linkNodes([2, 4, 6]), [1, 2, 3, 4, 5, 6]])  # 两个链表交叉递增
+        testArgs.append([linkNodes([1, 3, 5]), linkNodes([1, 3, 5]), [1, 1, 3, 3, 5, 5]])  # 两个链表中有重复的数字
+        testArgs.append([linkNodes([1, 2, 3]), linkNodes([4, 5, 6]), [1, 2, 3, 4, 5, 6]])  # 两个链表不交叉
+        testArgs.append([linkNodes([1]), linkNodes([2]), [1, 2]])  # 两个链表都只有一个数字
+        testArgs.append([linkNodes([1, 2, 3]), linkNodes([]), [1, 2, 3]])  # 一个链表为空链表
+        testArgs.append([linkNodes([]), linkNodes([]), []])  # 两个链表都为空链表
+
+        return testArgs
+
+    def convert(self, result, *func_arg):
+        # 在此处填写转换函数，将测试结果转换成其他形式
+        def listNodes(pHead):  # 将链表的值按顺序放进列表中
+            l = []
+            while pHead:
+                l.append(pHead.val)
+                pHead = pHead.next
+            return l
+
+        return listNodes(result)
 
 
-def listNodes(pHead):  # 将链表的值按顺序放进列表中
-    l = []
-    while pHead:
-        l.append(pHead.val)
-        pHead = pHead.next
-    return l
-
-
-def Test(testName, methodType, listNode1, listNode2, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    result = None
-    start = end = 0
-    try:
-        if methodType == 1 or methodType == '1':
-            start = timeit.default_timer()
-            result = listNodes(test.Merge1(listNode1, listNode2))
-            end = timeit.default_timer()
-        elif methodType == 2 or methodType == '2':
-            start = timeit.default_timer()
-            result = listNodes(test.Merge2(listNode1, listNode2))
-            end = timeit.default_timer()
-
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
-
-
-# Test('Test1_1', 1, linkNodes([1, 3, 5]), linkNodes([2, 4, 6]), [1, 2, 3, 4, 5, 6]) # 两个链表交叉递增
-# Test('Test1_2', 1, linkNodes([1, 3, 5]), linkNodes([1, 3, 5]), [1, 1, 3, 3, 5, 5]) # 两个链表中有重复的数字
-# Test('Test1_3', 1, linkNodes([1, 2, 3]), linkNodes([4, 5, 6]), [1, 2, 3, 4, 5, 6]) # 两个链表不交叉
-# Test('Test1_4', 1, linkNodes([1]), linkNodes([2]), [1, 2]) # 两个链表都只有一个数字
-# Test('Test1_5', 1, linkNodes([1, 2, 3]), linkNodes([]), [1, 2, 3]) # 一个链表为空链表
-# Test('Test1_6', 1, linkNodes([]), linkNodes([]), []) #  两个链表都为空链表
-
-Test('Test2_1', 2, linkNodes([1, 3, 5]), linkNodes([2, 4, 6]), [1, 2, 3, 4, 5, 6])  # 两个链表交叉递增
-Test('Test2_2', 2, linkNodes([1, 3, 5]), linkNodes([1, 3, 5]), [1, 1, 3, 3, 5, 5])  # 两个链表中有重复的数字
-Test('Test2_3', 2, linkNodes([1, 2, 3]), linkNodes([4, 5, 6]), [1, 2, 3, 4, 5, 6])  # 两个链表不交叉
-Test('Test2_4', 2, linkNodes([1]), linkNodes([2]), [1, 2])  # 两个链表都只有一个数字
-Test('Test2_5', 2, linkNodes([1, 2, 3]), linkNodes([]), [1, 2, 3])  # 一个链表为空链表
-Test('Test2_6', 2, linkNodes([]), linkNodes([]), [])  # 两个链表都为空链表
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

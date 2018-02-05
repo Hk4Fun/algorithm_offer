@@ -71,104 +71,31 @@ class Solution:
 
 
 # ================================测试代码================================
-
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 中的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def Test(testName, method_type, n, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    result = None
-    start = end = 0
-    try:
-        if method_type == 1:
-            start = timeit.default_timer()
-            result = test.Fibonacci1(n)
-            end = timeit.default_timer()
-        elif method_type == 2:
-            start = timeit.default_timer()
-            result = test.Fibonacci2(n)
-            end = timeit.default_timer()
-        elif method_type == 3:
-            start = timeit.default_timer()
-            result = test.Fibonacci3(n)
-            end = timeit.default_timer()
-        elif method_type == 4:
-            start = timeit.default_timer()
-            result = test.Fibonacci4(n)
-            end = timeit.default_timer()
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        testArgs = []
+        testArgs.append([0, 0])
+        testArgs.append([1, 1])
+        testArgs.append([2, 1])
+        testArgs.append([3, 2])
+        testArgs.append([4, 3])
+        testArgs.append([5, 5])
+        testArgs.append([6, 8])
+        testArgs.append([7, 13])
+        testArgs.append([8, 21])
+        testArgs.append([9, 34])
+        testArgs.append([10, 55])
+        testArgs.append([20, 6765])
+
+        return testArgs
 
 
-# Test('Test1_1', 1, 0, 0)
-# Test('Test1_2', 1, 1, 1)
-# Test('Test1_3', 1, 2, 1)
-# Test('Test1_4', 1, 3, 2)
-# Test('Test1_5', 1, 4, 3)
-# Test('Test1_6', 1, 5, 5)
-# Test('Test1_7', 1, 6, 8)
-# Test('Test1_8', 1, 7, 13)
-# Test('Test1_9', 1, 8, 21)
-# Test('Test1_10', 1, 9, 34)
-# Test('Test1_11', 1, 10, 55)
-# Test('Test1_12', 1, 20, 6765)
-
-Test('Test2_1', 2, 0, 0)
-Test('Test2_2', 2, 1, 1)
-Test('Test2_3', 2, 2, 1)
-Test('Test2_4', 2, 3, 2)
-Test('Test2_5', 2, 4, 3)
-Test('Test2_6', 2, 5, 5)
-Test('Test2_7', 2, 6, 8)
-Test('Test2_8', 2, 7, 13)
-Test('Test2_9', 2, 8, 21)
-Test('Test2_10', 2, 9, 34)
-Test('Test2_11', 2, 10, 55)
-Test('Test2_12', 2, 40, 102334155)
-
-# Test('Test3_1', 3, 0, 0)
-# Test('Test3_2', 3, 1, 1)
-# Test('Test3_3', 3, 2, 1)
-# Test('Test3_4', 3, 3, 2)
-# Test('Test3_5', 3, 4, 3)
-# Test('Test3_6', 3, 5, 5)
-# Test('Test3_7', 3, 6, 8)
-# Test('Test3_8', 3, 7, 13)
-# Test('Test3_9', 3, 8, 21)
-# Test('Test3_10', 3, 9, 34)
-# Test('Test3_11', 3, 10, 55)
-# Test('Test3_12', 3, 40, 102334155)
-
-# Test('Test4_1', 4, 0, 0)
-# Test('Test4_2', 4, 1, 1)
-# Test('Test4_3', 4, 2, 1)
-# Test('Test4_4', 4, 3, 2)
-# Test('Test4_5', 4, 4, 3)
-# Test('Test4_6', 4, 5, 5)
-# Test('Test4_7', 4, 6, 8)
-# Test('Test4_8', 4, 7, 13)
-# Test('Test4_9', 4, 8, 21)
-# Test('Test4_10', 4, 9, 34)
-# Test('Test4_11', 4, 10, 55)
-# Test('Test4_12', 4, 40, 102334155)
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

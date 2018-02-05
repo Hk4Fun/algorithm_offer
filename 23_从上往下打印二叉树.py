@@ -38,90 +38,71 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def ConnectTreeNodes(rootNode, leftNode, rightNode):
-    rootNode.left = leftNode
-    rootNode.right = rightNode
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        def ConnectTreeNodes(rootNode, leftNode, rightNode):
+            rootNode.left = leftNode
+            rootNode.right = rightNode
+
+        testArgs = []
+
+        #       10
+        #    /      \
+        #   6        14
+        #  /\        /\
+        # 4  8     12  16
+        treeNode10 = TreeNode(10)
+        treeNode6 = TreeNode(6)
+        treeNode14 = TreeNode(14)
+        treeNode4 = TreeNode(4)
+        treeNode8 = TreeNode(8)
+        treeNode12 = TreeNode(12)
+        treeNode16 = TreeNode(16)
+        ConnectTreeNodes(treeNode10, treeNode6, treeNode14)
+        ConnectTreeNodes(treeNode6, treeNode4, treeNode8)
+        ConnectTreeNodes(treeNode14, treeNode12, treeNode16)
+        testArgs.append([treeNode10, [10, 6, 14, 4, 8, 12, 16]])
+
+        #         5
+        #        /
+        #       4
+        #      /
+        #     3
+        treeNode5 = TreeNode(5)
+        treeNode4 = TreeNode(4)
+        treeNode3 = TreeNode(3)
+        ConnectTreeNodes(treeNode5, treeNode4, None)
+        ConnectTreeNodes(treeNode4, treeNode3, None)
+        testArgs.append([treeNode5, [5, 4, 3]])
+
+        # 1
+        #  \
+        #   2
+        #    \
+        #     3
+        treeNode1 = TreeNode(1)
+        treeNode2 = TreeNode(2)
+        treeNode3 = TreeNode(3)
+        ConnectTreeNodes(treeNode1, None, treeNode2)
+        ConnectTreeNodes(treeNode2, None, treeNode3)
+        testArgs.append([treeNode1, [1, 2, 3]])
+
+        # 树中只有1个结点
+        treeNode1 = TreeNode(1)
+        testArgs.append([treeNode1, [1]])
+
+        # 树中没有结点
+        testArgs.append([None, []])
+
+        return testArgs
 
 
-def Test(testName, root, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    try:
-        start = timeit.default_timer()
-        result = test.PrintFromTopToBottom(root)
-        end = timeit.default_timer()
-
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
-
-
-#       10
-#    /      \
-#   6        14
-#  /\        /\
-# 4  8     12  16
-treeNode10 = TreeNode(10)
-treeNode6 = TreeNode(6)
-treeNode14 = TreeNode(14)
-treeNode4 = TreeNode(4)
-treeNode8 = TreeNode(8)
-treeNode12 = TreeNode(12)
-treeNode16 = TreeNode(16)
-ConnectTreeNodes(treeNode10, treeNode6, treeNode14)
-ConnectTreeNodes(treeNode6, treeNode4, treeNode8)
-ConnectTreeNodes(treeNode14, treeNode12, treeNode16)
-Test("Test1", treeNode10, [10, 6, 14, 4, 8, 12, 16])
-
-#         5
-#        /
-#       4
-#      /
-#     3
-treeNode5 = TreeNode(5)
-treeNode4 = TreeNode(4)
-treeNode3 = TreeNode(3)
-ConnectTreeNodes(treeNode5, treeNode4, None)
-ConnectTreeNodes(treeNode4, treeNode3, None)
-Test("Test2", treeNode5, [5, 4, 3])
-
-# 1
-#  \
-#   2
-#    \
-#     3
-treeNode1 = TreeNode(1)
-treeNode2 = TreeNode(2)
-treeNode3 = TreeNode(3)
-ConnectTreeNodes(treeNode1, None, treeNode2)
-ConnectTreeNodes(treeNode2, None, treeNode3)
-Test("Test3", treeNode1, [1, 2, 3])
-
-# 树中只有1个结点
-treeNode1 = TreeNode(1)
-Test("Test4", treeNode1, [1])
-
-# 树中没有结点
-Test("Test5", None, [])
-
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

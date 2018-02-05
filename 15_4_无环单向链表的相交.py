@@ -47,64 +47,46 @@ class Solution:
             index += 1
         return index
 
+
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def Test(testName, headA, headB, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
-    try:
-        start = timeit.default_timer()
-        result = test.ListIntersect(headA, headB)
-        end = timeit.default_timer()
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
+        testArgs = []
 
+        headA = ListNode(1)
+        headA.next = ListNode(2)  # listA: 1 -> 2 -> None
+        headB = ListNode(1)  # listB: 1 -> None
+        testArgs.append([headA, headB, False])  # 不相交
 
-headA = ListNode(1)
-headA.next = ListNode(2)            # listA: 1 -> 2 -> None
-headB = ListNode(1)                 # listB: 1 -> None
-Test('Test1', headA, headB, False)  # 不相交
+        headA = ListNode(1)
+        headA.next = ListNode(2)  # listA: 1 \
+        headB = ListNode(1)  # 2 -> None
+        headB.next = headA.next  # listB: 1 /
+        testArgs.append([headA, headB, 1])  # 相交
 
-headA = ListNode(1)
-headA.next = ListNode(2)           # listA: 1 \
-headB = ListNode(1)                #           2 -> None
-headB.next = headA.next            # listB: 1 /
-Test('Test2', headA, headB, 1)  # 相交
+        headA = ListNode(1)
+        headA.next = ListNode(2)  # listA: 1 ->2 -> None
+        headB = ListNode(1)  # |
+        headB.next = headA  # listB: 1
+        testArgs.append([headA, headB, 1])  # 相交
 
-headA = ListNode(1)
-headA.next = ListNode(2)           # listA: 1 ->2 -> None
-headB = ListNode(1)                #        |
-headB.next = headA                 # listB: 1
-Test('Test3', headA, headB, 1)  # 相交
+        headA = ListNode(1)  # listA: 1 -> None
+        headB = ListNode(1)  # |
+        headB.next = headA  # listB: 1
+        testArgs.append([headA, headB, 1])  # 相交
+
+        testArgs.append([[], [], None])  # 空链表
+
+        return testArgs
 
 
-headA = ListNode(1)                # listA: 1 -> None
-headB = ListNode(1)                #        |
-headB.next = headA                 # listB: 1
-Test('Test4', headA, headB, 1)  # 相交
-
-Test('Test5', [], [], None)  # 空链表
-
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

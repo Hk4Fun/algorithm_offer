@@ -32,53 +32,36 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def linkNodes(values):
-    head = ListNode(None)
-    lastNode = head
-    for val in values:
-        newNode = ListNode(val)
-        lastNode.next = newNode
-        lastNode = newNode
-    return head.next
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        def linkNodes(values):
+            head = ListNode(None)
+            lastNode = head
+            for val in values:
+                newNode = ListNode(val)
+                lastNode.next = newNode
+                lastNode = newNode
+            return head.next
+
+        testArgs = []
+
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8]), 5])  # 链表个数为偶数
+        testArgs.append([linkNodes([1, 2, 3, 4, 5]), 3])  # 链表个数为奇数
+        testArgs.append([linkNodes([]), None])  # 空链表
+
+        return testArgs
+
+    def convert(self, result, *func_arg):
+        # 在此处填写转换函数，将测试结果转换成其他形式
+        return result.val if result else result
 
 
-def Test(testName, head, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-
-    try:
-        start = timeit.default_timer()
-        result = test.FindMiddleNode(head)
-        end = timeit.default_timer()
-        if result:
-            result = result.val
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
-
-
-Test('Test1', linkNodes([1, 2, 3, 4, 5, 6, 7, 8]), 5)  # 链表个数为偶数
-Test('Test2', linkNodes([1, 2, 3, 4, 5]), 3)  # 链表个数为奇数
-Test('Test3', linkNodes([]), None)  # 空链表
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

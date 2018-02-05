@@ -69,7 +69,7 @@ from Test import Test
 
 class MyTest(Test):
     def my_test_code(self):
-        # 在此处填写测试代码
+        # 只需在此处填写自己的测试代码
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
         testArgs = []
@@ -82,8 +82,11 @@ class MyTest(Test):
         testArgs.append([' ', "%20"])  # 传入内容为一个空格的字符串
         testArgs.append(['helloworld', "helloworld"])  # 传入的字符串没有空格
         testArgs.append(['   ', "%20%20%20"])  # 传入的字符串全是空格
-        self.start_test(testArgs)
+
+        return testArgs
+
 
 
 if __name__ == '__main__':
-    MyTest(Solution=Solution, methodNum=3).my_test_code()
+    solution = Solution()
+    MyTest(solution=solution).start_test()

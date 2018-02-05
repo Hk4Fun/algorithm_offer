@@ -17,46 +17,25 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 中的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def Test(testName, n, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    result = None
-    start = end = 0
-    try:
-        start = timeit.default_timer()
-        result = test.PowerOf2(n)
-        end = timeit.default_timer()
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        testArgs = []
+        testArgs.append([1, True])  # 2^0=1
+        testArgs.append([2, True])
+        testArgs.append([10, False])
+        testArgs.append([32, True])
+        testArgs.append([0, False])
+        testArgs.append([-1, False])
+
+        return testArgs
 
 
-Test('Test1', 1, True)  # 2^0=1
-Test('Test2', 2, True)
-Test('Test3', 10, False)
-Test('Test4', 32, True)
-Test('Test5', 0, False)
-Test('Test6', -1, False)
-
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

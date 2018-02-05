@@ -28,6 +28,7 @@ class ListNode:
 
 class Solution:
     def DeleteNode(self, ListHead, ToBeDeleted):
+        # 返回删除后链表的头结点
         if not ListHead or not ToBeDeleted:  # 头结点和要删除结点都为空返回None
             return
 
@@ -40,86 +41,72 @@ class Solution:
             ListHead.delete()
             ToBeDeleted.delete()
 
-        else: # 要删除的结点是尾结点
+        else:  # 要删除的结点是尾结点
             Node = ListHead
             while Node.next != ToBeDeleted:
                 Node = Node.next
             Node.next = None
             ToBeDeleted.delete()
+        return ListHead
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def getNodes(ListHead):
-    l = []
-    Node = ListHead
-    while Node:
-        l.append(Node.val)
-        Node = Node.next
-    return l
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+
+        testArgs = []
+
+        node1 = ListNode(1)
+        node2 = ListNode(2)
+        node3 = ListNode(3)
+        node4 = ListNode(4)
+        node1.next = node2
+        node2.next = node3
+        node3.next = node4
+        testArgs.append([node1, node3, [1, 2, 4]])  # 从多个结点的链表中间删除一个结点
+
+        node1 = ListNode(1)
+        node2 = ListNode(2)
+        node3 = ListNode(3)
+        node4 = ListNode(4)
+        node1.next = node2
+        node2.next = node3
+        node3.next = node4
+        testArgs.append([node1, node1, [2, 3, 4]])  # 从多个结点的链表中删除头结点
+
+        node1 = ListNode(1)
+        node2 = ListNode(2)
+        node3 = ListNode(3)
+        node4 = ListNode(4)
+        node1.next = node2
+        node2.next = node3
+        node3.next = node4
+        testArgs.append([node1, node4, [1, 2, 3]])  # 从多个结点的链表中删除尾结点
+
+        node1 = ListNode(1)
+        testArgs.append([node1, node1, [None]])  # 从只有一个结点的链表中删除唯一结点
+
+        return testArgs
+
+    def convert(self, result, *func_arg):
+        # 在此处填写转换函数，将测试结果转换成其他形式
+        def getNodes(ListHead):
+            l = []
+            Node = ListHead
+            while Node:
+                l.append(Node.val)
+                Node = Node.next
+            return l
+
+        return getNodes(result)
 
 
-def Test(testName, ListHead, ToBeDeleted, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    try:
-        start = timeit.default_timer()
-        test.DeleteNode(ListHead, ToBeDeleted)
-        end = timeit.default_timer()
-        result = getNodes(ListHead)
-
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
-
-
-node1 = ListNode(1)
-node2 = ListNode(2)
-node3 = ListNode(3)
-node4 = ListNode(4)
-node1.next = node2
-node2.next = node3
-node3.next = node4
-Test('Test1', node1, node3, [1, 2, 4])  # 从多个结点的链表中间删除一个结点
-
-node1 = ListNode(1)
-node2 = ListNode(2)
-node3 = ListNode(3)
-node4 = ListNode(4)
-node1.next = node2
-node2.next = node3
-node3.next = node4
-Test('Test2', node1, node1, [2,3,4])  # 从多个结点的链表中删除头结点
-
-node1 = ListNode(1)
-node2 = ListNode(2)
-node3 = ListNode(3)
-node4 = ListNode(4)
-node1.next = node2
-node2.next = node3
-node3.next = node4
-Test('Test3', node1, node4, [1,2,3])  # 从多个结点的链表中删除尾结点
-
-node1 = ListNode(1)
-Test('Test4', node1, node1, [None])  # 从只有一个结点的链表中删除唯一结点
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

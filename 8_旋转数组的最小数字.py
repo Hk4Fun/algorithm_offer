@@ -37,46 +37,28 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def Test(testName, rotateArray, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    try:
-        start = timeit.default_timer()
-        result = test.minNumberInRotateArray(rotateArray)
-        end = timeit.default_timer()
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        testArgs = []
+        testArgs.append([[3, 4, 5, 1, 2], 1])  # 典型输入，单调升序的数组的一个旋转
+        testArgs.append([[3, 4, 5, 1, 1, 2], 1])  # 有重复数字，并且重复的数字为最小的数字
+        testArgs.append([[3, 4, 5, 5, 1, 2], 1])  # 有重复数字，并且重复的数字为最大的数字
+        testArgs.append([[3, 4, 5, 1, 2, 2], 1])  # 有重复数字，但重复的数字不是最小数字和最大数字
+        testArgs.append([[1, 0, 1, 1, 1], 0])  # 特殊情况，测试顺序顺序查找
+        testArgs.append([[1, 1, 1, 0, 1], 0])  # 同上
+        testArgs.append([[1, 2, 3, 4, 5], 1])  # 单调升序数组，旋转0个元素，也就是单调升序数组本身
+        testArgs.append([[2], 2])  # 数组中只有一个数字
+        testArgs.append([[], None])  # 空数组
+
+        return testArgs
 
 
-Test('Test1', [3, 4, 5, 1, 2], 1)  # 典型输入，单调升序的数组的一个旋转
-Test('Test2', [3, 4, 5, 1, 1, 2], 1)  # 有重复数字，并且重复的数字为最小的数字
-Test('Test3', [3, 4, 5, 5, 1, 2], 1)  # 有重复数字，并且重复的数字为最大的数字
-Test('Test4', [3, 4, 5, 1, 2, 2], 1)  # 有重复数字，但重复的数字不是最小数字和最大数字
-Test('Test5', [1, 0, 1, 1, 1], 0)  # 特殊情况，测试顺序顺序查找
-Test('Test6', [1, 1, 1, 0, 1], 0)  # 同上
-Test('Test7', [1, 2, 3, 4, 5], 1)  # 单调升序数组，旋转0个元素，也就是单调升序数组本身
-Test('Test8', [2], 2)  # 数组中只有一个数字
-Test('Test9', [], None)  # 空数组
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

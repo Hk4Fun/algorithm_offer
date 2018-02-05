@@ -64,61 +64,41 @@ class Solution:
 
 
 # ================================测试代码================================
-
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def linkNodes(values, isCircle, linkIndex):
-    # linkIndex表示环的连接点索引，0表示尾结点与第一个结点链接成环，以此类推
-    head = ListNode(None)
-    lastNode = head
-    nodeList = []
-    for val in values:
-        newNode = ListNode(val)
-        nodeList.append(newNode)
-        lastNode.next = newNode
-        lastNode = newNode
-    if isCircle:
-        lastNode.next = nodeList[linkIndex]
-    return head.next
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        def linkNodes(values, isCircle, linkIndex):
+            # linkIndex表示环的连接点索引，0表示尾结点与第一个结点链接成环，以此类推
+            head = ListNode(None)
+            lastNode = head
+            nodeList = []
+            for val in values:
+                newNode = ListNode(val)
+                nodeList.append(newNode)
+                lastNode.next = newNode
+                lastNode = newNode
+            if isCircle:
+                lastNode.next = nodeList[linkIndex]
+            return head.next
+
+        testArgs = []
+
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8], False, 0), False])  # 单向链表，多个结点
+        testArgs.append([linkNodes([1], False, 0), False])  # 单向链表，单个结点
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8], True, 0), (8, 8)])  # 循环链表，多个结点， 尾结点与头结点连接
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8], True, 3), (8, 5)])  # 循环链表，多个结点， 尾结点与中间某个结点连接
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8], True, 7), (8, 1)])  # 循环链表，多个结点， 尾结点与尾结点连接
+        testArgs.append([linkNodes([1], True, 0), (1, 1)])  # 循环链表，单个结点
+        testArgs.append([linkNodes([], False, 0), None])  # 空链表
+
+        return testArgs
 
 
-def Test(testName, head, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-
-    try:
-        start = timeit.default_timer()
-        result = test.ListLenAndCircleLen(head)
-        end = timeit.default_timer()
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
-
-
-Test('Test1', linkNodes([1, 2, 3, 4, 5, 6, 7, 8], False, 0), False)  # 单向链表，多个结点
-Test('Test2', linkNodes([1], False, 0), False)  # 单向链表，单个结点
-Test('Test3', linkNodes([1, 2, 3, 4, 5, 6, 7, 8], True, 0), (8, 8))  # 循环链表，多个结点， 尾结点与头结点连接
-Test('Test4', linkNodes([1, 2, 3, 4, 5, 6, 7, 8], True, 3), (8, 5))  # 循环链表，多个结点， 尾结点与中间某个结点连接
-Test('Test5', linkNodes([1, 2, 3, 4, 5, 6, 7, 8], True, 7), (8, 1))  # 循环链表，多个结点， 尾结点与尾结点连接
-Test('Test6', linkNodes([1], True, 0), (1, 1))  # 循环链表，单个结点
-Test('Test7', linkNodes([], False, 0), None)  # 空链表
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

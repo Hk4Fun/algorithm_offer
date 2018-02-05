@@ -15,15 +15,16 @@ __date__ = '2018/1/6 2:39'
 
 
 class Solution:
-    def RmStartZero(self, number):  # 去掉前面多余的0
-        if int(''.join(number)) == 0:  # 全0直接返回
-            return number
-        num = number[:]  # 拷贝，因为pop操作会修改number的长度
-        while not int(num[0]):
-            num.pop(0)
-        return num
 
     def Print1ToMaxOfNDigits1(self, n):
+        def RmStartZero(number):  # 去掉前面多余的0
+            if int(''.join(number)) == 0:  # 全0直接返回
+                return number
+            num = number[:]  # 拷贝，因为pop操作会修改number的长度
+            while not int(num[0]):
+                num.pop(0)
+            return num
+
         def Increment(number):
             isOverflow = False
             nTakeOver = 0
@@ -52,15 +53,23 @@ class Solution:
         l = []
         number = ['0'] * n
         while not Increment(number):
-            l.append(''.join(self.RmStartZero(number)))
+            l.append(''.join(RmStartZero(number)))
         return l
 
     def Print1ToMaxOfNDigits2(self, n):
+        def RmStartZero(number):  # 去掉前面多余的0
+            if int(''.join(number)) == 0:  # 全0直接返回
+                return number
+            num = number[:]  # 拷贝，因为pop操作会修改number的长度
+            while not int(num[0]):
+                num.pop(0)
+            return num
+
         l = []
 
         def Print1ToMaxOfNDigitsRecursively(number, length, index):
             if index == length - 1:
-                l.append(''.join(self.RmStartZero(number)))
+                l.append(''.join(RmStartZero(number)))
                 return
             for i in range(10):
                 number[index + 1] = str(i)
@@ -76,55 +85,25 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def Test(testName, method_type, n, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    result = None
-    start = end = 0
-    try:
-        if method_type == 1:
-            start = timeit.default_timer()
-            result = test.Print1ToMaxOfNDigits1(n)
-            end = timeit.default_timer()
-        elif method_type == 2:
-            start = timeit.default_timer()
-            result = test.Print1ToMaxOfNDigits2(n)
-            end = timeit.default_timer()
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        testArgs = []
+
+        testArgs.append([1, [str(i + 1) for i in range(9)]])  # 正常功能测试
+        testArgs.append([2, [str(i + 1) for i in range(99)]])  # 正常功能测试
+        testArgs.append([5, [str(i + 1) for i in range(99999)]])  # 大数测试
+        testArgs.append([0, None])  # 鲁棒性，位数0
+        testArgs.append([-1, None])  # 鲁棒性，位数为负数
+
+        return testArgs
 
 
-Test('Test1_1', 1, 1, [str(i + 1) for i in range(9)])  # 正常功能测试
-Test('Test1_2', 1, 2, [str(i + 1) for i in range(99)])  # 正常功能测试
-Test('Test1_3', 1, 5, [str(i + 1) for i in range(99999)])  # 大数测试
-Test('Test1_4', 1, 0, None)  # 鲁棒性，位数0
-Test('Test1_5', 1, -1, None)  # 鲁棒性，位数为负数
-
-Test('Test2_1', 2, 1, [str(i + 1) for i in range(9)])  # 正常功能测试
-Test('Test2_2', 2, 2, [str(i + 1) for i in range(99)])  # 正常功能测试
-Test('Test2_3', 2, 5, [str(i + 1) for i in range(99999)])  # 大数测试
-Test('Test2_4', 2, 0, None)  # 鲁棒性，位数0
-Test('Test2_5', 2, -1, None)  # 鲁棒性，位数为负数
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

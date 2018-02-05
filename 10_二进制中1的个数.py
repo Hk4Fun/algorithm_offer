@@ -57,86 +57,28 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 中的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def Test(testName, method_type, n, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    result = None
-    start = end = 0
-    try:
-        if method_type == 1:
-            start = timeit.default_timer()
-            result = test.NumberOf1InBinary1(n)
-            end = timeit.default_timer()
-        elif method_type == 2:
-            start = timeit.default_timer()
-            result = test.NumberOf1InBinary2(n)
-            end = timeit.default_timer()
-        elif method_type == 3:
-            start = timeit.default_timer()
-            result = test.NumberOf1InBinary3(n)
-            end = timeit.default_timer()
-        elif method_type == 4:
-            start = timeit.default_timer()
-            result = test.NumberOf1InBinary4(n)
-            end = timeit.default_timer()
-        elif method_type == 5:
-            start = timeit.default_timer()
-            result = test.NumberOf1InBinary5(n)
-            end = timeit.default_timer()
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        testArgs = []
+
+        # 注意：0xFFFFFFFF在python中不是负数了（相当于无符号整数），所以对于判断负数的算法只能直接传-1
+        testArgs.append([0, 0])  # 0
+        testArgs.append([1, 1])  # 正数
+        testArgs.append([10, 2])  # 正数
+        testArgs.append([-1, 32])  # 负数
+        testArgs.append([-2, 31])  # 负数
+
+        return testArgs
 
 
-# 注意：0xFFFFFFFF在python中不是负数了（相当于无符号整数），所以对于判断负数的算法只能直接传-1
-Test('Test1_1', 1, 0, 0)  # 0
-Test('Test1_2', 1, 1, 1)  # 正数
-Test('Test1_3', 1, 10, 2)  # 正数
-Test('Test1_4', 1, -1, 32)  # 负数
-Test('Test1_5', 1, -2, 31)  # 负数
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()
 
-# Test('Test2_1', 2, 0, 0)  # 0
-# Test('Test2_2', 2, 1, 1)  # 正数
-# Test('Test2_3', 2, 10, 2)  # 正数
-# Test('Test2_4', 2, -1, 32)  # 负数
-# Test('Test2_5', 2, -2, 31)  # 负数
-#
-# Test('Test3_1', 3, 0, 0)  # 0
-# Test('Test3_2', 3, 1, 1)  # 正数
-# Test('Test3_3', 3, 10, 2)  # 正数
-# Test('Test3_4', 3, -1, 32)  # 负数
-# Test('Test3_5', 3, -2, 31)  # 负数
-#
-# Test('Test4_1', 4, 0, 0)  # 0
-# Test('Test4_2', 4, 1, 1)  # 正数
-# Test('Test4_3', 4, 10, 2)  # 正数
-# Test('Test4_4', 4, -1, 32)  # 负数
-# Test('Test4_5', 4, -2, 31)  # 负数
-#
-# Test('Test5_1', 5, 0, 0)  # 0
-# Test('Test5_2', 5, 1, 1)  # 正数
-# Test('Test5_3', 5, 10, 2)  # 正数
-# Test('Test5_4', 5, -1, 32)  # 负数
-# Test('Test5_5', 5, -2, 31)  # 负数
 
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))

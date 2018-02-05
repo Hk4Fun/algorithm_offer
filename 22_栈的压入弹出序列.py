@@ -33,44 +33,27 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def Test(testName, pushV, popV, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    try:
-        start = timeit.default_timer()
-        result = test.IsPopOrder(pushV, popV)
-        end = timeit.default_timer()
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        testArgs = []
 
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
+        testArgs.append([[1, 2, 3, 4, 5], [4, 5, 3, 2, 1], True])
+        testArgs.append([[1, 2, 3, 4, 5], [3, 5, 4, 2, 1], True])
+        testArgs.append([[1, 2, 3, 4, 5], [4, 3, 5, 1, 2], False])
+        testArgs.append([[1, 2, 3, 4, 5], [3, 5, 4, 1, 2], False])
+        testArgs.append([[1], [2], False])
+        testArgs.append([[1], [1], True])
+        testArgs.append([[], [], False])
 
-Test('Tset1', [1, 2, 3, 4, 5], [4, 5, 3, 2, 1], True)
-Test('Tset2', [1, 2, 3, 4, 5], [3, 5, 4, 2, 1], True)
-Test('Tset3', [1, 2, 3, 4, 5], [4, 3, 5, 1, 2], False)
-Test('Tset4', [1, 2, 3, 4, 5], [3, 5, 4, 1, 2], False)
-Test('Tset5', [1], [2], False)
-Test('Tset6', [1], [1], True)
-Test('Tset7', [], [], False)
+        return testArgs
 
 
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

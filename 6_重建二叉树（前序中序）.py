@@ -33,96 +33,83 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def BFS(rootNode):  # 宽度优先搜索遍历二叉树，用来测试结果
-    if not rootNode:
-        return None
-    l = []
-    queue = [rootNode]  # 用列表模仿队列，左出右进
-    while queue:
-        node = queue.pop(0)
-        if node:  # 每拿出一个结点就把其左右结点放入队列
-            l.append(node.val)
-            queue.append(node.left)
-            queue.append(node.right)
-    return l
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+
+        testArgs = []
+        # 普通二叉树
+        #              1
+        #           /     \
+        #          2       3
+        #         /       / \
+        #        4       5   6
+        #         \         /
+        #          7       8
+        testArgs.append([[1, 2, 4, 7, 3, 5, 6, 8], [4, 7, 2, 1, 5, 3, 8, 6], [1, 2, 3, 4, 5, 6, 7, 8]])
+
+        # 所有结点都没有右子结点
+        #            1
+        #           /
+        #          2
+        #         /
+        #        3
+        #       /
+        #      4
+        #     /
+        #    5
+        testArgs.append([[1, 2, 3, 4, 5], [5, 4, 3, 2, 1], [1, 2, 3, 4, 5]])
+
+        # 所有结点都没有左子结点
+        #            1
+        #             \
+        #              2
+        #               \
+        #                3
+        #                 \
+        #                  4
+        #                   \
+        #                    5
+        testArgs.append([[1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]])
+
+        # 完全二叉树
+        #              1
+        #           /     \
+        #          2       3
+        #         / \     / \
+        #        4   5   6   7
+        testArgs.append([[1, 2, 4, 5, 3, 6, 7], [4, 2, 5, 1, 6, 3, 7], [1, 2, 3, 4, 5, 6, 7]])
+
+        testArgs.append([[1], [1], [1]])  # 树中只有一个结点
+        testArgs.append([[], [], None])  # 传入空树
+        testArgs.append([[1, 2, 4, 5, 3, 6, 7], [4, 2, 8, 1, 6, 3, 7], None])  # 传入的两个序列不匹配
+
+        return testArgs
+
+    def convert(self, result, *func_arg):
+        # 在此处填写转换函数，将测试结果转换成其他形式
+        def BFS(rootNode):  # 宽度优先搜索遍历二叉树，用来测试结果
+            if not rootNode:
+                return None
+            l = []
+            queue = [rootNode]  # 用列表模仿队列，左出右进
+            while queue:
+                node = queue.pop(0)
+                if node:  # 每拿出一个结点就把其左右结点放入队列
+                    l.append(node.val)
+                    queue.append(node.left)
+                    queue.append(node.right)
+            return l
+
+        return BFS(result)
 
 
-def Test(testName, pre_order, in_order, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    try:
-        start = timeit.default_timer()
-        result = test.reConstructBinaryTree(pre_order, in_order)
-        end = timeit.default_timer()
-        result = BFS(result)
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()
 
-
-# 普通二叉树
-#              1
-#           /     \
-#          2       3
-#         /       / \
-#        4       5   6
-#         \         /
-#          7       8
-Test('Test1', [1, 2, 4, 7, 3, 5, 6, 8], [4, 7, 2, 1, 5, 3, 8, 6], [1, 2, 3, 4, 5, 6, 7, 8])
-
-# 所有结点都没有右子结点
-#            1
-#           /
-#          2
-#         /
-#        3
-#       /
-#      4
-#     /
-#    5
-Test('Test2', [1, 2, 3, 4, 5], [5, 4, 3, 2, 1], [1, 2, 3, 4, 5])
-
-# 所有结点都没有左子结点
-#            1
-#             \
-#              2
-#               \
-#                3
-#                 \
-#                  4
-#                   \
-#                    5
-Test('Test3', [1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5])
-
-# 完全二叉树
-#              1
-#           /     \
-#          2       3
-#         / \     / \
-#        4   5   6   7
-Test('Test4', [1, 2, 4, 5, 3, 6, 7], [4, 2, 5, 1, 6, 3, 7], [1, 2, 3, 4, 5, 6, 7])
-
-Test('Test5', [1], [1], [1])  # 树中只有一个结点
-Test('Test6', [], [], None)  # 传入空树
-Test('Test7', [1, 2, 4, 5, 3, 6, 7], [4, 2, 8, 1, 6, 3, 7], None)  # 传入的两个序列不匹配
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))

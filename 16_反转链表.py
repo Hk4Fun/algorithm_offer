@@ -50,86 +50,54 @@ class Solution:
     def ReverseList3(self, pHead):
         if not pHead:
             return
-        pReverseHead = pHead # 当前反转链表头部即为原链表头部
-        pNode = pHead.next # pNode永远指向将要插入头部的结点
+        pReverseHead = pHead  # 当前反转链表头部即为原链表头部
+        pNode = pHead.next  # pNode永远指向将要插入头部的结点
         while pNode:
-            pHead.next = pNode.next # 先把pNode的下一个结点给pHead
-            pNode.next = pReverseHead # 然后才把pNode的下一个结点指向反转链表头部pReverseHead
-            pReverseHead = pNode # 更新反转链表头部为当前遍历到的结点
-            pNode = pHead.next # 反转下一个结点，注意pHead不动，最终会变成尾结点
-        return pReverseHead # 返回反转链表头部
-
-    # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+            pHead.next = pNode.next  # 先把pNode的下一个结点给pHead
+            pNode.next = pReverseHead  # 然后才把pNode的下一个结点指向反转链表头部pReverseHead
+            pReverseHead = pNode  # 更新反转链表头部为当前遍历到的结点
+            pNode = pHead.next  # 反转下一个结点，注意pHead不动，最终会变成尾结点
+        return pReverseHead  # 返回反转链表头部
 
 
-def linkNodes(values):  # 根据给的值创建链表
-    head = ListNode(None)
-    lastNode = head
-    for val in values:
-        newNode = ListNode(val)
-        lastNode.next = newNode
-        lastNode = newNode
-    return head.next
+# ================================测试代码================================
+from Test import Test
 
 
-def listNodes(pHead):  # 将链表的值按顺序放进列表中
-    l = []
-    while pHead:
-        l.append(pHead.val)
-        pHead = pHead.next
-    return l
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        def linkNodes(values):
+            head = ListNode(None)
+            lastNode = head
+            for val in values:
+                newNode = ListNode(val)
+                lastNode.next = newNode
+                lastNode = newNode
+            return head.next
+
+        testArgs = []
+
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6]), [6, 5, 4, 3, 2, 1]])  # 1->2->3->4->5->6
+        testArgs.append([linkNodes([1]), [1]])  # 只有一个结点的链表: 1
+        testArgs.append([[], []])  # 空链表
+
+        return testArgs
+
+    def convert(self, result, *func_arg):
+        # 在此处填写转换函数，将测试结果转换成其他形式
+        def listNodes(pHead):  # 将链表的值按顺序放进列表中
+            l = []
+            while pHead:
+                l.append(pHead.val)
+                pHead = pHead.next
+            return l
+
+        return listNodes(result)
 
 
-def Test(testName, methodType, listNode, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    result = None
-    start = end = 0
-    try:
-        if methodType == 1 or methodType == '1':
-            start = timeit.default_timer()
-            result = listNodes(test.ReverseList1(listNode))
-            end = timeit.default_timer()
-        elif methodType == 2 or methodType == '2':
-            start = timeit.default_timer()
-            result = listNodes(test.ReverseList2(listNode))
-            end = timeit.default_timer()
-        elif methodType == 3 or methodType == '3':
-            start = timeit.default_timer()
-            result = listNodes(test.ReverseList3(listNode))
-            end = timeit.default_timer()
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
-
-
-# Test('Test1_1', 1, linkNodes([1, 2, 3, 4, 5, 6]), [6, 5, 4, 3, 2, 1])  # 1->2->3->4->5->6
-# Test('Test1_2', 1, linkNodes([1]), [1])  # 只有一个结点的链表: 1
-# Test('Test1_3', 1, [], [])  # 空链表
-#
-# Test('Test2_1', 2, linkNodes([1, 2, 3, 4, 5, 6]), [6, 5, 4, 3, 2, 1])  # 1->2->3->4->5->6
-# Test('Test2_2', 2, linkNodes([1]), [1])  # 只有一个结点的链表: 1
-# Test('Test2_3', 2, [], [])  # 空链表
-
-Test('Test3_1', 3, linkNodes([1, 2, 3, 4, 5, 6]), [6, 5, 4, 3, 2, 1])  # 1->2->3->4->5->6
-Test('Test3_2', 3, linkNodes([1]), [1])  # 只有一个结点的链表: 1
-Test('Test3_3', 3, [], [])  # 空链表
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

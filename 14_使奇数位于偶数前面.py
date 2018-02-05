@@ -58,20 +58,20 @@ class Solution:
                 evenBegin += 1
         return newArray
 
-    def reOrderArray3(self, array):
-        if len(array) == 1:
-            return array
-
-        front = 0
-        rear = len(array) - 1
-        while front < rear:
-            while front < rear and array[front] & 1 == 1:  # 向后移动头指针，直到它指向偶数
-                front += 1
-            while front < rear and array[rear] & 1 == 0:  # 向前移动尾指针，直到它指向奇数
-                rear -= 1
-            if front < rear:
-                array[front], array[rear] = array[rear], array[front]
-        return array
+    # def reOrderArray3(self, array):
+    #     if len(array) == 1:
+    #         return array
+    #
+    #     front = 0
+    #     rear = len(array) - 1
+    #     while front < rear:
+    #         while front < rear and array[front] & 1 == 1:  # 向后移动头指针，直到它指向偶数
+    #             front += 1
+    #         while front < rear and array[rear] & 1 == 0:  # 向前移动尾指针，直到它指向奇数
+    #             rear -= 1
+    #         if front < rear:
+    #             array[front], array[rear] = array[rear], array[front]
+    #     return array
 
     def reOrderArray4(self, array):
         return sorted(array, key=lambda x: x & 1, reverse=True)
@@ -81,101 +81,28 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def Test(testName, method_type, array, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    result = None
-    start = end = 0
-    try:
-        if method_type == 1:
-            start = timeit.default_timer()
-            result = test.reOrderArray1(array)
-            end = timeit.default_timer()
-        elif method_type == 2:
-            start = timeit.default_timer()
-            result = test.reOrderArray2(array)
-            end = timeit.default_timer()
-        elif method_type == 3:
-            start = timeit.default_timer()
-            result = test.reOrderArray3(array)
-            end = timeit.default_timer()
-        elif method_type == 4:
-            start = timeit.default_timer()
-            result = test.reOrderArray4(array)
-            end = timeit.default_timer()
-        elif method_type == 5:
-            start = timeit.default_timer()
-            result = test.reOrderArray5(array)
-            end = timeit.default_timer()
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        testArgs = []
 
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
+        testArgs.append([[1, 2, 3, 4, 5, 6], [1, 3, 5, 2, 4, 6]])  # 奇数偶数交替出现
+        testArgs.append([[1, 3, 5, 2, 4, 6], [1, 3, 5, 2, 4, 6]])  # 所有奇数都在偶数前面
+        testArgs.append([[2, 4, 6, 1, 3, 5], [1, 3, 5, 2, 4, 6]])  # 所有偶数都在奇数前面
+        testArgs.append([[1, 3, 5, 7, 9, 11], [1, 3, 5, 7, 9, 11]])  # 只有奇数
+        testArgs.append([[2, 4, 6, 8, 10], [2, 4, 6, 8, 10]])  # 只有偶数
+        testArgs.append([[1], [1]])  # 只有一个奇数
+        testArgs.append([[0], [0]])  # 只有一个偶数
+        testArgs.append([[], []])  # 空数组
+
+        return testArgs
 
 
-Test('Test1_1', 1, [1, 2, 3, 4, 5, 6], [1, 3, 5, 2, 4, 6])  # 奇数偶数交替出现
-Test('Test1_2', 1, [1, 3, 5, 2, 4, 6], [1, 3, 5, 2, 4, 6])  # 所有奇数都在偶数前面
-Test('Test1_3', 1, [2, 4, 6, 1, 3, 5], [1, 3, 5, 2, 4, 6])  # 所有偶数都在奇数前面
-Test('Test1_4', 1, [1, 3, 5, 7, 9, 11], [1, 3, 5, 7, 9, 11])  # 只有奇数
-Test('Test1_5', 1, [2, 4, 6, 8, 10], [2, 4, 6, 8, 10])  # 只有偶数
-Test('Test1_6', 1, [1], [1])  # 只有一个奇数
-Test('Test1_7', 1, [0], [0])  # 只有一个偶数
-Test('Test1_8', 1, [], [])  # 空数组
-
-# Test('Test2_1', 2, [1, 2, 3, 4, 5, 6], [1, 3, 5, 2, 4, 6])  # 奇数偶数交替出现
-# Test('Test2_2', 2, [1, 3, 5, 2, 4, 6], [1, 3, 5, 2, 4, 6])  # 所有奇数都在偶数前面
-# Test('Test2_3', 2, [2, 4, 6, 1, 3, 5], [1, 3, 5, 2, 4, 6])  # 所有偶数都在奇数前面
-# Test('Test2_4', 2, [1, 3, 5, 7, 9, 11], [1, 3, 5, 7, 9, 11])  # 只有奇数
-# Test('Test2_5', 2, [2, 4, 6, 8, 10], [2, 4, 6, 8, 10])  # 只有偶数
-# Test('Test2_6', 2, [1], [1])  # 只有一个奇数
-# Test('Test2_7', 2, [0], [0])  # 只有一个偶数
-# Test('Test2_8', 2, [], [])  # 空数组
-#
-# Test('Test3_1', 3, [1, 2, 3, 4, 5, 6], [1, 5, 3, 4, 2, 6])  # 奇数偶数交替出现
-# Test('Test3_2', 3, [1, 3, 5, 2, 4, 6], [1, 3, 5, 2, 4, 6])  # 所有奇数都在偶数前面
-# Test('Test3_3', 3, [2, 4, 6, 1, 3, 5], [5, 3, 1, 6, 4, 2])  # 所有偶数都在奇数前面
-# Test('Test3_4', 3, [1, 3, 5, 7, 9, 11], [1, 3, 5, 7, 9, 11])  # 只有奇数
-# Test('Test3_5', 3, [2, 4, 6, 8, 10], [2, 4, 6, 8, 10])  # 只有偶数
-# Test('Test3_6', 3, [1], [1])  # 只有一个奇数
-# Test('Test3_7', 3, [0], [0])  # 只有一个偶数
-# Test('Test3_8', 3, [], [])  # 空数组
-#
-# Test('Test4_1', 4, [1, 2, 3, 4, 5, 6], [1, 3, 5, 2, 4, 6])  # 奇数偶数交替出现
-# Test('Test4_2', 4, [1, 3, 5, 2, 4, 6], [1, 3, 5, 2, 4, 6])  # 所有奇数都在偶数前面
-# Test('Test4_3', 4, [2, 4, 6, 1, 3, 5], [1, 3, 5, 2, 4, 6])  # 所有偶数都在奇数前面
-# Test('Test4_4', 4, [1, 3, 5, 7, 9, 11], [1, 3, 5, 7, 9, 11])  # 只有奇数
-# Test('Test4_5', 4, [2, 4, 6, 8, 10], [2, 4, 6, 8, 10])  # 只有偶数
-# Test('Test4_6', 4, [1], [1])  # 只有一个奇数
-# Test('Test4_7', 4, [0], [0])  # 只有一个偶数
-# Test('Test4_8', 4, [], [])  # 空数组
-#
-# Test('Test5_1', 5, [1, 2, 3, 4, 5, 6], [1, 3, 5, 2, 4, 6])  # 奇数偶数交替出现
-# Test('Test5_2', 5, [1, 3, 5, 2, 4, 6], [1, 3, 5, 2, 4, 6])  # 所有奇数都在偶数前面
-# Test('Test5_3', 5, [2, 4, 6, 1, 3, 5], [1, 3, 5, 2, 4, 6])  # 所有偶数都在奇数前面
-# Test('Test5_4', 5, [1, 3, 5, 7, 9, 11], [1, 3, 5, 7, 9, 11])  # 只有奇数
-# Test('Test5_5', 5, [2, 4, 6, 8, 10], [2, 4, 6, 8, 10])  # 只有偶数
-# Test('Test5_6', 5, [1], [1])  # 只有一个奇数
-# Test('Test5_7', 5, [0], [0])  # 只有一个偶数
-# Test('Test5_8', 5, [], [])  # 空数组
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()

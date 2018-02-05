@@ -63,71 +63,40 @@ class Solution:
 
 
 # ================================测试代码================================
-import traceback
-import timeit
-
-pass_num = 0  # 通过测试的数量
-test_num = 0  # 总的测试数量
-time_pool = []  # 耗时
+from Test import Test
 
 
-def linkNodes(values):
-    head = ListNode(None)
-    lastNode = head
-    for val in values:
-        newNode = ListNode(val)
-        lastNode.next = newNode
-        lastNode = newNode
-    return head.next
+class MyTest(Test):
+    def my_test_code(self):
+        # 只需在此处填写自己的测试代码
+        # testArgs中每一项是一次测试，每一项由两部分构成
+        # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
+        def linkNodes(values):
+            head = ListNode(None)
+            lastNode = head
+            for val in values:
+                newNode = ListNode(val)
+                lastNode.next = newNode
+                lastNode = newNode
+            return head.next
+
+        testArgs = []
+
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6]), 3, 4])  # 要找的结点在链表中间
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6]), 1, 6])  # 要找的结点是链表的尾结点
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6]), 6, 1])  # 要找的结点是链表的头结点
+        testArgs.append([linkNodes([]), 100, None])  # 测试空链表
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6]), 100, None])  # k大于链表的结点总数
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6]), 0, None])  # k=0
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6]), -100, None])  # k<0
+
+        return testArgs
+
+    def convert(self, result, *func_arg):
+        # 在此处填写转换函数，将测试结果转换成其他形式
+        return result.val if result else result
 
 
-def Test(testName, method_type, head, k, expected):
-    global pass_num, test_num
-    if testName is not None:
-        print('{} begins:'.format(testName))
-    test_num += 1
-    test = Solution()
-    result = None
-    start = end = 0
-    try:
-        if method_type == 1:
-            start = timeit.default_timer()
-            result = test.FindKthToTail1(head, k)
-            end = timeit.default_timer()
-        elif method_type == 2:
-            start = timeit.default_timer()
-            result = test.FindKthToTail2(head, k)
-            end = timeit.default_timer()
-        if result:
-            result = result.val
-    except Exception as e:
-        print('Failed:语法错误！')
-        print(traceback.format_exc())
-        return
-    if (result == expected):
-        print('Passed.\n')
-        pass_num += 1
-        time_pool.append(end - start)
-    else:
-        print('Failed:测试不通过！\n')
-
-
-Test('Test1_1', 1, linkNodes([1, 2, 3, 4, 5, 6]), 3, 4)  # 要找的结点在链表中间
-Test('Test1_2', 1, linkNodes([1, 2, 3, 4, 5, 6]), 1, 6)  # 要找的结点是链表的尾结点
-Test('Test1_3', 1, linkNodes([1, 2, 3, 4, 5, 6]), 6, 1)  # 要找的结点是链表的头结点
-Test('Test1_4', 1, linkNodes([]), 100, None)  # 测试空链表
-Test('Test1_5', 1, linkNodes([1, 2, 3, 4, 5, 6]), 100, None)  # k大于链表的结点总数
-Test('Test1_6', 1, linkNodes([1, 2, 3, 4, 5, 6]), 0, None)  # k=0
-Test('Test1_7', 1, linkNodes([1, 2, 3, 4, 5, 6]), -100, None)  # k<0
-
-# Test('Test2_1', 2, linkNodes([1, 2, 3, 4, 5, 6]), 3, 4)  # 要找的结点在链表中间
-# Test('Test2_2', 2, linkNodes([1, 2, 3, 4, 5, 6]), 1, 6)  # 要找的结点是链表的尾结点
-# Test('Test2_3', 2, linkNodes([1, 2, 3, 4, 5, 6]), 6, 1)  # 要找的结点是链表的头结点
-# Test('Test2_4', 2, linkNodes([]), 100, None)  # 测试空链表
-# Test('Test2_5', 2, linkNodes([1, 2, 3, 4, 5, 6]), 100, None)  # k大于链表的结点总数
-# Test('Test2_6', 2, linkNodes([1, 2, 3, 4, 5, 6]), 0, None)  # k=0
-# Test('Test2_7', 2, linkNodes([1, 2, 3, 4, 5, 6]), -100, None)  # k<0
-
-print('测试结果：{}/{},{:.2f}%'.format(pass_num, test_num, (pass_num / test_num) * 100))
-if pass_num:
-    print('平均耗时：{:.2f}μs'.format((sum(time_pool) / pass_num) * 1000000))
+if __name__ == '__main__':
+    solution = Solution()
+    MyTest(solution=solution).start_test()
