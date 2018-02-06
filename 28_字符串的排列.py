@@ -41,7 +41,7 @@ class Solution:
             result = []
             for i in range(len(string)):
                 for j in permutation(string[:i] + string[i + 1:]):  # 从头到尾逐个字符抽出来，剩下字符的进行排列
-                    result.append(j + string[i])  # 把抽出来的那个字符与排列好的字符串拼在一起
+                    result.append(string[i] + j)  # 把抽出来的那个字符与排列好的字符串拼在一起
             return result
 
         if not ss:
