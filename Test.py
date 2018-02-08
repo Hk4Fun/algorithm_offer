@@ -48,7 +48,13 @@ class Test:
                 i += 1
             print('测试结果：{}/{},{:.2f}%'.format(self.pass_num, test_num, (self.pass_num / test_num) * 100))
             if self.pass_num:
-                print('平均耗时：{:.2f}μs\n'.format((sum(self.time_pool) / self.pass_num) * 1000000))
+                time = (sum(self.time_pool) / self.pass_num) * 1000000
+                if time < 1000:
+                    print('平均耗时：{:.2f}μs\n'.format(time))
+                elif time < 1000000:
+                    print('平均耗时：{:.2f}ms\n'.format(time/1000))
+                else:
+                    print('平均耗时：{:.2f}s\n'.format(time/1000000))
 
     def my_test_code(self):
         # 只需在此处填写测试代码
