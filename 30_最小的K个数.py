@@ -13,6 +13,7 @@ __date__ = '2018/2/9 16:41'
                   使得容器中的k个数保持是最小的k个数。其实可以用max()取得容器中的最大值，
                   但时间复杂度为O(k)，没有最大堆快，其只有O(1)，但插入需O(logk)。
                   使用python内置模块heapq：https://docs.python.org/3/library/heapq.html
+思路3（O(nlog(n))）：直接排序，然后取前面k个数
 '''
 
 
@@ -49,8 +50,7 @@ class Solution:
 
     def KLeastNumbers2(self, numbers, k):
         import heapq
-        length = len(numbers)
-        if not numbers or length < k or k <= 0:
+        if not numbers or len(numbers) < k or k <= 0:
             return []
         output = []
         for number in numbers:
@@ -61,6 +61,12 @@ class Solution:
                 if number < output[0]:  # output[0]为堆顶，最大值
                     output[0] = number  # 替换掉最大值，相当于删除堆顶，新数入堆
         return output  # 容器中的k个数始终是最小的k个数
+
+    def KLeastNumbers3(self, numbers, k):
+        length = len(numbers)
+        if not numbers or length < k or k <= 0:
+            return []
+        return sorted(numbers)[:k]
 
 
 # ================================测试代码================================
