@@ -72,7 +72,7 @@ class Solution:
     def EightQueen4(self, queenList):
         def convert(try_bit, row):
             # 将尝试的bit位转换为对应的列号
-            for col, bit in enumerate(reversed(bin(try_bit)[2:])):  # 注意要reverse
+            for col, bit in enumerate(bin(try_bit)[-1:1:-1]): # 注意去掉前面的'0b'并反转字符串
                 if bit == '1':
                     a_result[row] = col
                     return
