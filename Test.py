@@ -1,7 +1,6 @@
 __author__ = 'Hk4Fun'
 __date__ = '2018/2/4 16:55'
 
-# ================================测试代码================================
 import traceback
 import timeit
 import inspect

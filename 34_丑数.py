@@ -64,8 +64,8 @@ class Solution:
     def GetUglyNumber3(self, index):
         if not index or index <= 0:
             return 0
-        # if index < 7:  # 小于7的丑数连续
-        #     return index
+        if index < 7:  # 小于7的丑数连续
+            return index
         uglyNumbers = [1]
         index2 = index3 = index5 = 0
         for i in range(1, index):
