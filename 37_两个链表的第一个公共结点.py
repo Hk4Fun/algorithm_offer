@@ -75,8 +75,9 @@ class Solution:
                 return pNode1.next
             length1 -= 1
             length2 -= 1
-        if length1 == length2 == 0:  # 两个都来到末尾，说明两个链表重合，则第一个公共结点就是链表第一个结点
-            return pHead1
+        # 链表来到末尾，说明两个链表重合（可能部分重合），
+        # 则第一个公共结点就是较短链表头结点
+        return pHead1 if length1==0 else pHead2
 
     # 先走若干步，时间复杂度=O(m+n)，空间复杂度=O(1)
     def FindFirstCommonNode3(self, pHead1, pHead2):
@@ -216,6 +217,21 @@ class MyTest(Test):
         pNode3.next = pNode4
         pNode4.next = pNode5
         testArgs.append([pNode1, pNode1, pNode1])
+
+        # 第二个链表是第一个链表的一部分
+        # 1 - 2 - 3 \
+        #            4 - 5
+        # 两个链表完全重合
+        pNode1 = ListNode(1)
+        pNode2 = ListNode(2)
+        pNode3 = ListNode(3)
+        pNode4 = ListNode(4)
+        pNode5 = ListNode(5)
+        pNode1.next = pNode2
+        pNode2.next = pNode3
+        pNode3.next = pNode4
+        pNode4.next = pNode5
+        testArgs.append([pNode1, pNode4, pNode4])
 
         # 只有一个结点
         pNode1 = ListNode(1)
