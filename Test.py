@@ -35,15 +35,16 @@ class Test:
             print('Failed:测试不通过！\n')
 
     def start_test(self):
-        for method in range(1, len(self.methods) + 1):
+        runtime = {}  # 各解题思路的耗时
+        for method, method_name in enumerate(self.methods):
             self.pass_num = 0
             self.time_pool = []
             testArgs = self.my_test_code()
             test_num = len(testArgs)  # 总的测试数量
             i = 1
             for testArg in testArgs:
-                testName = "Test" + str(method) + "_" + str(i)
-                self.test(testName, method, testArg[-1], *tuple(testArg[:-1]))
+                testName = "Test" + str(method + 1) + "_" + str(i)
+                self.test(testName, method + 1, testArg[-1], *tuple(testArg[:-1]))
                 i += 1
             print('测试结果：{}/{},{:.2f}%'.format(self.pass_num, test_num, (self.pass_num / test_num) * 100))
             if self.pass_num:
@@ -51,9 +52,11 @@ class Test:
                 if time < 1000:
                     print('平均耗时：{:.2f}μs\n'.format(time))
                 elif time < 1000000:
-                    print('平均耗时：{:.2f}ms\n'.format(time/1000))
+                    print('平均耗时：{:.2f}ms\n'.format(time / 1000))
                 else:
-                    print('平均耗时：{:.2f}s\n'.format(time/1000000))
+                    print('平均耗时：{:.2f}s\n'.format(time / 1000000))
+                runtime[method_name.__name__] = round(time, 2)
+        print('本次测试各算法耗时排序（单位：μs）：\n{}'.format(sorted(runtime.items(), key=lambda x: x[1])))
 
     def my_test_code(self):
         # 只需在此处填写测试代码
