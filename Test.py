@@ -5,7 +5,7 @@ import traceback
 import timeit
 import inspect
 
-TEST_NUM = 100000  # 单个测试用例的测试次数
+TEST_NUM = 10000  # 单个测试用例的测试次数
 
 
 class Test:
