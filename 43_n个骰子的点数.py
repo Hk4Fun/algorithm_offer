@@ -30,6 +30,29 @@ class Solution:
             return
         return [(s, count(n, s)) for s in range(n, 6 * n + 1)]
 
+    def DicesProbability2(self, n):
+        if not n or n < 1:
+            return
+        maxVal = 6
+        count = [[0] * (maxVal * n + 1), []]  # 构造两个数组来存放每一个和出现的次数，下标表示和，里面的值代表次数
+        flag = 0  # 用flag来反复利用这两个数组
+        for i in range(1, maxVal + 1):  # 一开始只有一个骰子，当然次数都为1
+            count[flag][i] = 1
+        for i in range(2, n + 1):  # 逐渐加入其他骰子
+            # 一开始另一个数组要初始化为0，因为每加入一个骰子就会使前面的和次数成为0
+            # 比如，先是1个骰子时和为1的次数为1，当加入第二个骰子时，和为1是不可能出现的
+            # 换句话说，就是和的范围是动态变化的，且一直往右移
+            count[1 - flag] = [0] * (maxVal * n + 1)
+            for j in range(i, maxVal * i + 1):  # i <= s <= 6*i
+                k = 1
+                while k <= j and k <= maxVal:
+                    # F(n, s) = F(n - 1, s - 1) + F(n - 1, s - 2) + F(n - 1, s - 3)
+                    #         + F(n - 1, s - 4) + F(n - 1, s - 5) + F(n - 1, s - 6)
+                    count[1 - flag][j] += count[flag][j - k]
+                    k += 1
+            flag = 1 - flag  # 将flag更新，flag永远指向求和好的数组
+        return [(i, count[flag][i]) for i in range(n, maxVal * n + 1)]
+
 
 # ================================测试代码================================
 from Test import Test
