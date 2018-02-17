@@ -5,7 +5,7 @@ import traceback
 import timeit
 import inspect
 
-TEST_NUM = 10000  # 单个测试用例的测试次数
+TEST_NUM = 100000  # 单个测试用例的测试次数
 
 
 class Test:
@@ -15,7 +15,7 @@ class Test:
         self.time_pool = []  # 耗时
         self.methods = list(filter(inspect.ismethod, (getattr(solution, name) for name in dir(solution))))  # 解题方法列表
 
-    def print_runtime(self, time):
+    def print_runtime(self, time):  # time单位：μs
         if time < 1000:
             print('Average Runtime：{:.2f}μs\n'.format(time))
         elif time < 1000000:
@@ -23,51 +23,53 @@ class Test:
         else:
             print('Average Runtime：{:.2f}s\n'.format(time / 1000000))
 
-    def test(self, testName, methodType, expected, *func_arg):
-        # methodType表示要测试的方法，
-        if testName is not None:
-            print('{} begins:'.format(testName))
+    def test(self, test_name, method_num, expected, *func_arg):
+        # method_num 表示要测试的解题方法序号
+        if test_name is not None:
+            print('{} begins:'.format(test_name))
 
         try:
-            start = timeit.default_timer()
+            total_time = 0
             for i in range(TEST_NUM):
-                self.methods[int(methodType) - 1](*func_arg)
-            end = timeit.default_timer()
-            result = self.convert(self.methods[int(methodType) - 1](*func_arg), *func_arg)
-        except Exception as e:
+                start = timeit.default_timer()
+                self.methods[int(method_num) - 1](*func_arg)
+                end = timeit.default_timer()
+                total_time += end - start
+            result = self.convert(self.methods[int(method_num) - 1](*func_arg), *func_arg)
+        except Exception:
             print('Failed: Syntax Error！')
             print(traceback.format_exc())
             return
-        if (result == expected):
-            average_runtime = ((end - start) / TEST_NUM) * 1000000
+
+        if result == expected:
+            average_runtime = (total_time / TEST_NUM) * 1000000
             print('Passed.')
             self.print_runtime(average_runtime)
             self.pass_num += 1
             self.time_pool.append(average_runtime)
         else:
             print('Failed: The test does not pass！')
-            print('Expected: {}\nYour result: {}\n'.format(expected, result))
+            print('Your result: {}\nBut expected: {}\n'.format(result, expected))
 
     def start_test(self):
         runtime = {}  # 各解题思路的耗时
-        for method, method_name in enumerate(self.methods):
+        for i, method in enumerate(self.methods):
             self.pass_num = 0
             self.time_pool = []
             testArgs = self.my_test_code()
             test_num = len(testArgs)  # 总的测试数量
-            i = 1
-            for testArg in testArgs:
-                testName = "Test" + str(method + 1) + "_" + str(i)
-                self.test(testName, method + 1, testArg[-1], *tuple(testArg[:-1]))
-                i += 1
-            print('Result of Testing {}: {} / {}, {:.2f}%'.format(method_name.__name__,
+            for j, testArg in enumerate(testArgs):
+                testName = "Test" + str(i + 1) + "_" + str(j + 1)
+                self.test(testName, i + 1, testArg[-1], *tuple(testArg[:-1]))
+            print('Result of Testing {}: {} / {}, {:.2f}%'.format(method.__name__,
                                                                   self.pass_num, test_num,
                                                                   (self.pass_num / test_num) * 100))
             if self.pass_num:
                 time = sum(self.time_pool) / self.pass_num
                 print('Total ', end='')
                 self.print_runtime(time)
-                runtime[method_name.__name__] = round(time, 2)
+                if self.pass_num == test_num:  # 通过全部测试才加入排行版进行排名
+                    runtime[method.__name__] = round(time, 2)
             print('*' * 100)
         print('Runtime Ranking（unit：μs）：\n{}'.format(sorted(runtime.items(), key=lambda x: x[1])))
 
