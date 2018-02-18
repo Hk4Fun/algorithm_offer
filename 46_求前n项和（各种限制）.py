@@ -41,23 +41,15 @@ class Solution:
         return sumN(n)
 
     def Sum4(self, n):
-        def f(x):  # 奇数返回0xffffffff，否则0
-            # return ((x & 1) << 31) >> 31 # 这里右移时总是补上0，而不是符号位，因为python中整型位数基本无限
-            def cal():
-                nonlocal last_bit
-                last_bit ^= 0xfffffffe
-
-            last_bit = x & 1
-            last_bit and cal()
-            return last_bit
-
         a = n
         b = n + 1
         s = 0
         while a:  # 可以复制32次来替代循环，这里就不这么做了
-            # if a & 1: # 可以用s += (b & f(a)) 来替代if
+            # 可以用s += (b & ((a & 1) and (a & 1) ^ 0xfffffffe)) 来替代if
+            # 其中 (a & 1) and (a & 1) ^ 0xfffffffe 奇数返回0xffffffff，否则0
+            # if a & 1:
             #     s += b
-            s += (b & f(a))
+            s += (b & ((a & 1) and (a & 1) ^ 0xfffffffe))
             a >>= 1
             b <<= 1
         return s >> 1
