@@ -37,15 +37,17 @@ class Solution:
         return last
 
     # 递归实现
-    # def LastRemaining3(self, n, m):
-    #     def last(n, m):
-    #         if n == 1:
-    #             return 0
-    #         return (last(n - 1, m) + m) % n
-    #
-    #     if not n or not m:
-    #         return -1
-    #     return last(n, m)
+    def LastRemaining3(self, n, m):
+        import sys
+        sys.setrecursionlimit(5000)  # 设置最大递归深度
+        def last(n, m):
+            if n == 1:
+                return 0
+            return (last(n - 1, m) + m) % n
+
+        if not n or not m:
+            return -1
+        return last(n, m)
 
 
 # ================================测试代码================================
