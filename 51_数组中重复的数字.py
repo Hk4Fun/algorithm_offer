@@ -16,7 +16,7 @@ __date__ = '2018/2/20 17:41'
        没有必要交换，遍历下一个。
 思路2（时间O(n), 空间O(n)）：
        哈希法，用一个临时数组来存放出现过的数字，例如tmp[3]==True，表示3出现过了，
-       False表示未出现过，一次来找出重复的数字
+       False表示未出现过，以此来找出重复的数字
 
 '''
 
@@ -31,7 +31,7 @@ class Solution:
         for i in numbers:
             if i < 0 or i > length - 1:
                 return -1
-        for i in range(len(numbers)):
+        for i in range(length):
             # 当再次遍历到那个重复数字时该重复数字是在正确位置上的，所以不会进入while循环
             while numbers[i] != i:  # 这里的用while而不是if是因为交换过来的数字还没被检查过
                 if numbers[i] == numbers[numbers[i]]:
