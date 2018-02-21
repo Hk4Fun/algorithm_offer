@@ -21,6 +21,11 @@ __date__ = '2018/2/21 1:31'
 思路1：使用float()转换，利用是否抛出异常进行判断
 思路2：正则表达式re匹配
 思路3：从头到尾遍历字符串，按照逻辑一个个判断
+思路4：画出状态转移图（自动机），然后根据转移图实现相应逻辑。
+      状态转移图：http://ox186n2j0.bkt.clouddn.com/%E8%87%AA%E5%8A%A8%E6%9C%BA.png
+      其中S表示开始匹配，T表示匹配成功，N表示数字，'\0'表示来到字符串结尾
+      f1~5表示5个可重用的状态函数
+思路5：将思路4中的状态转移图表示成一个有向图对应的出度矩阵，根据矩阵进行状态的转换
 '''
 
 
@@ -63,6 +68,122 @@ class Solution:
             numeric = scanInteger(s) and numeric
         return numeric and s == []
 
+    def isNumeric4(self, s):
+        def is_num(ch):
+            return True if (ch >= '0' and ch <= '9') else False
+
+        def f5(s):
+            s.pop(0)
+            while s and is_num(s[0]):
+                s.pop(0)
+            if s == []:
+                return True
+            else:
+                return False
+
+        def f4(s):
+            s.pop(0)
+            if s == []:
+                return False
+            elif s[0] == '+' or s[0] == '-':
+                s.pop(0)
+                if s and is_num(s[0]):
+                    return f5(s)
+                else:
+                    return False
+            elif is_num(s[0]):
+                return f5(s)
+            else:
+                return False
+
+        def f3(s):
+            s.pop(0)
+            while s and is_num(s[0]):
+                s.pop(0)
+            if s == []:
+                return True
+            elif s[0] == 'e' or s[0] == 'E':
+                return f4(s)
+            else:
+                return False
+
+        def f2(s):
+            s.pop(0)
+            while s and is_num(s[0]):
+                s.pop(0)
+            if s == []:
+                return True
+            elif s[0] == 'e' or s[0] == 'E':
+                return f4(s)
+            elif s[0] == '.':
+                s.pop(0)
+                if s == []:
+                    return True
+                elif is_num(s[0]):
+                    return f3(s)
+                elif s[0] == 'e' or s[0] == 'E':
+                    return f4(s)
+                else:
+                    return False
+            else:
+                return False
+
+        def f1(s):
+            s.pop(0)
+            if s and is_num(s[0]):
+                return f3(s)
+            else:
+                return False
+
+        if not s:
+            return False
+        s = list(s)
+        if s[0] == '+' or s[0] == '-':
+            s.pop(0)
+            if s and s[0] == '.':
+                return f1(s)
+            elif s and is_num(s[0]):
+                return f2(s)
+            else:
+                return False
+        elif is_num(s[0]):
+            return f2(s)
+        elif s[0] == '.':
+            return f1(s)
+        else:
+            return False
+
+    def isNumeric5(self, s):
+        if not s:
+            return False
+        state = ['+/-', '.', 'n', '.', 'n', 'e/E', '+/-', 'n', 'T']
+        #       +/- .  n  .  n e/E +/- n T
+        turn = [[1, 1, 1, 0, 0, 0, 0, 0, 0],  # S
+                [0, 1, 1, 0, 0, 0, 0, 0, 0],  # +/-
+                [0, 0, 0, 0, 1, 0, 0, 0, 0],  # .
+                [0, 0, 1, 1, 0, 1, 0, 0, 1],  # n
+                [0, 0, 0, 0, 1, 1, 0, 0, 1],  # .
+                [0, 0, 0, 0, 1, 1, 0, 0, 1],  # n
+                [0, 0, 0, 0, 0, 0, 1, 1, 0],  # e/E
+                [0, 0, 0, 0, 0, 0, 0, 1, 0],  # +/-
+                [0, 0, 0, 0, 0, 0, 0, 1, 1]]  # n
+        cur = 0
+        s = list(s)
+        s.append('\0')
+        for ch in s:
+            for i in range(9):
+                if turn[cur][i]:
+                    if (state[i] == 'n' and '0' <= ch and ch <= '9') \
+                            or (state[i] == '+/-' and (ch == '+' or ch == '-')) \
+                            or (state[i] == 'e/E' and (ch == 'e' or ch == 'E')) \
+                            or (state[i] == ch == '.'):
+                        cur = i + 1
+                        break
+                    elif state[i] == 'T' and ch == '\0':
+                        return True
+            else:
+                return False
+
 
 # ================================测试代码================================
 from Test import Test
@@ -87,6 +208,7 @@ class MyTest(Test):
         testArgs.append(["1.79769313486232E+308", True])
         testArgs.append(['1.', True])
         testArgs.append(['.1', True])
+        testArgs.append(['+.1', True])
         testArgs.append(['-.1e123', True])
         testArgs.append(['+1.E0', True])
 
@@ -99,9 +221,14 @@ class MyTest(Test):
         testArgs.append([".", False])
         testArgs.append(["+", False])
         testArgs.append(["+.", False])
+        testArgs.append([".+1", False])
         testArgs.append([".e1", False])
         testArgs.append(["e1", False])
+        testArgs.append(["e", False])
+        testArgs.append(["a", False])
+        testArgs.append(["1e", False])
         testArgs.append(["-.1e.", False])
+        testArgs.append(["1e+", False])
         testArgs.append(["-.1e-1.", False])
         testArgs.append(['', False])
         testArgs.append([None, False])
