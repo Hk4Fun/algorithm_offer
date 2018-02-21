@@ -49,6 +49,7 @@ class Test:
             self.time_pool.append(average_runtime)
         else:
             print('Failed: The test does not pass！')
+            print('Test for: {}'.format(func_arg))
             print('Your result: {}\nBut expected: {}\n'.format(result, expected))
 
     def start_test(self):

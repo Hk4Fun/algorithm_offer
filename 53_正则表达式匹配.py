@@ -23,7 +23,7 @@ __date__ = '2018/2/20 23:08'
 
 
 class Solution:
-    def match(self, s, pattern):
+    def match1(self, s, pattern):
         if s == None or pattern == None:
             return False
         if s == '' and pattern == '':
@@ -32,14 +32,20 @@ class Solution:
             return False
         if len(pattern) > 1 and pattern[1] == '*':
             if s != '' and (pattern[0] == s[0] or pattern[0] == '.'):
-                return self.match(s[1:], pattern) \
-                       or self.match(s, pattern[2:]) \
+                return self.match1(s[1:], pattern) \
+                       or self.match1(s, pattern[2:]) \
                     # or self.match(s[1:], pattern[2:]) # 该情况可以由前两种情况组合，所以可以省略
             else:
-                return self.match(s, pattern[2:])
+                return self.match1(s, pattern[2:])
         if s != '' and (s[0] == pattern[0] or pattern[0] == '.'):
-            return self.match(s[1:], pattern[1:])
+            return self.match1(s[1:], pattern[1:])
         return False
+
+    def match2(self, s, pattern):  # 用re标准库进行性能对比
+        import re
+        if s == None or pattern == None:
+            return False
+        return True if re.match(pattern + '$', s) else False
 
 
 # ================================测试代码================================
