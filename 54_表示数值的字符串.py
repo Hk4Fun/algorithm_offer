@@ -177,9 +177,9 @@ class Solution:
                             or (state[i] == '+/-' and (ch == '+' or ch == '-')) \
                             or (state[i] == 'e/E' and (ch == 'e' or ch == 'E')) \
                             or (state[i] == ch == '.'):
-                        cur = i + 1
+                        cur = i + 1  # 转入下一个状态
                         break
-                    elif state[i] == 'T' and ch == '\0':
+                    elif state[i] == 'T' and ch == '\0':  # 匹配成功
                         return True
             else:
                 return False
