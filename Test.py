@@ -13,6 +13,7 @@ class Test:
         self.solution = solution  # 解题实例
         self.pass_num = 0  # 通过测试的数量
         self.time_pool = []  # 耗时
+        self.debug = False  # debug模式下每个测试用例只测试一遍，默认情况下关闭debug模式
         self.methods = list(filter(inspect.ismethod, (getattr(solution, name) for name in dir(solution))))  # 解题方法列表
 
     def print_runtime(self, time):  # time单位：μs
@@ -30,19 +31,20 @@ class Test:
 
         try:
             total_time = 0
-            for i in range(TEST_NUM):
+            result = None
+            for i in range(1 if self.debug else TEST_NUM):
                 start = timeit.default_timer()
-                self.methods[int(method_num) - 1](*func_arg)
+                result = self.methods[int(method_num) - 1](*func_arg)
                 end = timeit.default_timer()
                 total_time += end - start
-            result = self.convert(self.methods[int(method_num) - 1](*func_arg), *func_arg)
+            result = self.convert(result, *func_arg)
         except Exception:
             print('Failed: Syntax Error！')
             print(traceback.format_exc())
             return
 
         if result == expected:
-            average_runtime = (total_time / TEST_NUM) * 1000000
+            average_runtime = (total_time / (1 if self.debug else TEST_NUM)) * 1000000
             print('Passed.')
             self.print_runtime(average_runtime)
             self.pass_num += 1
@@ -72,7 +74,9 @@ class Test:
                 if self.pass_num == test_num:  # 通过全部测试才加入排行版进行排名
                     runtime[method.__name__] = round(time, 2)
             print('*' * 100)
-        print('Runtime Ranking（unit：μs）：\n{}'.format(sorted(runtime.items(), key=lambda x: x[1])))
+        print('Runtime Ranking (unit：μs, test_num: {})：\n{}'.format(1 if self.debug else TEST_NUM,
+                                                                     sorted(runtime.items(), key=lambda x: x[1]),
+                                                                     ))
 
     def my_test_code(self):
         # 只需在此处填写测试代码
