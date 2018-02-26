@@ -26,8 +26,7 @@ class Test:
 
     def test(self, test_name, method_num, expected, *func_arg):
         # method_num 表示要测试的解题方法序号
-        if test_name is not None:
-            print('{} begins:'.format(test_name))
+        print('{} begins:'.format(test_name))
 
         try:
             total_time = 0
@@ -75,8 +74,8 @@ class Test:
                     runtime[method.__name__] = round(time, 2)
             print('*' * 100)
         print('Runtime Ranking (unit：μs, test_num: {})：\n{}'.format(1 if self.debug else TEST_NUM,
-                                                                     sorted(runtime.items(), key=lambda x: x[1]),
-                                                                     ))
+                                                                    sorted(runtime.items(), key=lambda x: x[1]),
+                                                                    ))
 
     def my_test_code(self):
         # 只需在此处填写测试代码
