@@ -6,10 +6,10 @@ __date__ = '2018/2/23 19:12'
 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
 '''
 '''主要思路：
-思路1：若该结点的父结点无右孩子或其父结点的右孩子就是自己，则后序遍历顺序的下一个结点
-       就是其父结点；否则若该结点的父结点有右孩子则后序遍历顺序的下一个结点为
-       以其父结点的右孩子为根的子树的最左叶结点。如何找出该最左叶结点？
-       类似于寻找最右叶结点，只不过在这里是左孩子优先：从其父结点的右孩子开始向下迭代遍历，
+思路1：若该结点为其父结点的右孩子，则其父结点就是后序遍历顺序的下一个结点
+       若该结点为其父结点的左孩子，且其父结点无右孩子，则其父结点就是后序遍历顺序的下一个结点
+       若该结点为其父结点的左孩子，且其父结点有右孩子，则为其父结点的右子树的最左叶结点
+       如何找到这个最左叶结点？从其父结点的右孩子开始向下迭代遍历，
        有左孩子就迭代左孩子，没有就迭代右孩子，即优先迭代左孩子，都没有说明来到了那个最左叶结点
 思路2：既然是后序遍历，那就先后序遍历整棵树，把结点都存放在数组里，
        然后在数组里找到所给结点的下一个结点，当然如果所给结点在最后则返回None
@@ -31,9 +31,7 @@ class Solution:
     def GetNext1(self, pNode):
         if not pNode or not pNode.parent:
             return
-        if not pNode.parent.right or pNode.parent.right == pNode:
-            return pNode.parent
-        if pNode.parent.right:
+        if pNode.parent.left == pNode and pNode.parent.right:
             pNode = pNode.parent.right
             while True:
                 if pNode.left:
@@ -43,6 +41,7 @@ class Solution:
                 else:
                     break
             return pNode
+        return pNode.parent
 
     # def GetNext2(self, pNode):
     #     def postTraversal(root, treeNodes):

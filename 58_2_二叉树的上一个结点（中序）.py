@@ -39,22 +39,22 @@ class Solution:
                 return pNode.parent
             pNode = pNode.parent
 
-    def GetNext2(self, pNode):
-        def midTraversal(root, treeNodes):
-            if not root: return
-            midTraversal(root.left, treeNodes)
-            treeNodes.append(root)
-            midTraversal(root.right, treeNodes)
-
-        if not pNode:
-            return
-        cur = pNode
-        while cur.parent:  # 先找到根结点
-            cur = cur.parent
-        treeNodes = []
-        midTraversal(cur, treeNodes)
-        index = treeNodes.index(pNode)
-        return treeNodes[index - 1] if index != 0 else None
+    # def GetNext2(self, pNode):
+    #     def midTraversal(root, treeNodes):
+    #         if not root: return
+    #         midTraversal(root.left, treeNodes)
+    #         treeNodes.append(root)
+    #         midTraversal(root.right, treeNodes)
+    #
+    #     if not pNode:
+    #         return
+    #     cur = pNode
+    #     while cur.parent:  # 先找到根结点
+    #         cur = cur.parent
+    #     treeNodes = []
+    #     midTraversal(cur, treeNodes)
+    #     index = treeNodes.index(pNode)
+    #     return treeNodes[index - 1] if index != 0 else None
 
 
 # ================================测试代码================================
@@ -75,6 +75,7 @@ class MyTest(Test):
                 if right:
                     right.parent = parent
 
+        self.debug = True
         testArgs = []
 
         #      8
@@ -135,6 +136,48 @@ class MyTest(Test):
 
         # 空树
         testArgs.append([None, None])
+
+        # 随机生成二叉树进行测试
+
+        def correct(pNode):
+            def midTraversal(root, treeNodes):
+                if not root: return
+                midTraversal(root.left, treeNodes)
+                treeNodes.append(root)
+                midTraversal(root.right, treeNodes)
+
+            if not pNode:
+                return
+            cur = pNode
+            while cur.parent:  # 先找到根结点
+                cur = cur.parent
+            treeNodes = []
+            midTraversal(cur, treeNodes)
+            index = treeNodes.index(pNode)
+            return treeNodes[index - 1] if index != 0 else None
+
+        import random
+        tree_num = 1000  # 二叉树棵数
+        node_num = 100  # 结点数
+
+        for tree in range(tree_num):
+            root = TreeNode(-1)
+            nodeList = [root]
+            randomList = [(root, 'l'), (root, 'r')]
+            for i in range(random.randint(0, node_num)):
+                newNode = TreeNode(i)
+                nodeList.append(newNode)
+                connect = random.choice(randomList)
+                if connect[1] == 'l':
+                    connect[0].left = newNode
+                else:
+                    connect[0].right = newNode
+                newNode.parent = connect[0]
+                randomList.remove(connect)
+                randomList.append((newNode, 'l'))
+                randomList.append((newNode, 'r'))
+            for node in nodeList:
+                testArgs.append([node, correct(node)])
 
         return testArgs
 
