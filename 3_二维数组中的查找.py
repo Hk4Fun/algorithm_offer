@@ -6,17 +6,39 @@ __date__ = '2018/1/1 12:22'
 请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
 '''
 '''主要思路：
+设数组m行n列
+思路1（时间复杂度O(mlogn)）：
+由于每一行有序递增，所以可利用二分查找，通过遍历每一行得到答案
+
+思路2（时间复杂度O(m+n)）:
 从右上角或左下角开始查找，这里选择右上角
 如果当前元素大于target, 剔除target所在列（col左移-1），
 如果当前元素小于target, 剔除target所在行（row下移+1），
 否则等于，结束查找。
 每一次查找都在数组的查找范围中剔除一行或一列，每一步都缩小了查找的范围
 直到找到要查找的数字，或者查找范围为空
+
+但m远小于n时，思路1才优于思路2
 '''
 
 
 class Solution:
-    def Find(self, array, target):
+    def Find1(self, array, target):
+        if not target or not array:  # 鲁棒性
+            return False
+        for i in range(len(array)):
+            low, high = 0, len(array[0]) - 1
+            while low <= high:
+                mid = low + ((high - low) >> 1)  # 防止溢出，移位也更高效
+                if target < array[i][mid]:
+                    high = mid - 1
+                elif target > array[i][mid]:
+                    low = mid + 1
+                else:
+                    return True
+        return False
+
+    def Find2(self, array, target):
         if not target or not array:  # 鲁棒性
             return False
         rows, cols = len(array), len(array[0])

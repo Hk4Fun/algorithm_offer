@@ -6,28 +6,40 @@ __date__ = '2018/1/3 23:07'
 （n从0开始，f(0)=0，f(1)=1）
 '''
 '''主要思路：
-思路1：递归，简洁但效率低，O(n^2)
-思路2：循环，一般解法，O(n)
-思路3：生成器，pythonic，O(n)
-思路4：矩阵，转化成矩阵的乘方，然后用递归，实现代码量大，不实用，O(logn)
-思路5：公式法，最直接暴力，这里不实现，O(1)
+思路1：非线性递归，简洁但效率低，O(2^n)
+思路2：线性递归，O(n)
+思路3：尾递归，O(n)
+思路4：循环，一般解法，O(n)
+思路5：生成器，pythonic，O(n)
+思路6：矩阵，转化成矩阵的乘方，然后用递归，实现代码量大，不实用，O(logn)
+思路7：公式法，最直接暴力，这里不实现，O(1)
 '''
 
 
 class Solution:
-    def Fibonacci1(self, n):
-        if n <= 1:
-            return n
-        return self.Fibonacci1(n - 1) + self.Fibonacci1(n - 2)
+    def Fibonacci1(self, n):  # 非线性递归
+        return n if n <= 1 else self.Fibonacci1(n - 1) + self.Fibonacci1(n - 2)
 
-    def Fibonacci2(self, n):
+    def Fibonacci2(self, n):  # 线性递归
+        def fib(a, b, n):
+            return 1 if n <= 1 else a + fib(b, a + b, n - 1)
+
+        return n if n <= 1 else fib(0, 1, n)
+
+    def Fibonacci3(self, n):  # 尾递归
+        def fib(a, b, n):
+            return a if n == 0 else fib(b, a + b, n - 1)
+
+        return n if n <= 1 else fib(0, 1, n)
+
+    def Fibonacci4(self, n):
         tempArray = [0, 1]
         if n >= 2:
             for i in range(2, n + 1):
                 tempArray[i % 2] = tempArray[0] + tempArray[1]  # 注意这里 i%2 的巧妙
         return tempArray[n % 2]
 
-    def Fibonacci3(self, n):
+    def Fibonacci5(self, n):
         def fib(n):
             a, b = 0, 1
             for i in range(n + 1):
@@ -36,7 +48,7 @@ class Solution:
 
         return [i for i in fib(n)][n]
 
-    def Fibonacci4(self, n):
+    def Fibonacci6(self, n):
         def MatrixMultipy(matrix1, matrix2):
             # result = []
             # for i in range(len(matrix1)):
@@ -91,7 +103,7 @@ class MyTest(Test):
         testArgs.append([8, 21])
         testArgs.append([9, 34])
         testArgs.append([10, 55])
-        testArgs.append([20, 6765])
+        # testArgs.append([20, 6765])
 
         return testArgs
 

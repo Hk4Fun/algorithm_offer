@@ -21,8 +21,22 @@ __date__ = '2018/1/4 3:20'
        所以n最后一定被全部变为0，循环退出；但python就有区别了，
        python的整数位数不止32位，所以在负数情况下1的位数会多出很多，
        所以应先&0xffffffff，保留后面32位，前面全部变成0
-思路5：先&0xffffffff保留后32位，再使用python内置方法 bin(n)，
+思路5：平行算法，有点类似于二分，
+       原理：若相邻的两个bit为00则相加为00， 相邻的两个bit为01或10则相加为01，
+       相邻两个数为11则相加为10，即相邻位相加，结果就是它们的1的个数，重复这个过程，
+       直到只剩下一位。例如0x11530828的二进制1个数统计过程如下：
+        0001 0001 1001 0011 0000 1000 0010 1000
+        0 1  0 1  1 1  0 2  0 0  1 0  0 1  1 0
+        1    1    2    2    0    1    1    1
+        2         4         1         2 
+        6                   3
+        9
+思路6：MIT HAKMEM算法：http://blog.csdn.net/msquare/article/details/4536388
+       其中涉及到一个求模运算，可能会减慢速度，可以用其他运算替代，
+       C = A % B 等价于 C = A – B * (A / B)
+思路7：先&0xffffffff保留后32位，再使用python内置方法 bin(n)，
        将n转成2进制字符串，然后再用 count('1') 统计字符1的个数
+       （&0xffffffff也可以2**32+n替代）
 '''
 
 
@@ -52,7 +66,18 @@ class Solution:
             n &= (n - 1)
         return count
 
-    def NumberOf1InBinary5(self, n):  # pythonic
+    def NumberOf1InBinary5(self, n):
+        n = (n & 0x55555555) + ((n >> 1) & 0x55555555)
+        n = (n & 0x33333333) + ((n >> 2) & 0x33333333)
+        n = (n & 0x0f0f0f0f) + ((n >> 4) & 0x0f0f0f0f)
+        n = (n & 0x00ff00ff) + ((n >> 8) & 0x00ff00ff)
+        return (n & 0x0000ffff) + ((n >> 16) & 0x0000ffff)
+
+    def NumberOf1InBinary6(self, n):
+        tmp = n - ((n >> 1) & 0o33333333333) - ((n >> 2) & 0o11111111111)
+        return ((tmp + (tmp >> 3)) & 0o30707070707) % 63
+
+    def NumberOf1InBinary7(self, n):  # pythonic
         return bin(n).count('1') if n > 0 else bin(n & 0xffffffff).count('1')
 
 
@@ -80,5 +105,3 @@ class MyTest(Test):
 if __name__ == '__main__':
     solution = Solution()
     MyTest(solution=solution).start_test()
-
-
