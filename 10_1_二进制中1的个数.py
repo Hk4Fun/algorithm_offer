@@ -34,6 +34,7 @@ __date__ = '2018/1/4 3:20'
 思路6：MIT HAKMEM算法：http://blog.csdn.net/msquare/article/details/4536388
        其中涉及到一个求模运算，可能会减慢速度，可以用其他运算替代，
        C = A % B 等价于 C = A – B * (A / B)
+       （考虑到负数的情况不能用&63替代%63）
 思路7：先&0xffffffff保留后32位，再使用python内置方法 bin(n)，
        将n转成2进制字符串，然后再用 count('1') 统计字符1的个数
        （&0xffffffff也可以2**32+n替代）
