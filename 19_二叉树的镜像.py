@@ -31,7 +31,7 @@ class Solution:
         if not root:
             return
         nodeQue = [root]
-        while len(nodeQue):
+        while nodeQue:
             pRoot = nodeQue.pop(0)
             pRoot.left, pRoot.right = pRoot.right, pRoot.left
             if pRoot.left:

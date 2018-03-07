@@ -8,15 +8,16 @@ __date__ = '2018/1/4 3:14'
 '''主要思路：
 若第一个矩形竖着放，则右边剩下 2*(n-1);
 若第一个矩形横着放，则下面必须也要横着放一个，此时右边剩下 2*(n-2)
-所以还是一个斐波那契问题：f(n) = f(n-1) + f(n-2)
+所以还是一个斐波那契问题：f(n) = f(n-1) + f(n-2)，其中f(1)=1, f(2)=2
 '''
+
 
 class Solution:
     def rectCover(self, number):
         if number == 0:
-            return number
+            return 0
         tempArray = [1, 2]
         if number >= 3:
             for i in range(3, number + 1):
-                tempArray[(i + 1) % 2] = tempArray[0] + tempArray[1]  # 注意这里 i%2 的巧妙
+                tempArray[(i + 1) % 2] = tempArray[0] + tempArray[1]
         return tempArray[(number + 1) % 2]

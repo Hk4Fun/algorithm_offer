@@ -13,7 +13,7 @@ __date__ = '2018/1/31 15:58'
 '''主要思路：
 思路1： 由外向内一圈一圈打印，每一圈从左上角开始顺时针打印
         左上角的坐标总是x=y，标记为（start,start）,
-        由于每打印一圈，行列都减少2，所以圈数=(min(行，列))+1//2
+        由于每打印一圈，行列都减少2，所以圈数=(min(行，列)+1)//2
         每一圈的打印分四个步骤，且这四个步骤的执行是有条件的，因为里面那一圈并不完整：
         --->    
         ^  |
@@ -59,11 +59,9 @@ class Solution:
             return
         rows = len(matrix)
         cols = len(matrix[0])
-        if rows == 0 or cols == 0:
-            return
         result = []
-        for start in range((min(rows, cols) + 1) // 2):
-            PrintMatrixInCircle(matrix, result, cols - start * 2, rows - start * 2, start)
+        for start in range((min(rows, cols) + 1) >> 1):
+            PrintMatrixInCircle(matrix, result, cols - (start << 1), rows - (start << 1), start)
         return result
 
     def PrintMatrix2(self, matrix):
@@ -83,7 +81,7 @@ class Solution:
         result = []
         while matrix:
             result += matrix.pop(0)
-            if not matrix or not matrix[0]:
+            if not matrix:
                 break
             matrix = turn(matrix)
         return result

@@ -22,15 +22,17 @@ class Solution:
         def DoesTree1haveTree2(pRoot1, pRoot2):
             # 用于递归判断树的每个节点是否相同
             # 需要注意的地方是: 前两个if语句不可以颠倒顺序
-            # 如果颠倒顺序, 会先判断pRoot1是否为None, 其实这个时候pRoot2的结点已经遍历完成确定相等了, 但是返回了False, 判断错误
+            # 如果颠倒顺序, 会先判断pRoot1是否为None,
+            # 其实这个时候pRoot2的结点已经遍历完成确定相等了,
+            # 但是返回了False, 判断错误
             if not pRoot2:  # 来到B的叶结点，递归遍历结束，结构一致
                 return True
             if not pRoot1:
                 return False
             if pRoot1.val != pRoot2.val:
                 return False
-            return DoesTree1haveTree2(pRoot1.left, pRoot2.left) and DoesTree1haveTree2(pRoot1.right,
-                                                                                                 pRoot2.right)
+            return DoesTree1haveTree2(pRoot1.left, pRoot2.left) \
+                   and DoesTree1haveTree2(pRoot1.right, pRoot2.right)
 
         result = False
         if pRoot1 and pRoot2:

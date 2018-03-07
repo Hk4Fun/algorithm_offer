@@ -10,11 +10,9 @@ __date__ = '2018/1/4 2:46'
 求得通项公式为：f(n) = 2^(n-1)，其中 n >= 1，且 f(0) = 1
 '''
 
+
 class Solution:
     def jumpFloorII(self, n):
-        if n<=1:
+        if n <= 1:
             return 1
-        f = 1
-        for i in range(n-1):
-            f *= 2
-        return f
+        return 2 ** (n - 1)

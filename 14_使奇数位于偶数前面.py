@@ -24,8 +24,9 @@ __date__ = '2018/1/6 17:57'
        使用python内置方法sorted()。注意这个sorted方法是一种稳定排序，且可以设置
        key = lambda x：x&1，将所有偶数映射成0，奇数映射成1，再排序。
        同时设置reverse = True，这样奇数在前偶数在后（先映射再稳定排序，排序根据映射后的值）
-思路5（Pythonic，列表推导式）：
-       具体见代码
+思路5（时间复杂度O(n)，空间复杂度O(n)）：
+       创建两个数组，一个用来放奇数，一个用来放偶数。
+       遍历原数组，遇到奇数放进奇数组，偶数放进偶数组，最后把偶数组拼接在奇数组后面即可。
 '''
 
 
@@ -33,13 +34,12 @@ class Solution:
     def reOrderArray1(self, array):
         length = len(array)
         evenNum = length - sum([i & 1 for i in array])  # 统计偶数个数
-        count = 0
         i = 0
-        while count != evenNum:
+        while evenNum:
             if not array[i] & 1:  # 遇到偶数则冒泡到最后面
                 for j in range(i + 1, length):
                     array[j - 1], array[j] = array[j], array[j - 1]
-                count += 1  # 冒泡个数加一，等于偶数个数时结束，但i不加，因为已经往前挪了一位
+                evenNum -= 1  # 冒泡个数加一，等于偶数个数时结束，但i不加，因为已经往前挪了一位
             else:  # 遇到奇数就往后索引
                 i += 1
         return array

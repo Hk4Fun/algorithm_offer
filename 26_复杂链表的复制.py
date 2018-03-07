@@ -111,13 +111,13 @@ class Solution:
             pNode = pHead
             pClonedHead = pClonedNode = pNode.next
             pNode.next = pClonedNode.next
-            pNode = pNode.next
+            pNode = pNode.next  # 到这里pClonedNode在前，pNode在后，
 
             while pNode:
-                pClonedNode.next = pNode.next
-                pClonedNode = pClonedNode.next
-                pNode.next = pClonedNode.next
-                pNode = pNode.next
+                pClonedNode.next = pNode.next  # pNode的下一个与pClonedNode链接
+                pClonedNode = pClonedNode.next  # pClonedNode顺着链接后移一格
+                pNode.next = pClonedNode.next  # pClonedNode把下一个与pNode链接
+                pNode = pNode.next  # pNode顺着链接后移一格，保证pClonedNode在前，pNode在后
 
             return pClonedHead
 
@@ -142,7 +142,6 @@ class MyTest(Test):
             node.random = random
 
         testArgs = []
-
 
         #         -----------------
         #        \|/              |

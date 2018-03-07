@@ -45,9 +45,9 @@ class Solution:
         row, col = 0, cols - 1
         while row < rows and col >= 0:
             if array[row][col] > target:  # 当前元素大于target, 剔除target所在列（col左移-1）
-                col = col - 1
+                col -= 1
             elif array[row][col] < target:  # 当前元素小于target, 剔除target所在行（row下移+1）
-                row = row + 1
+                row += 1
             else:  # 等于，结束查找
                 return True
         return False

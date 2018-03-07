@@ -20,7 +20,7 @@ class TreeNode:
 class Solution:
     # 返回二维列表，内部每个列表表示找到的路径
     def FindPath(self, root, expectedSum):
-        def find(root, expectedSum, path, total_path, currentSum):
+        def find(root, currentSum, expectedSum, path, all_path):
             # 每遍历一个结点就把该结点加入路径中，更新currentSum
             currentSum += root.val
             path.append(root.val)
@@ -28,14 +28,14 @@ class Solution:
             # 如果是叶结点，并且路径上结点的和等于输入的值，则找到新的路径
             isLeaf = not (root.left or root.right)
             if currentSum == expectedSum and isLeaf:
-                total_path.append(path[:])  # 注意这里应该是path的拷贝，否则后面path改变，这里也会一起改变
+                all_path.append(path[:])  # 注意这里应该是path的拷贝，否则后面path改变，这里也会一起改变
 
             # 不是叶结点的话就遍历它的左右子结点
             if root.left:
-                find(root.left, expectedSum, path, total_path, currentSum)
+                find(root.left, currentSum, expectedSum, path, all_path)
 
             if root.right:
-                find(root.right, expectedSum, path, total_path, currentSum)
+                find(root.right, currentSum, expectedSum, path, all_path)
 
             # 在返回父节点之前，在路径上删除当前结点，并在currentSum中减去当前结点的值
             # 最终遍历整棵树，找到所有路径
@@ -46,12 +46,12 @@ class Solution:
             # 即可以适当剪枝，提高遍历速度，但此题并没有说明全部结点值都大于0，
             # 说明后面可能有负数使得currentSum会减回来等于expectedSum，所以这里没有剪枝而是到叶结点才返回
 
-        total_path = []
+        all_path = []
         path = []
         currentSum = 0
         if root:
-            find(root, expectedSum, path, total_path, currentSum)
-        return total_path
+            find(root, currentSum, expectedSum, path, all_path)
+        return all_path
 
 
 # ================================测试代码================================

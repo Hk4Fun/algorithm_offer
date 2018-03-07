@@ -19,12 +19,10 @@ high = high - 1
 (3)array[mid] < array[high]:
 出现这种情况的array类似[2,2,3,4,5,6,6],此时最小数字一定就是array[mid]或者在mid的左
 边。因为右边必然都是递增的。
-high = mid
-注意这里有个坑：如果待查询的范围最后只剩两个数，那么mid 一定会指向下标靠前的数字
-比如 array = [4,6]
-array[low] = 4 ;array[mid] = 4 ; array[high] = 6 ;
-如果high = mid - 1，就会产生错误， 因此high = mid
-但情形(1)中low = mid + 1就不会错误   
+若 mid = 0 ,这说明low与high之间未发生旋转，最小数字就是array[mid]，
+或者array[mid-1]>array[mid]，则最小数字就是array[mid]；
+否则mid不为零且array[mid-1]<=array[mid]，最小数字在mid的左边，
+high = mid - 1
 '''
 
 
@@ -34,20 +32,18 @@ class Solution:
         if not rotateArray:
             return
         low, high = 0, len(rotateArray) - 1
-        while low <= high:
+        while low < high:
             mid = low + ((high - low) >> 1)
             if rotateArray[mid] > rotateArray[high]:
                 low = mid + 1
             elif rotateArray[mid] < rotateArray[high]:
-                high = mid  # 不是mid-1
+                if mid == 0 or rotateArray[mid - 1] > rotateArray[mid]:
+                    return rotateArray[mid]
+                else:
+                    high = mid - 1
             else:
                 high = high - 1  # 退化成O(n)
-        # 返回rotateArray[low] ，而不是rotateArray[high]
-        # 因为整个数组都旋转时最小在rotateArray[0]
-        # 且跳出循环一定是high跑到low左边了，low一定不会跑到high的右边
-        # 因为只有 low = mid + 1 会让low右移，而当high-low==1且low右移时，
-        # low==high，接下来一定是high左移然后跳出循环
-        return rotateArray[low]
+        return rotateArray[low] # 最终一定是high==low跳出循环
 
     # ================================测试代码================================
 

@@ -17,5 +17,5 @@ class Solution:
         tempArray = [1, 2]
         if n >= 3:
             for i in range(3, n + 1):
-                tempArray[(i + 1) % 2] = tempArray[0] + tempArray[1]  # 注意这里 i%2 的巧妙
+                tempArray[(i + 1) % 2] = tempArray[0] + tempArray[1]
         return tempArray[(n + 1) % 2]

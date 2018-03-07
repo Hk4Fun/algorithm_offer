@@ -14,7 +14,6 @@ __date__ = '2018/2/5 21:57'
        最后再把抽出来的那个字符与排列好的字符串拼在一起返回即可，只剩下一个字符时直接返回该字符
 思路3：pythonic，使用itertools.permutations()
 '''
-import itertools
 
 
 class Solution:
@@ -49,6 +48,7 @@ class Solution:
         return sorted(list(set(permutation(ss))))
 
     def Permutation3(self, ss):
+        import itertools
         if not ss:
             return []
         return sorted(list(set(map(''.join, itertools.permutations(ss)))))

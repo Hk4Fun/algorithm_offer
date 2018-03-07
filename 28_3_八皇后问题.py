@@ -72,7 +72,7 @@ class Solution:
     def EightQueen4(self, queenList):
         def convert(try_bit, row):
             # 将尝试的bit位转换为对应的列号
-            for col, bit in enumerate(bin(try_bit)[-1:1:-1]): # 注意去掉前面的'0b'并反转字符串
+            for col, bit in enumerate(bin(try_bit)[-1:1:-1]):  # 注意去掉前面的'0b'并反转字符串
                 if bit == '1':
                     a_result[row] = col
                     return
@@ -86,7 +86,7 @@ class Solution:
                 try_bit = allow_bits & (-allow_bits)  # 取出最右边的'1'
                 convert(try_bit, row)
                 queen((left | try_bit) << 1, mid | try_bit, (right | try_bit) >> 1, row + 1)
-                allow_bits -= try_bit
+                allow_bits -= try_bit  # 减去已经尝试的的位置，准备尝试下一个位置
 
         if queenList:
             length = len(queenList)
@@ -106,6 +106,7 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
+        self.debug = False
         testArgs = []
 
         testArgs.append([range(3), None])

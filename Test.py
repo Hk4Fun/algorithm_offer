@@ -4,8 +4,9 @@ __date__ = '2018/2/4 16:55'
 import traceback
 import timeit
 import inspect
+import copy
 
-TEST_NUM = 100000  # 单个测试用例的测试次数
+TEST_NUM = 10000  # 单个测试用例的测试次数
 
 
 class Test:
@@ -32,8 +33,9 @@ class Test:
             total_time = 0
             result = None
             for i in range(1 if self.debug else TEST_NUM):
+                func_arg_copy = copy.deepcopy(func_arg)
                 start = timeit.default_timer()
-                result = self.methods[int(method_num) - 1](*func_arg)
+                result = self.methods[int(method_num) - 1](*func_arg_copy)
                 end = timeit.default_timer()
                 total_time += end - start
             result = self.convert(result, *func_arg)

@@ -24,9 +24,7 @@ class Solution:
             return pHead2  # 此时如果pHead2也为None也正好直接返回
         elif not pHead2:
             return pHead1
-
-        pMergedHead = None
-        if pHead1.val < pHead2.val:
+        if pHead1.val <= pHead2.val:
             pMergedHead = pHead1
             pMergedHead.next = self.Merge1(pHead1.next, pHead2)
         else:
@@ -71,6 +69,7 @@ class MyTest(Test):
                 lastNode = newNode
             return head.next
 
+        self.debug = False
         testArgs = []
 
         testArgs.append([linkNodes([1, 3, 5]), linkNodes([2, 4, 6]), [1, 2, 3, 4, 5, 6]])  # 两个链表交叉递增

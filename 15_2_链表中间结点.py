@@ -7,7 +7,7 @@ __date__ = '2018/1/7 1:28'
 '''
 '''主要思路：
 定义两个指针，同时从头结点出发，一个指针一次走一步，另一个一次走两步。
-当走得快的指针走到链表末尾时，走得慢的指针正好在链表的在中间。
+当走得快的指针走到链表末尾时，走得慢的指针正好在链表的中间。
 注意：一次走两步的指针不能一下子走完，因为如果来到倒数第二个结点时就只能走一步了
 '''
 
@@ -53,6 +53,7 @@ class MyTest(Test):
 
         testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8]), 5])  # 链表个数为偶数
         testArgs.append([linkNodes([1, 2, 3, 4, 5]), 3])  # 链表个数为奇数
+        testArgs.append([linkNodes([1]), 1])  # 只有一个结点的链表
         testArgs.append([linkNodes([]), None])  # 空链表
 
         return testArgs

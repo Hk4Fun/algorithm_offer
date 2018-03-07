@@ -11,7 +11,7 @@ __date__ = '2018/2/5 15:03'
 原先指向右子结点的指针调整为链表中指向后一结点的指针：
       10
     /    \
-   6     14        =====>     4<->6<->8<->10<->12<->14<->16
+   6     14        =====>     None<-4<->6<->8<->10<->12<->14<->16->None
   /\     /\
  4  8  12  16
 思路1：中序遍历，同时设置一个指针指向当前双向链表的最后一个结点，
@@ -65,7 +65,7 @@ class Solution:
                 return
 
             # 处理左子树
-            self.Convert2(pRootOfTree.left)
+            ConvertNode(pRootOfTree.left)
             left = pRootOfTree.left
 
             # 连接根与左子树最大结点（左子树最右边结点）
@@ -75,7 +75,7 @@ class Solution:
                 pRootOfTree.left, left.right = left, pRootOfTree
 
             # 处理右子树
-            self.Convert2(pRootOfTree.right)
+            ConvertNode(pRootOfTree.right)
             right = pRootOfTree.right
 
             # 连接根与右子树最小结点（右子树最左边结点）
@@ -87,7 +87,7 @@ class Solution:
         if not pRootOfTree:
             return
         ConvertNode(pRootOfTree)
-        while pRootOfTree.left:    # 移到头结点返回
+        while pRootOfTree.left:  # 移到头结点返回
             pRootOfTree = pRootOfTree.left
         return pRootOfTree
 

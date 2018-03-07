@@ -26,10 +26,10 @@ class Solution:
         j = 0
         for i in pushV:
             stack.append(i)
-            while len(stack) and stack[-1] == popV[j]:
+            while stack and stack[-1] == popV[j]:
                 stack.pop()
                 j += 1
-        return False if len(stack) else True
+        return False if stack else True
 
 
 # ================================测试代码================================

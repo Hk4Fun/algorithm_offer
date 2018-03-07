@@ -22,7 +22,7 @@ class Solution:
 
     def Fibonacci2(self, n):  # 线性递归
         def fib(a, b, n):
-            return 1 if n <= 1 else a + fib(b, a + b, n - 1)
+            return 1 if n == 1 else a + fib(b, a + b, n - 1)
 
         return n if n <= 1 else fib(0, 1, n)
 
@@ -36,8 +36,8 @@ class Solution:
         tempArray = [0, 1]
         if n >= 2:
             for i in range(2, n + 1):
-                tempArray[i % 2] = tempArray[0] + tempArray[1]  # 注意这里 i%2 的巧妙
-        return tempArray[n % 2]
+                tempArray[i & 1] = tempArray[0] + tempArray[1]  # 注意这里 i&1 的巧妙
+        return tempArray[n & 1]
 
     def Fibonacci5(self, n):
         def fib(n):
