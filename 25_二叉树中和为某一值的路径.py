@@ -40,7 +40,7 @@ class Solution:
             # 在返回父节点之前，在路径上删除当前结点，并在currentSum中减去当前结点的值
             # 最终遍历整棵树，找到所有路径
             currentSum -= root.val
-            path.pop(-1)
+            path.pop()
 
             # 注意：其实当currentSum > expectedSum 时就没有必要往下遍历了，可以直接回溯
             # 即可以适当剪枝，提高遍历速度，但此题并没有说明全部结点值都大于0，

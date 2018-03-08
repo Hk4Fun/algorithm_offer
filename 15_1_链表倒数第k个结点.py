@@ -51,12 +51,12 @@ class Solution:
         pAHead = head
 
         for i in range(k - 1):  # 第一个指针先走k-1步
-            if pAHead.next != None:  # 边走边判断，防止k大于链表结点总数
+            if pAHead.next:  # 边走边判断，防止k大于链表结点总数
                 pAHead = pAHead.next
             else:  # k大于链表结点总数
                 return
         pBehind = head
-        while pAHead.next != None:  # 第一个指针到尾结点就结束遍历
+        while pAHead.next:  # 第一个指针到尾结点就结束遍历
             pAHead = pAHead.next
             pBehind = pBehind.next  # 第二个指针开始与第一个同时遍历
         return pBehind  # 返回此时第二个结点

@@ -5,15 +5,20 @@ __date__ = '2018/2/9 16:41'
 输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4
 '''
 '''主要思路：
-思路1（O(n)）：基于Partition的算法, 只有当我们可以修改输入的数组时可用。
-               利用Partition找到第(k-1)大的数(从0开始)，则数组左边的k个数字就是最小的k个数字
-               （这k个数字不一定是排序的）
-思路2（O(nlogk)）：不必修改数组，适合海量数据，利用一个k容量的容器存放数组, 构造最大堆, 
-                  当下一个数据大于最大数, 跳过, 小于最大数, 则进入容器替换之前的最大数，
-                  使得容器中的k个数保持是最小的k个数。其实可以用max()取得容器中的最大值，
-                  但时间复杂度为O(k)，没有最大堆快，其只有O(1)，但插入需O(logk)。
-                  使用python内置模块heapq：https://docs.python.org/3/library/heapq.html
-思路3（O(nlog(n))）：直接排序，然后取前面k个数
+思路1（时间O(nlogk)，空间O(1)）：
+基于Partition的算法, 只有当我们可以修改输入的数组时可用。
+利用Partition找到第(k-1)小的数(从0开始)，则数组左边的k个数字就是最小的k个数字
+（这k个数字不一定是排序的）
+
+思路2（时间O(nlogk)，空间O(k)）：
+不必修改数组，适合海量数据，利用一个k容量的容器存放数组, 构造最大堆, 
+当下一个数据大于最大数, 跳过, 小于最大数, 则进入容器替换之前的最大数，
+使得容器中的k个数保持是最小的k个数。其实可以用max()取得容器中的最大值，
+但时间复杂度为O(k)，没有最大堆快，其只有O(1)，但插入需O(logk)。
+使用python内置模块heapq：https://docs.python.org/3/library/heapq.html
+
+思路3（时间O(nlogn)，空间O(1)）：
+直接排序，然后取前面k个数
 '''
 
 
@@ -25,7 +30,7 @@ class Solution:
             last_small = start - 1  # 小于区域的右边界
             for index in range(start, end):  # 遍历start~end-1范围内的元素
                 if numbers[index] < numbers[end]:  # 找到比标杆还小的数
-                    last_small += 1  # 扩大小于区域的右边界，一定指向大于等于标杆的数，因为小于区域右边的数都大于等于标杆
+                    last_small += 1  # 扩大小于区域的右边界
                     if last_small != index:  # 不必自己和自己交换
                         # 把那个比标杆还小的数和刚刚扩大的小于区域右边界处交换
                         numbers[index], numbers[last_small] = numbers[last_small], numbers[index]

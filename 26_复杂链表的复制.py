@@ -33,59 +33,58 @@ class RandomListNode:
         self.next = None
         self.random = None
 
-
 class Solution:
-    def Clone1(self, pHead):
-        if not pHead:
-            return
-        # 第一步，复制原链表上的每一个节点，并用next连接起来
-        pCloneHead = RandomListNode(pHead.label)
-        pClonePre = pCloneHead
-        pNode = pHead.next
-        while pNode:
-            pCloned = RandomListNode(pNode.label)
-            pClonePre.next = pCloned
-            pNode = pNode.next
-            pClonePre = pCloned
-        # 第二步，链接复制链表每个结点的random结点
-        pNode = pHead
-        pCloned = pCloneHead
-        while pNode:
-            pRandom = pNode.random
-            if pRandom:
-                pOld = pHead  # 从原链表头结点开始遍历
-                pCloneRandom = pCloneHead  # 复制链表也同时从头遍历
-                while pOld != pRandom:  # 直到来到原链表的random结点
-                    pOld = pOld.next
-                    pCloneRandom = pCloneRandom.next
-                pCloned.random = pCloneRandom  # 此时的pCloneRandom正好也指向自己的random结点
-            pNode = pNode.next
-            pCloned = pCloned.next
-        return pCloneHead
-
-    def Clone2(self, pHead):
-        if not pHead:
-            return
-        # 第一步，复制原链表上的每一个节点，并用next连接起来
-        pCloneHead = RandomListNode(pHead.label)
-        pClonePre = pCloneHead
-        pNode = pHead.next
-        dict = {pHead: pCloneHead}  # 同时建立字典dict[N]=N';
-        while pNode:
-            pCloned = RandomListNode(pNode.label)
-            dict[pNode] = pCloned
-            pClonePre.next = pCloned
-            pNode = pNode.next
-            pClonePre = pCloned
-        # 第二步，链接复制链表每个结点的random结点
-        pNode = pHead
-        pCloned = pCloneHead
-        while pNode:
-            if pNode.random:
-                pCloned.random = dict[pNode.random]  # dict[S]=S'
-            pNode = pNode.next
-            pCloned = pCloned.next
-        return pCloneHead
+    #     def Clone1(self, pHead):
+    #         if not pHead:
+    #             return
+    #         # 第一步，复制原链表上的每一个节点，并用next连接起来
+    #         pCloneHead = RandomListNode(pHead.label)
+    #         pClonePre = pCloneHead
+    #         pNode = pHead.next
+    #         while pNode:
+    #             pCloned = RandomListNode(pNode.label)
+    #             pClonePre.next = pCloned
+    #             pNode = pNode.next
+    #             pClonePre = pCloned
+    #         # 第二步，链接复制链表每个结点的random结点
+    #         pNode = pHead
+    #         pCloned = pCloneHead
+    #         while pNode:
+    #             pRandom = pNode.random
+    #             if pRandom:
+    #                 pOld = pHead  # 从原链表头结点开始遍历
+    #                 pCloneRandom = pCloneHead  # 复制链表也同时从头遍历
+    #                 while pOld != pRandom:  # 直到来到原链表的random结点
+    #                     pOld = pOld.next
+    #                     pCloneRandom = pCloneRandom.next
+    #                 pCloned.random = pCloneRandom  # 此时的pCloneRandom正好也指向自己的random结点
+    #             pNode = pNode.next
+    #             pCloned = pCloned.next
+    #         return pCloneHead
+    #
+    #     def Clone2(self, pHead):
+    #         if not pHead:
+    #             return
+    #         # 第一步，复制原链表上的每一个节点，并用next连接起来
+    #         pCloneHead = RandomListNode(pHead.label)
+    #         pClonePre = pCloneHead
+    #         pNode = pHead.next
+    #         dict = {pHead: pCloneHead}  # 同时建立字典dict[N]=N';
+    #         while pNode:
+    #             pCloned = RandomListNode(pNode.label)
+    #             dict[pNode] = pCloned
+    #             pClonePre.next = pCloned
+    #             pNode = pNode.next
+    #             pClonePre = pCloned
+    #         # 第二步，链接复制链表每个结点的random结点
+    #         pNode = pHead
+    #         pCloned = pCloneHead
+    #         while pNode:
+    #             if pNode.random:
+    #                 pCloned.random = dict[pNode.random]  # dict[S]=S'
+    #             pNode = pNode.next
+    #             pCloned = pCloned.next
+    #         return pCloneHead
 
     def Clone3(self, pHead):
         # 复制原始链表的每个结点, 将复制的结点链接在其原始结点的后面
@@ -141,6 +140,7 @@ class MyTest(Test):
             node.next = next
             node.random = random
 
+        self.debug = True
         testArgs = []
 
         #         -----------------

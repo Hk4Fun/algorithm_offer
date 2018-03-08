@@ -66,12 +66,12 @@ class Solution:
 
     def PrintMatrix2(self, matrix):
         def turn(matrix):  # 逆时针旋转矩阵
-            rows = len(matrix)
-            cols = len(matrix[0])
+            if not matrix:
+                return
             matrix_turn = []
-            for i in range(cols - 1, -1, -1):
+            for i in range(len(matrix[0]) - 1, -1, -1):
                 row = []
-                for j in range(rows):
+                for j in range(len(matrix)):
                     row.append(matrix[j][i])
                 matrix_turn.append(row)
             return matrix_turn
@@ -81,8 +81,6 @@ class Solution:
         result = []
         while matrix:
             result += matrix.pop(0)
-            if not matrix:
-                break
             matrix = turn(matrix)
         return result
 

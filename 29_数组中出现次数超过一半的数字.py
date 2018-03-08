@@ -9,7 +9,7 @@ __date__ = '2018/2/9 14:28'
 '''主要思路：
 思路1：基于Partition函数的O(n)算法。
        若存在该数，则利用Partition划分找到中位数即为数组中出现次数超过一半的数，
-       相当于找到数组中第n/2大的数，最后记得检查查找到的中位数出现次数是否真的有超过总数的一半
+       相当于找到数组中第n/2小的数，最后记得检查查找到的中位数出现次数是否真的有超过总数的一半
 思路2：根据数组特点找出O(n)的算法。
        采用阵地攻守的思想：
        先让第一个数作为守阵地的士兵，HP=1；
@@ -35,7 +35,7 @@ class Solution:
             last_small = start - 1  # 小于区域的右边界
             for index in range(start, end):  # 遍历start~end-1范围内的元素
                 if numbers[index] < numbers[end]:  # 找到比标杆还小的数
-                    last_small += 1  # 扩大小于区域的右边界，一定指向大于等于标杆的数，因为小于区域右边的数都大于等于标杆
+                    last_small += 1  # 扩大小于区域的右边界
                     if last_small != index:  # 不必自己和自己交换
                         # 把那个比标杆还小的数和刚刚扩大的小于区域右边界处交换
                         numbers[index], numbers[last_small] = numbers[last_small], numbers[index]
@@ -47,7 +47,7 @@ class Solution:
         if not numbers:
             return 0
 
-        middle = length >> 1  # 要找的数是中位数，即数组中第n/2大的数
+        middle = length >> 1  # 要找的数是中位数，即数组中第n/2小的数
         start = 0
         end = length - 1
         index = Partition(numbers, length, start, end)

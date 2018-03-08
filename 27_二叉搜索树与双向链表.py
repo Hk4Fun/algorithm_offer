@@ -65,9 +65,7 @@ class Solution:
                 return
 
             # 处理左子树
-            ConvertNode(pRootOfTree.left)
-            left = pRootOfTree.left
-
+            left = ConvertNode(pRootOfTree.left)
             # 连接根与左子树最大结点（左子树最右边结点）
             if left:
                 while left.right:  # 移到左子树最右边结点
@@ -75,14 +73,13 @@ class Solution:
                 pRootOfTree.left, left.right = left, pRootOfTree
 
             # 处理右子树
-            ConvertNode(pRootOfTree.right)
-            right = pRootOfTree.right
-
+            right = ConvertNode(pRootOfTree.right)
             # 连接根与右子树最小结点（右子树最左边结点）
             if right:
                 while right.left:  # 移到右子树最左边结点
                     right = right.left
                 pRootOfTree.right, right.left = right, pRootOfTree
+            return pRootOfTree
 
         if not pRootOfTree:
             return

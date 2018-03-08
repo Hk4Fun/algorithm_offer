@@ -34,18 +34,16 @@ class Solution:
             return DoesTree1haveTree2(pRoot1.left, pRoot2.left) \
                    and DoesTree1haveTree2(pRoot1.right, pRoot2.right)
 
-        result = False
         if pRoot1 and pRoot2:
-            if pRoot1.val == pRoot2.val:
-                result = DoesTree1haveTree2(pRoot1, pRoot2)
-            if not result:
-                result = self.HasSubtree(pRoot1.left, pRoot2)
-            if not result:
-                result = self.HasSubtree(pRoot1.right, pRoot2)
-        return result
+            return True if DoesTree1haveTree2(pRoot1, pRoot2) \
+                else (self.HasSubtree(pRoot1.left, pRoot2)
+                      or self.HasSubtree(pRoot1.right, pRoot2))
+        return False
 
 
 # ================================测试代码================================
+
+
 from Test import Test
 
 
@@ -58,6 +56,7 @@ class MyTest(Test):
             rootNode.left = leftNode
             rootNode.right = rightNode
 
+        self.debug = True
         testArgs = []
 
         # 树中结点含有分叉，树B是树A的子结构
