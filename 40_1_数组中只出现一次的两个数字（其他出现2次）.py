@@ -52,8 +52,7 @@ class Solution:
 
     def FindNumsAppearOnce3(self, array):
         from collections import Counter
-        if array and len(array) > 1:
-            return list(map(lambda c: c[0], Counter(array).most_common()[-2:]))
+        return list(map(lambda c: c[0], Counter(array).most_common()[-2:])) if (array and len(array) > 1) else None
 
 
 # ================================测试代码================================

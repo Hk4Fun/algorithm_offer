@@ -2,7 +2,8 @@ __author__ = 'Hk4Fun'
 __date__ = '2018/2/11 16:38'
 
 '''题目描述：
-
+在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。
+输入一个数组, 求出这个数组中逆序对的总数
 '''
 '''主要思路：
 思路1：暴力枚举。每遍历到一个数字就逐个比较该数字与它后面数字的大小。
@@ -13,7 +14,7 @@ __date__ = '2018/2/11 16:38'
        排好序的，则p2之前的数都小于p1指向的数。反之，如果p1数字小于等于p2，则不构成
        逆序对。每一次比较都把较大的数从后往前复制到一个辅助数组里,确保辅助数组里的数字
        是递增排序的。然后把较大的数的指针往前移一位，进行下一轮比较。所以总的逆序对数就是
-       先把数组分隔成子数组，先统计出子数组内部的逆序对数，然后统计出两个相邻子数组之间的
+       先把数组分隔成子数组，先统计出两个子数组内部的逆序对数，然后统计出两个相邻子数组之间的
        逆序对数，三者之和。
 思路3：先把原数组进行从小到大排序，得到一个排好序的数组。然后遍历排序数组，
        找到每个数在原数组的索引，该索引就是这个数的在原数组中相对排好序的数组的偏移，
@@ -39,7 +40,7 @@ class Solution:
         def InversePairsCore(data, copy, start, end):
             if start == end:
                 return 0
-            mid = (end - start) // 2
+            mid = (end - start) >> 1
             # 注意这里的copy和data位置交换了，这样就能保证递归回来时，上一层拿到的data是下一层已经排好序的copy
             left = InversePairsCore(copy, data, start, start + mid)
             right = InversePairsCore(copy, data, start + mid + 1, end)
@@ -52,6 +53,7 @@ class Solution:
             indexCopy = end
             count = 0
             while i >= start and j >= start + mid + 1:
+                # 复制的时候统计两个子数组之间的逆序对数
                 if data[i] > data[j]:
                     copy[indexCopy] = data[i]
                     indexCopy -= 1
@@ -81,9 +83,9 @@ class Solution:
     def InversePairs3(self, data):
         count = 0
         copy = sorted(data[:])
-        for i in range(len(copy)):
-            count += data.index(copy[i])
-            data.remove(copy[i])
+        for num in copy:
+            count += data.index(num)
+            data.remove(num)
         return count
 
 

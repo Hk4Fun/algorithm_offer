@@ -18,6 +18,7 @@ __date__ = '2018/2/10 21:06'
        同理设置index3、index5，这样每次只需求min(A[index2]*2,A[index3]*3,A[index5]*5)
        就可求出下一个丑数，然后更新三个标记。这样关键就在于如何更新这三个标记，
        对于index2，只需往后遍历，直到指向的那个数乘2大于M即可停止，其他两个同理。
+       空间换时间，比思路1时间上快了不少
 思路3：对思路2的改进，对于如何更新那三个标记，仔细推敲可以发现其实
        只需让那些指向的数乘相应因子等于当前M的标记往后移一位即可，
        因为 M = min(A[index2]*2,A[index3]*3,A[index5]*5)，则至少有个标记是要往后移的，
@@ -26,6 +27,20 @@ __date__ = '2018/2/10 21:06'
        还是因为 M = min(A[index2]*2,A[index3]*3,A[index5]*5)， 既然M是其中最小的，
        那么其他的标记所指向的数乘以相应因子一定就比M大了，没有必要更新
        这样就可以把思路2中的三个并列的while简化成三个并列的if
+       
+更新：这里谈谈为什么要使用这三个index，且为什么这样做可以保证按顺序产生下一个丑数。
+按照正常的理解，后面的丑数都是由前面已经产生的某个丑数乘2或乘3或乘5得到，为了按照顺序，
+必须把前面每个丑数乘2或乘3或乘5得到的积中取大于当前最后一个丑数的最小值。
+那么问题来了，有必要把每个丑数都乘这三个因子然后取最小值？
+我们发现每个丑数都要经历乘2乘3乘5的过程，但却没有必要在同一次竞争下一个丑数中乘，
+所以我们反过来，标记上那些需要乘2或乘3或乘5的数，使得index2指向的数就要乘2，
+因为它在下一次竞争中可能会胜利，index3和index5同理。为了满足以上规则，
+我们让这三个标记从左向右各自独立遍历，这样也就让每个数都会经历乘2或乘3或乘5的过程，
+且如果标记的数乘以相应因子后竞争胜利了，那么该标记就要往后挪1位，
+因为新的丑数是该标记因子乘以它指向的数竞争胜利而生成的，
+所以该数乘以该因子已经没有参与下一次竞争的机会了，相应的因子标记就该往后挪，
+使得下一个数参与新的竞争。而其他竞争失败的标记不用动，因为它们还有竞争胜利的机会，
+毕竟每次胜利的是那个乘积最小的。
 '''
 
 
@@ -55,6 +70,7 @@ class Solution:
         uglyNumbers = [1]
         index2 = index3 = index5 = 0
         for i in range(1, index):
+            # 竞争产生下一个丑数
             uglyNumbers.append(min(uglyNumbers[index2] * 2, uglyNumbers[index3] * 3, uglyNumbers[index5] * 5))
             while uglyNumbers[index2] * 2 <= uglyNumbers[-1]: index2 += 1
             while uglyNumbers[index3] * 3 <= uglyNumbers[-1]: index3 += 1
@@ -69,8 +85,11 @@ class Solution:
         uglyNumbers = [1]
         index2 = index3 = index5 = 0
         for i in range(1, index):
+            # 竞争产生下一个丑数
             uglyNumbers.append(min(uglyNumbers[index2] * 2, uglyNumbers[index3] * 3, uglyNumbers[index5] * 5))
             # 把思路2中的三个并列的while简化成三个并列的if
+            # 则三个if只有一个会执行，也就是说只有一个标记会往后移，就是那个在上面竞争胜利的那个标记
+            # 胜利的标记后移，而其他两个失败的标记原地不动，因为它俩还有胜利的机会
             if uglyNumbers[-1] == uglyNumbers[index2] * 2: index2 += 1
             if uglyNumbers[-1] == uglyNumbers[index3] * 3: index3 += 1
             if uglyNumbers[-1] == uglyNumbers[index5] * 5: index5 += 1
@@ -87,6 +106,7 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
+        self.debug = True
         testArgs = []
 
         testArgs.append([1, 1])

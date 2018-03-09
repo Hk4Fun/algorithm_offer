@@ -16,8 +16,7 @@ __date__ = '2018/2/15 17:12'
 
 class Solution:
     def ReverseSentence1(self, s):
-        if s != None:
-            return ' '.join(i[::-1] for i in s[::-1].split(' '))
+        return ' '.join(i[::-1] for i in s[::-1].split(' ')) if s != None else None
 
     def ReverseSentence2(self, s):
         if s != None:
@@ -32,8 +31,7 @@ class Solution:
             return result
 
     def ReverseSentence3(self, s):
-        if s != None:
-            return ' '.join(s.split(' ')[::-1])
+        return ' '.join(s.split(' ')[::-1]) if s != None else None
 
     def ReverseSentence4(self, s):
         def reverse(s, start, end):

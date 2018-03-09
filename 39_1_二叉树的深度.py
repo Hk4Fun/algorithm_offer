@@ -21,7 +21,7 @@ class TreeNode:
 class Solution:
     def TreeDepth1(self, pRoot):
         if not pRoot: return 0
-        return max(self.TreeDepth(pRoot.left), self.TreeDepth(pRoot.right)) + 1
+        return max(self.TreeDepth1(pRoot.left), self.TreeDepth1(pRoot.right)) + 1
 
     def TreeDepth2(self, pRoot):
         if not pRoot: return 0

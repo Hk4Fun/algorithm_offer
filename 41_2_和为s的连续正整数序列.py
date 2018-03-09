@@ -19,8 +19,10 @@ __date__ = '2018/2/15 0:45'
           假设序列长度为n，那么这个序列的中间值可以通过（S / n）得到，知道序列的中间值和长度，也就不难求出这段序列了。
           所以只需遍历n的值即可。
        2）满足条件的n分两种情况：
-          n为奇数时，序列中间的数正好是序列的平均值，所以条件为：(n & 1) == 1 && sum % n == 0；
-          n为偶数时，序列中间两个数的平均值是序列的平均值，而这个平均值的小数部分为0.5，所以条件为：(sum % n) * 2 == n.
+          n为奇数时，序列中间的数正好是序列的平均值，所以条件为：
+          (n & 1) == 1 && sum % n == 0；
+          n为偶数时，序列中间两个数的平均值是序列的平均值，而这个平均值的小数部分为0.5，所以条件为：
+          (n & 1) == 0 && (sum % n) * 2 == n.
        3）由题可知n >= 2，那么n的最大值是多少呢？我们让序列从1开始，根据等差数列的求和公式：S = (1 + n) * n / 2，
           得到 n <= sqrt(2s).
 '''
@@ -39,11 +41,11 @@ class Solution:
         while small <= small_top and big <= big_top:
             while curSum > sum and small <= small_top:
                 curSum -= small
-                small += 1
+                small += 1  # 先减再右移
             if curSum == sum:
                 result.append(list(range(small, big + 1)))
             big += 1  # 如果curSum < sum，那么big后移；如果找到了一个序列，那么big也后移继续寻找下一个序列
-            curSum += big
+            curSum += big  # 先右移再加
         return result
 
     def FindContinuousSequence2(self, sum):
@@ -71,8 +73,8 @@ class Solution:
             return []
         result = []
         # 之所以j取值从上限到下限反过来是因为题目要求序列间按照开始数字从小到大的顺序输出，
-        # 也就是要求a1从小到大遍历。由a1 = (i - j + 1) / 2 和s = sqrt(2 * sum) 可知，
-        # 当j从s开始取值能保证(i - j)由小到大(i>j)，也就保证了a1由小到大
+        # 也就是要求a1从小到大遍历。由a1 = (i - j + 1) / 2 和 i*j = 2s 可知，
+        # 当j从大到小开始取值能保证(i - j)由小到大(i>j)，也就保证了a1由小到大
         for j in range(int(sqrt(sum << 1)), 1, -1):
             if 2 * sum % j == 0:
                 i = 2 * sum // j
@@ -89,7 +91,7 @@ class Solution:
         result = []
         # 同思路3，当n从由大至小遍历时，可以保证序列间按照开始数字从小到大的顺序
         for n in range(int(sqrt(sum << 1)), 1, -1):
-            if (n & 1 == 1 and sum % n == 0) or (((sum % n) << 1) == n):
+            if (n & 1 == 1 and sum % n == 0) or (n & 1 == 0 and ((sum % n) << 1) == n):
                 first = (sum // n) - ((n - 1) >> 1)
                 result.append(list(range(first, first + n)))
         return result

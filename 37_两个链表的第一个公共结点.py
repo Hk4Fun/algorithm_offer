@@ -102,7 +102,7 @@ class Solution:
         while pListHeadLong and pListHeadShort and pListHeadLong != pListHeadShort:  # 再同时遍历
             pListHeadLong = pListHeadLong.next
             pListHeadShort = pListHeadShort.next
-        return pListHeadLong # 包含了无公共结点的情况（即返回None）
+        return pListHeadLong  # 包含了无公共结点的情况（即返回None）
 
     # 同时从头开始遍历，时间复杂度=O[lcm(m,n)]，空间复杂度=O(1)
     def FindFirstCommonNode4(self, pHead1, pHead2):
@@ -124,6 +124,7 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
+        self.debug = False
         testArgs = []
 
         # 第一个公共结点在链表中间

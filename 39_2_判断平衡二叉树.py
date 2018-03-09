@@ -66,6 +66,7 @@ class MyTest(Test):
             rootNode.left = leftNode
             rootNode.right = rightNode
 
+        self.debug = True
         testArgs = []
 
         # 完全二叉树

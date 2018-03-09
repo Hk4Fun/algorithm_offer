@@ -37,7 +37,7 @@ class Solution:
         d = dict(zip(s2, [1] * len(s2)))
         result = []
         for i in s1:
-            if i not in d.keys(): # 这样的话其实与思路1没什么区别，反而还麻烦了，多建一个字典
+            if i not in d.keys():
                 result.append(i)
         return ''.join(result)
 # ================================测试代码================================

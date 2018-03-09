@@ -31,14 +31,13 @@ class Test:
 
         try:
             total_time = 0
-            result = None
             for i in range(1 if self.debug else TEST_NUM):
                 func_arg_copy = copy.deepcopy(func_arg)
                 start = timeit.default_timer()
-                result = self.methods[int(method_num) - 1](*func_arg_copy)
+                self.methods[int(method_num) - 1](*func_arg_copy)
                 end = timeit.default_timer()
                 total_time += end - start
-            result = self.convert(result, *func_arg)
+            result = self.convert(self.methods[int(method_num) - 1](*func_arg), *func_arg)
         except Exception:
             print('Failed: Syntax Error！')
             print(traceback.format_exc())

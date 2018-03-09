@@ -6,7 +6,7 @@ __date__ = '2018/2/11 0:48'
 '''
 '''主要思路：
 思路1：利用python的字典建立哈希表，键记录字母，值记录字母出现的次数。
-       第一次遍历建立哈希表，第二次遍历找到第一个值为0的键（字母）。
+       第一次遍历建立哈希表，第二次遍历找到第一个值为1的键（字母）。
        时间复杂度O(n)，空间复杂度O(1)（不会超过256个键值对）
 思路2：pythonic，利用count()
 '''
@@ -16,13 +16,13 @@ class Solution:
     def FirstNotRepeatingChar1(self, s):
         if not s:
             return -1
-        d = {}
-        for i in s:
-            if i in d.keys():
-                d[i] += 1
+        hashTable = {}
+        for char in s:
+            if char not in hashTable.keys():
+                hashTable[char] = 1
             else:
-                d[i] = 1
-        for i, v in d.items():
+                hashTable[char] += 1
+        for i, v in hashTable.items():
             if v == 1:
                 return s.index(i)
         return -1

@@ -7,7 +7,9 @@ __date__ = '2018/2/11 15:53'
 '''
 '''主要思路：
 思路1：pythonic，利用python的set数据结构快速判断
-思路2：将word1和word2建成两张哈希表，值为出现的次数，看两张表是否相等
+思路2：将word1和word2建成两张哈希表，记录出现的次数，看两张表是否相等
+思路3: 思路2在空间上的优化。只需用word1建立一张表（在表上添加记录，做加法），
+       而word2在这张表上查询并做减法，最后若表中所有键的值都为0，则说明为变位词，否则不是
 '''
 
 
@@ -20,20 +22,27 @@ class Solution:
     def Anagram2(self, word1, word2):
         if word1 == None or word1 == None:
             return
-        d1 = {}
-        d2 = {} # 这里不能d1 = d2 = {}，因为后面会改变字典，d1和d2将会一致
+        # 这里不能table1 = table1 = [0] * 26，因为后面会改变其中一个，另一个也会一起改变，因为列表的引用是同一个
+        table1, table2 = [0] * 26, [0] * 26
+        for char in word1:
+            index = ord(char) - ord('a')
+            table1[index] = table1[index] + 1
+        for char in word2:
+            index = ord(char) - ord('a')
+            table2[index] = table2[index] + 1
+        return table1 == table2
 
-        for w1 in word1:
-            if w1 not in d1.keys():
-                d1[w1] = 1
-            else:
-                d1[w1] += 1
-        for w2 in word2:
-            if w2 not in d2.keys():
-                d2[w2] = 1
-            else:
-                d2[w2] += 1
-        return d1 == d2
+    def Anagram3(self, word1, word2):
+        if word1 == None or word1 == None:
+            return
+        table = [0] * 26
+        for char in word1:
+            index = ord(char) - ord('a')
+            table[index] = table[index] + 1
+        for char in word2:
+            index = ord(char) - ord('a')
+            table[index] = table[index] - 1
+        return table == [0] * 26
 
 
 # ================================测试代码================================

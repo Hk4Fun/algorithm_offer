@@ -8,7 +8,7 @@ __date__ = '2018/1/30 17:11'
 思路1：递归实现原地合并，将两个链表中值较小的头结点链接到已经合并的链表之后，
        两个链表剩余的结点依然是排序的，因此合并的步骤和之前的步骤一致，可以递归实现，
        注意，合并到最后，必有一个链表不为None，此时将头结点直接链接到最后即可       
-思路2：非递归，循环实现，非原地合并，记得最后将剩余的链表链接到新链表中
+思路2：非递归，循环实现，记得最后将剩余的链表链接到新链表中
 '''
 
 
@@ -25,13 +25,11 @@ class Solution:
         elif not pHead2:
             return pHead1
         if pHead1.val <= pHead2.val:
-            pMergedHead = pHead1
-            pMergedHead.next = self.Merge1(pHead1.next, pHead2)
+            pHead1.next = self.Merge1(pHead1.next, pHead2)
+            return pHead1
         else:
-            pMergedHead = pHead2
-            pMergedHead.next = self.Merge1(pHead1, pHead2.next)
-
-        return pMergedHead
+            pHead2.next = self.Merge1(pHead1, pHead2.next)
+            return pHead2
 
     def Merge2(self, pHead1, pHead2):
         mergeHead = mergeTail = ListNode(0)  # 这个头结点只是用来创建新的链表，真正的合并链表头结点是它的下一个
@@ -44,10 +42,7 @@ class Solution:
                 pHead1 = pHead1.next
             mergeTail = mergeTail.next
         # 将剩下的不为空的链表直接链接到新链表后面
-        if pHead1:
-            mergeTail.next = pHead1
-        elif pHead2:
-            mergeTail.next = pHead2
+        mergeTail.next = pHead1 or pHead2 # 利用短路原则
         return mergeHead.next  # 返回真正的头结点
 
 
@@ -69,7 +64,7 @@ class MyTest(Test):
                 lastNode = newNode
             return head.next
 
-        self.debug = False
+        self.debug = True
         testArgs = []
 
         testArgs.append([linkNodes([1, 3, 5]), linkNodes([2, 4, 6]), [1, 2, 3, 4, 5, 6]])  # 两个链表交叉递增

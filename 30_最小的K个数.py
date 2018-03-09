@@ -24,34 +24,31 @@ __date__ = '2018/2/9 16:41'
 
 class Solution:
     def KLeastNumbers1(self, numbers, k):
-        def Partition(numbers, length, start, end):
-            if not numbers or length <= 0 or start < 0 or end >= length:
-                return
+        def partition(numbers, start, end):
             last_small = start - 1  # 小于区域的右边界
-            for index in range(start, end):  # 遍历start~end-1范围内的元素
-                if numbers[index] < numbers[end]:  # 找到比标杆还小的数
+            for i in range(start, end):  # 遍历start~end-1范围内的元素
+                if numbers[i] < numbers[end]:  # 找到比标杆还小的数
                     last_small += 1  # 扩大小于区域的右边界
-                    if last_small != index:  # 不必自己和自己交换
+                    if last_small != i:  # 不必自己和自己交换
                         # 把那个比标杆还小的数和刚刚扩大的小于区域右边界处交换
-                        numbers[index], numbers[last_small] = numbers[last_small], numbers[index]
+                        numbers[last_small], numbers[i] = numbers[i], numbers[last_small]
             last_small += 1  # 右移一格指向大于等于区域的左边界，即标杆实际上的正确位置
-            numbers[end], numbers[last_small] = numbers[last_small], numbers[end]  # 现在可以把标杆交换过来了
-            return last_small  # 返回标杆
+            numbers[last_small], numbers[end] = numbers[end], numbers[last_small]  # 现在可以把标杆交换过来了
+            return last_small  # 返回分界线
 
-        length = len(numbers)
-        if not numbers or length < k or k <= 0:
+        if not numbers or k < 1 or k > len(numbers):
             return []
-        start = 0
-        end = length - 1
-        index = Partition(numbers, length, start, end)
-        while index != k - 1:  # 0~k-1共最小的k个数
+        start, end = 0, len(numbers) - 1
+        # 以下为二分， 只不过没有分界线不再是mid，而是通过partition求得
+        while start <= end:
+            index = partition(numbers, start, end)
             if index > k - 1:
                 end = index - 1
-                index = Partition(numbers, length, start, end)
-            else:
+            elif index < k - 1:
                 start = index + 1
-                index = Partition(numbers, length, start, end)
-        return numbers[:k]
+            else:
+                return numbers[:k]
+        return []
 
     def KLeastNumbers2(self, numbers, k):
         import heapq
@@ -84,6 +81,7 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
+        self.debug = True
         testArgs = []
 
         # k小于数组的长度
