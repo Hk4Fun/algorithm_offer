@@ -8,8 +8,9 @@ __date__ = '2018/2/25 20:03'
 序列化可以采用多种遍历方式，本来可以仿照第6题序列化成前序+中序或后序+中序，
 但这要求结点值不能重复，所以不能使用双遍历的方式。采用单遍历就允许结点值重复，
 可是单次遍历是无法确定一个二叉树的，所以可以在遍历到None时也加入遍历序列中。
-这里的序列化字符串用‘#’表示None，且采用层次遍历。
-为了防止12，3以及1，23产生歧义而分不清，使用逗号将每个结点的值分开。
+这里的序列化字符串用‘#’表示None,为了防止12，3以及1，23产生歧义而分不清，使用逗号将每个结点的值分开。
+思路1：层序遍历
+思路2：前序遍历
 '''
 
 
@@ -22,7 +23,7 @@ class TreeNode:
 
 class Solution:
     # 先序列化再反序列化，最终返回反序列化后的树的根结点
-    def Serialize(self, root):
+    def Serialize1(self, root):
         def serialize(root):
             if not root:
                 return '#'
@@ -63,8 +64,40 @@ class Solution:
                     SubTreeRoot.right = right
             return TreeRoot
 
-        serializeStr = serialize(root)
-        return deserialize(serializeStr)
+        return deserialize(serialize(root))
+
+    def Serialize2(self, root):
+        def serialize(root):
+            def pre_order(root, s):
+                if not root:
+                    s.append('#')
+                    return
+                s.append(str(root.val))
+                pre_order(root.left, s)
+                pre_order(root.right, s)
+
+            if not root:
+                return '#'
+            s = []
+            pre_order(root, s)
+            return ','.join(s)
+
+        def deserialize(s):
+            def pre_order(s):
+                if s[0] == '#':
+                    s.pop(0)
+                    return
+                root = TreeNode(int(s.pop(0)))
+                root.left = pre_order(s)
+                root.right = pre_order(s)
+                return root
+
+            if not s or s == '#':
+                return
+            s = s.split(',')
+            return pre_order(s)
+
+        return deserialize(serialize(root))
 
 
 # ================================测试代码================================
@@ -80,6 +113,7 @@ class MyTest(Test):
             rootNode.left = leftNode
             rootNode.right = rightNode
 
+        self.debug = False
         testArgs = []
 
         #      8

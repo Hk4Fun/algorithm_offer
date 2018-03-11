@@ -63,7 +63,7 @@ class Solution:
             return []
         deque = []
         result = []
-        for i in range(0, len(num)):
+        for i in range(len(num)):
             # 新增加的值从队尾开始比较，把前面所有比他小的值从队尾取出，直到遇到比它大的数就停止
             while deque and num[i] >= num[deque[-1]]:
                 deque.pop()

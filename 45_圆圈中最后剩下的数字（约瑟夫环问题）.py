@@ -21,10 +21,10 @@ class Solution:
         if not n or not m:
             return -1
         circle = list(range(n))
-        i = 0
+        last = 0
         while len(circle) > 1:
-            i = (i + m - 1) % len(circle)
-            circle.pop(i)
+            last = (last + m - 1) % len(circle)
+            circle.pop(last)
         return circle[0]
 
     # 循环实现
