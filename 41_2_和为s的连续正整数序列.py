@@ -38,7 +38,7 @@ class Solution:
         small_top = (sum - 1) >> 1
         big_top = small_top + 1
         result = []
-        while small <= small_top and big <= big_top:
+        while big <= big_top:
             while curSum > sum and small <= small_top:
                 curSum -= small
                 small += 1  # 先减再右移
@@ -107,6 +107,7 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
+        self.debug = True
         testArgs = []
 
         testArgs.append([1, []])

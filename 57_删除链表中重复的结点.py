@@ -34,14 +34,12 @@ class Solution:
         while cur:
             if cur.next and cur.next.val == cur.val:  # 找到重复的结点
                 val = cur.val
-                delNode = cur  # 从重复结点的第一个开始删除
-                while delNode and delNode.val == val:  # 连续删除与当前结点重复的结点
-                    delNode = delNode.next  # python有垃圾回收，所以直接把删除指针后移即可
+                while cur and cur.val == val:  # 连续删除与当前结点值重复的结点
+                    cur = cur.next  # python有垃圾回收，所以直接后移即可
                 if not pre:  # 如果pre始终为None，说明从头结点开始就重复了，直接把头结点改掉
-                    pHead = delNode  # 连续删除重复结点后的删除指针指向第一个与当前结点不同的结点
+                    pHead = cur  # 连续删除重复结点后当前指针指向第一个不同的结点
                 else:
-                    pre.next = delNode  # 将第一个与当前结点不同的结点链接到pre后面
-                cur = delNode  # 更新cur指向第一个与当前结点不同的结点
+                    pre.next = cur  # 将第一个不同的结点链接到pre后面
             else:  # 没有找到重复结点，确定是唯一结点
                 pre = cur  # 把pre往后移
                 cur = cur.next  # cur也后移
@@ -111,6 +109,7 @@ class MyTest(Test):
                 lastNode = newNode
             return head.next
 
+        self.debug = True
         testArgs = []
 
         testArgs.append([linkNodes([1, 2, 3, 3, 4, 4, 5]), [1, 2, 5]])

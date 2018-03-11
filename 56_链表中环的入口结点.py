@@ -67,35 +67,34 @@ class Solution:
             p2 = p2.next
         return p1
 
-    # def EntryNodeOfLoop2(self, pHead):
-    # # 该算法会破坏原链的结构，所以只能测试1次，再次测试会无法通过
-    #     def isLoop(pHead):
-    #         # 判断是否含环，不含环返回False，含环则返回相遇点
-    #         fast = slow = pHead
-    #         while fast.next:
-    #             fast = fast.next
-    #             if fast.next:  # 确定fast是否能再走一步
-    #                 fast = fast.next
-    #             else:  # None说明来到尾部，即不含环
-    #                 return False
-    #             slow = slow.next
-    #             if fast == slow:
-    #                 return slow
-    #         if not fast.next:
-    #             return False
-    #
-    #     if not pHead:
-    #         return
-    #     meetNode = isLoop(pHead)
-    #     if not meetNode:
-    #         return
-    #     before = pHead
-    #     after = pHead.next
-    #     while after:
-    #         before.next = None
-    #         before = after
-    #         after = after.next
-    #     return before
+    def EntryNodeOfLoop2(self, pHead):
+        def isLoop(pHead):
+            # 判断是否含环，不含环返回False，含环则返回相遇点
+            fast = slow = pHead
+            while fast.next:
+                fast = fast.next
+                if fast.next:  # 确定fast是否能再走一步
+                    fast = fast.next
+                else:  # None说明来到尾部，即不含环
+                    return False
+                slow = slow.next
+                if fast == slow:
+                    return slow
+            if not fast.next:
+                return False
+
+        if not pHead:
+            return
+        meetNode = isLoop(pHead)
+        if not meetNode:
+            return
+        before = pHead
+        after = pHead.next
+        while after:
+            before.next = None
+            before = after
+            after = after.next
+        return before
 
     def EntryNodeOfLoop3(self, pHead):
         tmp = []

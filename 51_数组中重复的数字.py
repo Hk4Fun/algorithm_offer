@@ -38,7 +38,7 @@ class Solution:
                     duplicate_num.append(numbers[i])
                     break  # 找到了就跳到下一个，因为没有发生交换
                 else:
-                    index = numbers[i]
+                    index = numbers[i]  # 这里必须把numbers[i]抽出来而不能直接带入下面的表达式中
                     numbers[i], numbers[index] = numbers[index], numbers[i]
         return duplicate_num if duplicate_num else -1
 
@@ -57,9 +57,8 @@ class Solution:
                 tmp[numbers[i]] = True
         return duplicate_num if duplicate_num else -1
 
-    # ================================测试代码================================
 
-
+# ================================测试代码================================
 from Test import Test
 
 

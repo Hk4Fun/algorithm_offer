@@ -7,9 +7,13 @@ __date__ = '2018/2/17 0:23'
 注意：这里大小王的个数不限，且输入参数的AJQK和大小王已经转换成相应数字
 '''
 '''主要思路：
-思路1：1. 除0外没有重复的数，2. max - min < 5 （由于max和min动态变化，但最终max-min=4）
-思路2：首先排序数组，再统计数组中0的个数，最后统计排序数组中相邻数字之间的空缺总数。
-       如果空缺的总数小于或者等于0的个数，那么这个数组就是连续的，反之不连续。
+思路1（时间O(n)，空间n(1)）：
+1. 除0外没有重复的数(用位图来记录每个出现过的数字)，
+2. max - min < 5 （由于max和min动态变化，但最终max-min=4）
+
+思路2（时间O(nlogn)，空间n(1)）：
+首先排序数组，再统计数组中0的个数，最后统计排序数组中相邻数字之间的空缺总数。
+如果空缺的总数小于或者等于0的个数，那么这个数组就是连续的，反之不连续。
 '''
 
 
@@ -50,20 +54,12 @@ class Solution:
                 return False
         numbers.sort()
         # 统计相邻数字的空缺个数
-        start = zero_num
-        next = start + 1
-        gap_num = 0
-        while next < length:
-            # 如果出现对子的情况，一定不可能成为顺子
-            if numbers[next] == numbers[start]:
+        for i in range(zero_num, length - 1):  # 排序后前面都是0，从0之后的数字开始遍历
+            if numbers[i] == numbers[i + 1]:  # 如果出现对子的情况，一定不可能成为顺子
                 return False
-            gap_num += numbers[next] - numbers[start] - 1
-            start = next
-            next += 1
+            zero_num -= numbers[i + 1] - numbers[i] - 1
         # 判断能够成为顺子
-        if gap_num <= zero_num:
-            return True
-        return False
+        return True if zero_num >= 0 else False
 
 
 # ================================测试代码================================

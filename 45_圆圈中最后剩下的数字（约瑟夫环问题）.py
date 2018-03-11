@@ -20,12 +20,12 @@ class Solution:
     def LastRemaining1(self, n, m):
         if not n or not m:
             return -1
-        result = list(range(n))
+        circle = list(range(n))
         i = 0
-        while len(result) > 1:
-            i = (i + m - 1) % len(result)
-            result.pop(i)
-        return result[0]
+        while len(circle) > 1:
+            i = (i + m - 1) % len(circle)
+            circle.pop(i)
+        return circle[0]
 
     # 循环实现
     def LastRemaining2(self, n, m):
