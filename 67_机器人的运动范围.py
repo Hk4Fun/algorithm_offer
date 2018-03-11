@@ -14,7 +14,7 @@ __date__ = '2018/2/27 16:09'
        2.判断当前节点是否可达的标准为：
        1）当前节点在矩阵内；
        2）当前节点未被访问过；
-       3）当前节点满足limit限制。
+       3）当前节点满足题目要求。
        注意，这里不是寻找路径，而是类似于扫雷，
        走过的地方发现满足条件就算作能够到达，走不下去了也不必回退
        注意这里若去遍历所有位置看是否满足条件是不行的，因为有可能出现单个‘孤岛’或者是连在一起的‘孤岛’，
@@ -25,7 +25,7 @@ __date__ = '2018/2/27 16:09'
 
 class Solution:
     def movingCount1(self, threshold, rows, cols):
-        def canReach(row, col, threshold):
+        def canReach(row, col):
             sum = 0
             while row or col:
                 sum += row % 10 + col % 10
@@ -33,23 +33,23 @@ class Solution:
                 col //= 10
             return sum <= threshold
 
-        def movingCountCore(threshold, rows, cols, row, col, visited):
+        def movingCountCore(row, col, visited):
             for i, j in [(row, col - 1), (row, col + 1), (row - 1, col), (row + 1, col)]:
                 if 0 <= i < rows and 0 <= j < cols \
-                        and canReach(i, j, threshold) \
+                        and canReach(i, j) \
                         and not visited[i * cols + j]:  # 先判断四个方向是否满足条件
                     visited[i * cols + j] = True
-                    movingCountCore(threshold, rows, cols, i, j, visited)
+                    movingCountCore(i, j, visited)
 
         if threshold == None or threshold < 0 or not cols or not rows:
             return 0
         visited = [False] * (rows * cols)
         visited[0] = True
-        movingCountCore(threshold, rows, cols, 0, 0, visited)  # 从（0，0）开始移动
+        movingCountCore(0, 0, visited)  # 从（0，0）开始移动
         return sum(visited)
 
     def movingCount2(self, threshold, rows, cols):
-        def canReach(row, col, threshold):
+        def canReach(row, col):
             sum = 0
             while row or col:
                 sum += row % 10 + col % 10
@@ -66,7 +66,7 @@ class Solution:
             row, col = stack.pop()  # 模拟进入函数时的弹栈，弹出参数
             for i, j in [(row, col - 1), (row, col + 1), (row - 1, col), (row + 1, col)]:
                 if 0 <= i < rows and 0 <= j < cols \
-                        and canReach(i, j, threshold) \
+                        and canReach(i, j) \
                         and not visited[i * cols + j]:
                     visited[i * cols + j] = True
                     stack.append((i, j))  # 模拟调用函数时的压栈，压入参数
@@ -81,7 +81,7 @@ from Test import Test
 
 class MyTest(Test):
     def my_test_code(self):
-        self.debug = False  # debug模式下每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.debug = True  # debug模式下每个测试用例只测试一遍，默认情况下关闭debug模式
         testArgs = []
         # 只需在此处填写自己的测试代码
         # testArgs中每一项是一次测试，每一项由两部分构成

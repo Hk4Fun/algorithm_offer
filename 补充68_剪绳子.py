@@ -10,7 +10,7 @@ __date__ = '2018/3/4 0:15'
 思路1： 动态规划（时间O(n^2)，空间O(n)）。
         定义函数f(n)为把长度为n的绳子剪成若干段后各段长度乘积的最大值。
         则状态转移方程为：f(n)= max(f(i)*f(n-i)),其中0<i<n。考虑边界情况：
-        当n=2时，f(2)=1; 当n=3时，f(3)=2。递归实现重复计算，这里自下而上计算
+        当n=2时，f(2)=1; 当n=3时，f(3)=2。递归实现会发生重复计算，所以这里自下而上计算
         （从上往下分析问题，从下往上求解问题，用一维或二维数组作备忘录）
 思路2： 贪心（时间O(1)，空间O(1)）。
         当n>=5时，尽可能多地剪长度为3的绳子；当剩下的绳子长度为4时，把绳子剪成两段长度为2的绳子
@@ -29,17 +29,17 @@ class Solution:
         if length == 3:
             return 2
         dp = [0] * (length + 1)
-        dp[1] = 1  # 注意边界值的填写
-        dp[2] = 2
-        dp[3] = 3
+        dp[1], dp[2], dp[3] = 1, 2, 3  # 注意边界值的填写
+
         for i in range(4, length + 1):
             max = 0
             for j in range(1, (i >> 1) + 1):
-                product = dp[j] * dp[i - j]
-                if product > max:
-                    max = product
+                mul = dp[j] * dp[i - j]
+                if mul > max:
+                    max = mul
                 dp[i] = max
         return dp[length]
+
 
     def cuttingRope2(self, length):
         if not length:

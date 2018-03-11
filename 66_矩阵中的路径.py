@@ -18,7 +18,7 @@ __date__ = '2018/2/27 14:07'
 
 class Solution:
     def hasPath1(self, matrix, rows, cols, path):
-        def hasPathCore(matrix, rows, cols, row, col, path, pathLength, visited):
+        def hasPathCore(row, col, pathLength, visited):
             if len(path) == pathLength:  # 来到末尾，成功找到路径
                 return True
             hasPath = False
@@ -27,10 +27,10 @@ class Solution:
                     and not visited[row * cols + col]:
                 pathLength += 1
                 visited[row * cols + col] = True
-                hasPath = hasPathCore(matrix, rows, cols, row, col - 1, path, pathLength, visited) or \
-                          hasPathCore(matrix, rows, cols, row - 1, col, path, pathLength, visited) or \
-                          hasPathCore(matrix, rows, cols, row, col + 1, path, pathLength, visited) or \
-                          hasPathCore(matrix, rows, cols, row + 1, col, path, pathLength, visited)
+                hasPath = hasPathCore(row, col - 1, pathLength, visited) or \
+                          hasPathCore(row - 1, col, pathLength, visited) or \
+                          hasPathCore(row, col + 1, pathLength, visited) or \
+                          hasPathCore(row + 1, col, pathLength, visited)
                 if not hasPath:  # 上下左右都没找到路径，则回退
                     pathLength -= 1
                     visited[row * cols + col] = False
@@ -40,9 +40,9 @@ class Solution:
             return False
         visited = [False] * (rows * cols)  # 访问过的字符位置置1
         pathLength = 0
-        for row in range(rows):
+        for row in range(rows):  # 遍历以每个格子作为开头的路径
             for col in range(cols):
-                if hasPathCore(matrix, rows, cols, row, col, path, pathLength, visited):
+                if hasPathCore(row, col, pathLength, visited):
                     return True
         return False
 
@@ -62,6 +62,7 @@ class Solution:
             if s == path[0] and visit([(i // cols, i % cols)], matrix, rows, cols, path):
                 return True
         return False
+
 
 # ================================测试代码================================
 

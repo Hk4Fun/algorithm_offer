@@ -32,7 +32,7 @@ class Solution:
         while True:
             count += countDigits(number)
             if count > index:
-                for i in range(1, count - index):  # 右移
+                for i in range(count - index - 1):  # 右移
                     number //= 10
                 return number % 10
             number += 1
@@ -45,7 +45,7 @@ class Solution:
             numbers = 10 if digits == 1 else 9 * (10 ** (digits - 1))  # digits位数字总共有多少个
             if index < numbers * digits:  # 在范围内
                 number = (0 if digits == 1 else 10 ** (digits - 1)) + index // digits  # 求出落在哪个数上
-                for i in range(1, digits - index % digits):  # 右移
+                for i in range(digits - index % digits - 1):  # 右移
                     number //= 10
                 return number % 10
             index -= digits * numbers  # 还没在范围内则继续往后找
@@ -60,7 +60,7 @@ from Test import Test
 
 class MyTest(Test):
     def my_test_code(self):
-        self.debug = True  # debug模式下每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.debug = False  # debug模式下每个测试用例只测试一遍，默认情况下关闭debug模式
         testArgs = []
         # 只需在此处填写自己的测试代码
         # testArgs中每一项是一次测试，每一项由两部分构成

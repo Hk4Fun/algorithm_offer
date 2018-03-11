@@ -3,13 +3,14 @@ __date__ = '2018/3/6 14:31'
 
 '''题目描述：
 假设把某股票的价格按照时间先后顺序存储在数组中，
-请问买卖交易该股票可能获得的利润是多少？
+请问买卖交易该股票可能获得的最大利润是多少？
 例如一只股票在某些时间节点的价格为{9, 11, 8, 5, 7, 12, 16, 14}。
 如果我们能在价格为5的时候买入并在价格为16时卖出，则能收获最大的利润11。
 '''
 '''主要思路：
-首先明确一点：买入股票后才能卖出。如果把股票的买入价和卖出价两个数字组成数字对，
-那么利润就是这个数字对的差值（卖出-买入）。因此，最大利润就是数组中所有数字对的最大差值
+首先明确一点：买入股票后才能卖出，因此直接用最大值减最小值是不行的，因为最大值可能出现在最小值前面。
+如果把股票的买入价和卖出价两个数字组成数字对，那么利润就是这个数字对的差值（卖出-买入）。
+因此，最大利润就是数组中所有数字对的最大差值：
 思路1（时间O(n^2), 空间O(1)）：枚举。找出数组中所有的数对，求出它们的差值的最大值。
 思路2（时间O(n), 空间O(1)）：显然，在卖出价固定时，买入价越低获得的利润越大。
 也就是说，如果在遍历到数组中第i个数时，只要能够记录下之前的i-1个数字的最小值，
@@ -24,7 +25,7 @@ class Solution:
         length = len(numbers)
         maxDiff = numbers[1] - numbers[0]
         for buy in range(length):
-            for sell in range(buy + 1, length): # 注意这里从buy+1开始
+            for sell in range(buy + 1, length):  # 注意这里从buy+1开始
                 curDiff = numbers[sell] - numbers[buy]
                 if curDiff > maxDiff:
                     maxDiff = curDiff
@@ -37,11 +38,11 @@ class Solution:
         maxDiff = numbers[1] - min
         for i in range(1, len(numbers)):
             curDiff = numbers[i] - min
+            # 一边更新最大差值一边更新最小值
             if curDiff > maxDiff:
                 maxDiff = curDiff
             if numbers[i] < min:
                 min = numbers[i]
-
         return maxDiff
 
 
