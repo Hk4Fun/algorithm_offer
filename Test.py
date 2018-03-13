@@ -55,6 +55,7 @@ class Test:
             print('Your result: {}\nBut expected: {}\n'.format(result, expected))
 
     def start_test(self):
+        begin = timeit.default_timer()
         runtime = {}  # 各解题思路的耗时
         for i, method in enumerate(self.methods):
             self.pass_num = 0
@@ -74,9 +75,11 @@ class Test:
                 if self.pass_num == test_num:  # 通过全部测试才加入排行版进行排名
                     runtime[method.__name__] = round(time, 2)
             print('*' * 100)
-        print('Runtime Ranking (unit：μs, test_num: {})：\n{}'.format(1 if self.debug else TEST_NUM,
-                                                                    sorted(runtime.items(), key=lambda x: x[1]),
-                                                                    ))
+        end = timeit.default_timer()
+        template = 'Test Result (unit：μs, test_num: {}*{}, test_time:{:.4f} s)：\n{}'
+        print(template.format(test_num, 1 if self.debug else TEST_NUM,
+                              end - begin,
+                              sorted(runtime.items(), key=lambda x: x[1])))
 
     def my_test_code(self):
         # 只需在此处填写测试代码
