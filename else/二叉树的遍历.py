@@ -16,6 +16,7 @@ class Solution:
     即三种状态：访问了0个孩子、访问了1个孩子（左孩子）、访问了3个孩子（左右孩子）
     所以实际上递归时每个结点被访问了三次
     '''
+
     def traverse_recursion(self, root):
         def pre_order(root):
             if not root:
@@ -26,6 +27,8 @@ class Solution:
             pre_order(root.right)
             # res.append(root.val) # 后序visit
 
+        if not root:
+            return
         res = []
         pre_order(root)
         return res
@@ -33,16 +36,16 @@ class Solution:
     '''
     至于层序遍历一般只用非递归，队列实现
     '''
-    def seq_order_iteration(self, root):
-        queue, res = [root], []
-        while queue:
-            cur = queue.pop(0)
-            res.append(cur.val)
-            if cur.left:
-                queue.append(cur.left)
-            if cur.right:
-                queue.append(cur.right)
-        return res
+    # def seq_order_iteration(self, root):
+    #     queue, res = [root], []
+    #     while queue:
+    #         cur = queue.pop(0)
+    #         res.append(cur.val)
+    #         if cur.left:
+    #             queue.append(cur.left)
+    #         if cur.right:
+    #             queue.append(cur.right)
+    #     return res
 
     '''
     前序遍历的非递归需要自己维护一个栈来模拟系统栈：
@@ -52,6 +55,7 @@ class Solution:
     4、把该结点的左孩子入栈（如果有的话），然后转入步骤2。
     注意先入右孩子再入左孩子，这样访问时才能先访问左孩子再访问右孩子
     '''
+
     def pre_order_iteration(self, root):
         if not root:
             return
@@ -72,19 +76,19 @@ class Solution:
     3、从栈顶弹出一个结点并访问之；
     4、cur来到弹出结点的右结点，转入步骤2。
     '''
-    def in_order_iteration(self, root):
-        if not root:
-            return
-        stack, res = [], []
-        cur = root
-        while stack or cur:
-            while cur:  # cur一路往左遍历左孩子，依次入栈，一直来到最左结点停止
-                stack.append(cur)
-                cur = cur.left
-            cur = stack.pop()
-            res.append(cur.val)
-            cur = cur.right
-        return res
+    # def in_order_iteration(self, root):
+    #     if not root:
+    #         return
+    #     stack, res = [], []
+    #     cur = root
+    #     while stack or cur:
+    #         while cur:  # cur一路往左遍历左孩子，依次入栈，一直来到最左结点停止
+    #             stack.append(cur)
+    #             cur = cur.left
+    #         cur = stack.pop()
+    #         res.append(cur.val)
+    #         cur = cur.right
+    #     return res
 
     '''
     到这里，会觉得前序和中序的非递归在代码上没有像递归那样统一且模版化，
@@ -92,6 +96,7 @@ class Solution:
     是第一次来到每个结点的时机，完全可以在入栈前访问该结点，这样就可以实现前序，
     所以前序中序的代码可以统一模版化
     '''
+
     def pre_in_order_iteration1(self, root):
         if not root:
             return
@@ -111,6 +116,7 @@ class Solution:
     上面代码中入栈时是前序遍历的时机，而出栈时是中序遍历的时机，每个结点都经历一次入栈和出栈，
     所以每个结点实际上被访问了2次。其实入栈和出栈是对称操作，那么在代码的实现上也可以是‘对称’的。
     '''
+
     def pre_in_order_iteration2(self, root):
         if not root:
             return
@@ -139,20 +145,20 @@ class Solution:
     3、将当前结点的左孩子和右孩子先后分别压入stack1，转入步骤2；
     4、当所有元素都压入stack2后，依次弹出stack2的栈顶结点并访问之。
     '''
-    def post_order_iteration1(self, root):
-        if not root:
-            return
-        stack1, stack2, res = [root], [], []
-        while stack1:
-            cur = stack1.pop()
-            stack2.append(cur)  # cur不直接访问而是先压入另一个栈
-            if cur.left:
-                stack1.append(cur.left)
-            if cur.right:
-                stack1.append(cur.right)
-        while stack2:
-            res.append(stack2.pop().val)
-        return res
+    # def post_order_iteration1(self, root):
+    #     if not root:
+    #         return
+    #     stack1, stack2, res = [root], [], []
+    #     while stack1:
+    #         cur = stack1.pop()
+    #         stack2.append(cur)  # cur不直接访问而是先压入另一个栈
+    #         if cur.left:
+    #             stack1.append(cur.left)
+    #         if cur.right:
+    #             stack1.append(cur.right)
+    #     while stack2:
+    #         res.append(stack2.pop().val)
+    #     return res
 
     '''
     思路2：一个栈实现。
@@ -170,24 +176,24 @@ class Solution:
     注意出栈的顺序，第一次访问根结点时pre是不可能指向根结点的左右孩子的，因为左右孩子根本还没入栈。
     而如果是第二次访问该结点，则pre一定会指向根结点的孩子，因为左右孩子在根结点前面出栈被访问了。
     '''
-    def post_order_iteration2(self, root):
-        if not root:
-            return
-        stack, res = [root], []
-        pre = None
-        while stack:
-            cur = stack[-1]  # 注意这里不要直接弹出
-            if (not cur.left and not cur.right) or (pre and (pre == cur.left or pre == cur.right)):
-                # 如果当前结点没有孩子结点或者孩子节点都已被访问过了
-                res.append(cur.val)
-                stack.pop()
-                pre = cur
-            else:  # 否则说明该结点有左孩子或右孩子且都没被访问过，直接入栈
-                if cur.right:
-                    stack.append(cur.right)
-                if cur.left:
-                    stack.append(cur.left)
-        return res
+    # def post_order_iteration2(self, root):
+    #     if not root:
+    #         return
+    #     stack, res = [root], []
+    #     pre = None
+    #     while stack:
+    #         cur = stack[-1]  # 注意这里不要直接弹出
+    #         if (not cur.left and not cur.right) or (pre and (pre == cur.left or pre == cur.right)):
+    #             # 如果当前结点没有孩子结点或者孩子节点都已被访问过了
+    #             res.append(cur.val)
+    #             stack.pop()
+    #             pre = cur
+    #         else:  # 否则说明该结点有左孩子或右孩子且都没被访问过，直接入栈
+    #             if cur.right:
+    #                 stack.append(cur.right)
+    #             if cur.left:
+    #                 stack.append(cur.left)
+    #     return res
 
     '''
     到这里，既然前序中序的非递归已经统一模板了，那么后序是否也可以统一进前面的pre_in_order_iteration1
@@ -325,6 +331,8 @@ class Solution:
                 cur = cur.right
             reverse(tail)  # 记得反转回来
 
+        if not root:
+            return
         cur = root
         res = []
         while cur:
@@ -361,7 +369,8 @@ from Test import Test
 
 class MyTest(Test):
     def my_test_code(self):
-        self.debug = True  # debug模式下每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.debug = False  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.TEST_NUM = 10  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
         testArgs = []
 
         # 只需在此处填写自己的测试代码
@@ -404,6 +413,52 @@ class MyTest(Test):
         # testArgs.append([node2, [5, 3, 2, 4, 6]])  # 中序
         # testArgs.append([node2, [5, 3, 6, 4, 2]])  # 后序
         # testArgs.append([node2, [2, 3, 4, 5, 6]])  # 层序
+
+        # 单个结点
+        testArgs.append([TreeNode(1), [1]])
+
+        # 空树
+        testArgs.append([None, None])
+
+        # 随机生成二叉树进行测试
+
+        def correct(root):
+            def pre_order(root):
+                if not root:
+                    return
+                res.append(root.val)  # 前序visit
+                pre_order(root.left)
+                # res.append(root.val) # 中序visit
+                pre_order(root.right)
+                # res.append(root.val) # 后序visit
+
+            if not root:
+                return
+            res = []
+            pre_order(root)
+            return res
+
+        import random
+        tree_num = 50  # 二叉树棵数
+        node_num = 1000  # 结点数
+
+        for tree in range(tree_num):
+            root = TreeNode(-1)
+            nodeList = [root]
+            randomList = [(root, 'l'), (root, 'r')]
+            for i in range(random.randint(0, node_num)):
+                newNode = TreeNode(i)
+                nodeList.append(newNode)
+                connect = random.choice(randomList)
+                if connect[1] == 'l':
+                    connect[0].left = newNode
+                else:
+                    connect[0].right = newNode
+                newNode.parent = connect[0]
+                randomList.remove(connect)
+                randomList.append((newNode, 'l'))
+                randomList.append((newNode, 'r'))
+            testArgs.append([root, correct(root)])
 
         return testArgs
 

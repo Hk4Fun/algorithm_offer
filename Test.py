@@ -6,7 +6,6 @@ import timeit
 import inspect
 import copy
 
-TEST_NUM = 10000  # 单个测试用例的测试次数
 
 
 class Test:
@@ -15,6 +14,7 @@ class Test:
         self.pass_num = 0  # 通过测试的数量
         self.time_pool = []  # 耗时
         self.debug = False  # debug模式下每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.TEST_NUM = 10000  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
         self.methods = list(filter(inspect.ismethod, (getattr(solution, name) for name in dir(solution))))  # 解题方法列表
 
     def print_runtime(self, time):  # time单位：μs
@@ -31,7 +31,7 @@ class Test:
 
         try:
             total_time = 0
-            for i in range(1 if self.debug else TEST_NUM):
+            for i in range(1 if self.debug else self.TEST_NUM):
                 func_arg_copy = copy.deepcopy(func_arg)
                 start = timeit.default_timer()
                 self.methods[int(method_num) - 1](*func_arg_copy)
@@ -44,7 +44,7 @@ class Test:
             return
 
         if result == expected:
-            average_runtime = (total_time / (1 if self.debug else TEST_NUM)) * 1000000
+            average_runtime = (total_time / (1 if self.debug else self.TEST_NUM)) * 1000000
             print('Passed.')
             self.print_runtime(average_runtime)
             self.pass_num += 1
@@ -77,7 +77,7 @@ class Test:
             print('*' * 100)
         end = timeit.default_timer()
         template = 'Test Result (unit：μs, test_num: {}*{}, test_time:{:.4f} s)：\n{}'
-        print(template.format(test_num, 1 if self.debug else TEST_NUM,
+        print(template.format(test_num, 1 if self.debug else self.TEST_NUM,
                               end - begin,
                               sorted(runtime.items(), key=lambda x: x[1])))
 
