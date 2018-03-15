@@ -7,7 +7,6 @@ import inspect
 import copy
 
 
-
 class Test:
     def __init__(self, solution):
         self.solution = solution  # 解题实例
@@ -43,7 +42,7 @@ class Test:
             print(traceback.format_exc())
             return
 
-        if result == expected:
+        if self.checked(result, expected, *func_arg):
             average_runtime = (total_time / (1 if self.debug else self.TEST_NUM)) * 1000000
             print('Passed.')
             self.print_runtime(average_runtime)
@@ -91,3 +90,7 @@ class Test:
     def convert(self, result, *func_arg):
         # 在此处填写转换函数，将测试结果转换成其他形式
         return result
+
+    def checked(self, result, expected, *func_arg):
+        # 在此处填写比较器，测试返回的结果是否正确
+        return result == expected
