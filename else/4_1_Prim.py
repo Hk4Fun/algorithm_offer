@@ -34,7 +34,7 @@ class Solution:
         sum = 0  # 最小生成树的总权值
 
         for i in range(num - 1):
-            min = 1 << 20  # 这里不能float('inf')， 因为graph中已经出现，而float('inf')-1等于float('inf')
+            min = 1 << 32  # 这里不能float('inf')， 因为graph中已经出现，而float('inf')-1等于float('inf')
             for j in range(num):  # 选出候选边的最小者，即选出当前生成树到其余顶点最短边的最小值
                 if not add_node[j] and low_cost[j] < min:
                     min = low_cost[j]
