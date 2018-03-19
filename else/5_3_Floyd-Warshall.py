@@ -1,15 +1,16 @@
 __author__ = 'Hk4Fun'
 __date__ = '2018/3/19 15:48'
 '''
-Floyd算法（时间O（n^3），空间O（n^2））：
+Floyd-Warshall算法（时间O（V^3））：
 求出任意两点间的最短路径————全局最短路径
+适用于解决可有负权边但不可有负权环的全局最短路径问题
 '''
 
 
 class Solution:
-    def Floyd(self, graph):
+    def Floyd_Warshall(self, graph):
         '''
-        Floyd算法求出任意两点间的最短路径及其长度
+        Floyd_Warshall算法求出任意两点间的最短路径及其长度
         :param graph: 图的邻接矩阵
         :return: 返回任意两点的最短路径及其长度
         '''

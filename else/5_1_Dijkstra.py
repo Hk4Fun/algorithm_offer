@@ -1,9 +1,9 @@
 __author__ = 'Hk4Fun'
 __date__ = '2018/3/19 12:56'
 '''
-Dijkstra算法（时间O（n^2），空间O（n））：
+Dijkstra算法（时间O（V^2），可用最小堆优化为O（ElogV））：
 找出指定顶点到其他各顶点的最短路径——单源最短路径
-不能解决负权值边的图
+不能解决带负权边的图
 
 对比Dijkstra算法和Prim算法，会发现其代码结构十分相似，区别就在于
 Prim算法：graph[next][j] < low_cost[j]
@@ -15,7 +15,7 @@ Prim只是从边中选更短，而Dijkstra还要进行累加看是否更短
 
 
 class Solution:
-    def Dijkstra(self, graph, start):
+    def Dijkstra1(self, graph, start):
         '''
         Dijkstra算法，找出指定顶点到其他各顶点的最短路径
         :param graph: 图的邻接矩阵
@@ -31,7 +31,7 @@ class Solution:
             stack.insert(0, end)
             return stack
 
-        def Dijkstra():
+        def dijkstra():
             add_node = [False] * num  # 标记顶点是否已经并入最短路径
             add_node[start] = True  # V0并入最短路径中
             # dist表示当前已找到的从V0到Vi的最短路径的长度。
@@ -57,8 +57,35 @@ class Solution:
             return dist, path
 
         num = len(graph)  # 顶点数量
-        dist, path = Dijkstra()
+        dist, path = dijkstra()
         return [(findPath(i), dist[i]) for i in range(1, num)]
+
+    # def Dijkstra2(self, G, s):
+    #     '''
+    #     使用最小堆优化时间效率，为O（elogv）
+    #     :param G: 图的带权字典（类似邻接表）
+    #     :param s: 起始顶点
+    #     :return: 到各顶点的最短路径D和前驱顶点P
+    #     '''
+    #     from heapq import heappush, heappop
+    #
+    #     def relax(G, u, v, D, P):
+    #         old = D.get(v, float('inf'))  # 若D[v]不存在则返回inf
+    #         new = D.get(u, float('inf')) + G[u][v]
+    #         if new < old:
+    #             D[v], P[v] = new, u
+    #             return True  # 若有改进，则返回True
+    #         return False
+    #
+    #     D, P, Q, S = {s: 0}, {}, [(0, s)], set()  # Est., tree, queue, visited
+    #     while Q:  # Still unprocessed nodes?
+    #         _, u = heappop(Q)  # Node with lowest estimate
+    #         if u in S: continue  # Already visited? Skip it
+    #         S.add(u)  # We've visited it now
+    #         for v in G[u]:  # Go through all its neighbors
+    #             relax(G, u, v, D, P)  # Relax the out-edge
+    #             heappush(Q, (D[v], v))  # Add to queue, w/est. as pri
+    #     return D, P  # Final D and P returned
 
 
 # ================================测试代码================================
