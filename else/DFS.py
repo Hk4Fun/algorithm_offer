@@ -1,12 +1,20 @@
 __author__ = 'Hk4Fun'
 __date__ = '2018/3/15 21:15'
 '''
-
+深度优先搜索（邻接表时间O(n+e)，邻接矩阵时间O(n^2)，空间O(n)）：
+类似于二叉树的前序遍历，用一个visited数组来标记访问过的顶点，避免重复访问
 '''
 
 
 class Solution:
     def dfs_recursion(self, graph, start):
+        '''
+        递归实现
+        :param graph: 图的邻接表
+        :param start: 遍历的起始顶点
+        :return: list，按顺序遍历过的顶点的值
+        '''
+
         def dfs(graph, start):
             visited.add(start)
             res.append(start)
@@ -19,6 +27,12 @@ class Solution:
         return res
 
     def dfs_iteration(self, graph, start):
+        '''
+        非递归实现
+        :param graph: 图的邻接表
+        :param start: 遍历的起始顶点
+        :return: list，按顺序遍历过的顶点的值
+        '''
         stack, res, visited = [start], [], set()
         while stack:
             cur = stack.pop()

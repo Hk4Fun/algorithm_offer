@@ -1,12 +1,21 @@
 __author__ = 'Hk4Fun'
 __date__ = '2018/3/15 23:15'
 '''
+广度优先搜索（邻接表时间O(n+e)，邻接矩阵时间O(n^2)，空间O(n)）：
+类似于二叉树的层序遍历，但与二叉树的层序遍历有些不同：访问结点后才入队，不能反过来，否则会重复访问
+用一个visited数组来标记访问过的顶点，避免重复访问
 
 '''
 
 
 class Solution:
     def bfs(self, graph, start):
+        '''
+        非递归实现
+        :param graph: 图的邻接表
+        :param start: 遍历的起始顶点
+        :return: list，按顺序遍历过的顶点的值
+        '''
         res = []
         visited = set()
         res.append(start)
