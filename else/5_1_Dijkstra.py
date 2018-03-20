@@ -60,32 +60,32 @@ class Solution:
         dist, path = dijkstra()
         return [(findPath(i), dist[i]) for i in range(1, num)]
 
-    # def Dijkstra2(self, G, s):
-    #     '''
-    #     使用最小堆优化时间效率，为O（elogv）
-    #     :param G: 图的带权字典（类似邻接表）
-    #     :param s: 起始顶点
-    #     :return: 到各顶点的最短路径D和前驱顶点P
-    #     '''
-    #     from heapq import heappush, heappop
-    #
-    #     def relax(G, u, v, D, P):
-    #         old = D.get(v, float('inf'))  # 若D[v]不存在则返回inf
-    #         new = D.get(u, float('inf')) + G[u][v]
-    #         if new < old:
-    #             D[v], P[v] = new, u
-    #             return True  # 若有改进，则返回True
-    #         return False
-    #
-    #     D, P, Q, S = {s: 0}, {}, [(0, s)], set()  # Est., tree, queue, visited
-    #     while Q:  # Still unprocessed nodes?
-    #         _, u = heappop(Q)  # Node with lowest estimate
-    #         if u in S: continue  # Already visited? Skip it
-    #         S.add(u)  # We've visited it now
-    #         for v in G[u]:  # Go through all its neighbors
-    #             relax(G, u, v, D, P)  # Relax the out-edge
-    #             heappush(Q, (D[v], v))  # Add to queue, w/est. as pri
-    #     return D, P  # Final D and P returned
+    def Dijkstra2(self, G, s):
+        '''
+        使用最小堆优化时间效率，为O（elogv）
+        :param G: 图的带权字典（类似邻接表）
+        :param s: 起始顶点
+        :return: 到各顶点的最短路径D和前驱顶点P
+        '''
+        from heapq import heappush, heappop
+
+        def relax(G, u, v, D, P):
+            old = D.get(v, float('inf'))  # 若D[v]不存在则返回inf
+            new = D.get(u, float('inf')) + G[u][v]
+            if new < old:
+                D[v], P[v] = new, u
+                return True  # 若有改进，则返回True
+            return False
+
+        D, P, Q, S = {s: 0}, {}, [(0, s)], set()  # Est., tree, queue, visited
+        while Q:  # Still unprocessed nodes?
+            _, u = heappop(Q)  # Node with lowest estimate
+            if u in S: continue  # Already visited? Skip it
+            S.add(u)  # We've visited it now
+            for v in G[u]:  # Go through all its neighbors
+                relax(G, u, v, D, P)  # Relax the out-edge
+                heappush(Q, (D[v], v))  # Add to queue, w/est. as pri
+        return D, P  # Final D and P returned
 
 
 # ================================测试代码================================
