@@ -24,19 +24,18 @@ class Test:
         else:
             print('Average Runtime：{:.2f}s\n'.format(time / 1000000))
 
-    def test(self, test_name, method_num, expected, *func_arg):
+    def test(self, method_num, expected, *func_arg):
         # method_num 表示要测试的解题方法序号
-        print('{} begins:'.format(test_name))
-
         try:
             total_time = 0
             for i in range(1 if self.debug else self.TEST_NUM):
-                func_arg_copy = copy.deepcopy(func_arg)
+                func_arg_copy = copy.deepcopy(func_arg) # 防止func_arg被原地修改
                 start = timeit.default_timer()
                 self.methods[int(method_num) - 1](*func_arg_copy)
                 end = timeit.default_timer()
                 total_time += end - start
-            result = self.convert(self.methods[int(method_num) - 1](*func_arg), *func_arg)
+            func_arg_copy = copy.deepcopy(func_arg)
+            result = self.convert(self.methods[int(method_num) - 1](*func_arg_copy), *func_arg_copy)
         except Exception:
             print('Failed: Syntax Error！')
             print(traceback.format_exc())
@@ -56,14 +55,15 @@ class Test:
     def start_test(self):
         begin = timeit.default_timer()
         runtime = {}  # 各解题思路的耗时
+        testArgs = self.my_test_code()
+        test_num = len(testArgs)  # 总的测试数量
         for i, method in enumerate(self.methods):
             self.pass_num = 0
             self.time_pool = []
-            testArgs = self.my_test_code()
-            test_num = len(testArgs)  # 总的测试数量
-            for j, testArg in enumerate(testArgs):
-                testName = "Test" + str(i + 1) + "_" + str(j + 1)
-                self.test(testName, i + 1, testArg[-1], *tuple(testArg[:-1]))
+            testArgs_copy = copy.deepcopy(testArgs)
+            for j, testArg in enumerate(testArgs_copy):
+                print('Test for {}_{}:'.format(method.__name__, j + 1))
+                self.test(i + 1, testArg[-1], *tuple(testArg[:-1]))
             print('Result of Testing {}: {} / {}, {:.2f}%'.format(method.__name__,
                                                                   self.pass_num, test_num,
                                                                   (self.pass_num / test_num) * 100))
@@ -75,10 +75,10 @@ class Test:
                     runtime[method.__name__] = round(time, 2)
             print('*' * 100)
         end = timeit.default_timer()
-        template = 'Test Result (unit：μs, test_num: {}*{}, test_time:{:.4f} s)：\n{}'
-        print(template.format(test_num, 1 if self.debug else self.TEST_NUM,
-                              end - begin,
-                              sorted(runtime.items(), key=lambda x: x[1])))
+        template = 'Test Result (unit：μs, test_num: {}*{}, test_time:{:.4f} s)：'
+        print(template.format(test_num, 1 if self.debug else self.TEST_NUM, end - begin))
+        for i, v in enumerate(sorted(runtime.items(), key=lambda x: x[1]), 1):
+            print('{:2}、{:20}: {}'.format(i, v[0], v[1]))
 
     def my_test_code(self):
         # 只需在此处填写测试代码
