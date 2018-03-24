@@ -80,7 +80,7 @@ class Solution:
         gap = len(arr) // 3
         while gap > 0:
             # 内循环就是插入排序，只不过增量为gap
-            for i in range(gap, len(arr)):  # 从下标1开始
+            for i in range(gap, len(arr)):
                 preIndex = i - gap
                 cur = arr[i]
                 while preIndex >= 0 and arr[preIndex] > cur:
@@ -130,12 +130,12 @@ class Solution:
                     j += 1
 
         def sort(arr, copy, low, high):
-            if high <= low: return
-            mid = low + ((high - low) >> 1)
-            # 类似后序遍历
-            sort(copy, arr, low, mid)  # 注意这里copy和arr的位置调换了一下，可以省去复制arr的时间
-            sort(copy, arr, mid + 1, high)
-            merge(arr, copy, low, mid, high)
+            if low < high:
+                mid = low + ((high - low) >> 1)
+                # 类似后序遍历
+                sort(copy, arr, low, mid)  # 注意这里copy和arr的位置调换了一下，可以省去复制arr的时间
+                sort(copy, arr, mid + 1, high)
+                merge(arr, copy, low, mid, high)
 
         copy = arr[:]  # 只需复制一次
         sort(arr, copy, 0, len(arr) - 1)
@@ -195,7 +195,7 @@ class Solution:
         quick(arr, 0, len(arr) - 1)
         return arr
 
-    def quick_3way(self, arr):  # 三向切分，荷兰国旗问题，对于含有较多重复字符的排序效率高
+    def quick_3way(self, arr):   # 三向切分，荷兰国旗问题，对于含有较多重复字符的排序效率高
         def quick(arr, left, right):
             if left < right:
                 pivot = arr[left]  # 选择首位作为枢轴，先记录下来，因为后面会被交换
@@ -286,7 +286,7 @@ class MyTest(Test):
 
         import random
         arrLen = 100
-        arrNum = 1000
+        arrNum = 100
         numLimit = 100
         for i in range(arrNum):
             arr = []
