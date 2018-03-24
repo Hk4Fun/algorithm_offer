@@ -32,7 +32,7 @@ class Solution:
         if not rotateArray:
             return
         low, high = 0, len(rotateArray) - 1
-        while low < high:
+        while low <= high:
             mid = low + ((high - low) >> 1)
             if rotateArray[mid] > rotateArray[high]:
                 low = mid + 1
@@ -43,9 +43,10 @@ class Solution:
                     high = mid - 1
             else:
                 high = high - 1  # 退化成O(n)
-        return rotateArray[low] # 最终一定是high==low跳出循环
+        return rotateArray[low]  # 最终一定是high==low跳出循环
 
-    # ================================测试代码================================
+
+# ================================测试代码================================
 
 
 from Test import Test

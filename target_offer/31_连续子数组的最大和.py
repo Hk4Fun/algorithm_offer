@@ -84,6 +84,16 @@ class Solution:
 
         return GreatestSum
 
+    def FindGreatestSumOfSubArray4(self, array):
+        # 简化版
+        if not array:
+            return
+        curSum = maxSum = array[0]
+        for num in array[1:]:
+            curSum = max(num, curSum + num)
+            maxSum = max(maxSum, curSum)
+        return maxSum
+
 
 # ================================测试代码================================
 from Test import Test
