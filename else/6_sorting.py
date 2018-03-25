@@ -171,6 +171,7 @@ class Solution:
     def quick(self, arr):
         def partition(arr, left, right):
             i, j = left, right
+            # 这里把枢轴单独提取出来可以避免后序的交换操作，可以直接覆盖
             pivot = arr[left]  # 选择首位作为枢轴
             while i < j:
                 while i < j and arr[j] > pivot: j -= 1

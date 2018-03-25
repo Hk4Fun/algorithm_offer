@@ -31,7 +31,7 @@ class Solution:
 
         for row_num in range(numRows):
             # The first and last row elements are always 1.
-            row = [None for _ in range(row_num + 1)]
+            row = [None] * (row_num + 1)
             row[0], row[-1] = 1, 1
 
             # Each triangle element is equal to the sum of the elements
@@ -54,9 +54,6 @@ class Solution:
         for _ in range(numRows - 1):
             res.append([x + y for x, y in zip([0] + res[-1], res[-1] + [0])])
         return res
-
-
-
 
 
 # ================================测试代码================================
