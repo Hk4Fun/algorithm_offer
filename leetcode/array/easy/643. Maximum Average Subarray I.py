@@ -1,24 +1,37 @@
 __author__ = 'Hk4Fun'
-__date__ = '2018/3/28 15:31'
+__date__ = '2018/3/29 18:07'
 '''题目描述：
+Given an array consisting of n integers, 
+find the contiguous subarray of given length k that has the maximum average value. 
+And you need to output the maximum average value.
+
+Example 1:
+Input: [1,12,-5,-6,50,3], k = 4
+Output: 12.75
+Explanation: Maximum average is (12-5-6+50)/4 = 51/4 = 12.75
+
+Note:
+1 <= k <= n <= 30,000.
+Elements of the given array will be in the range [-10,000, 10,000].
 
 '''
 '''主要思路：
 时间O（n），空间O（1）
-窗口问题，相关问题见：数组-中等-617. 最大平均值子数组 II
+这里的窗口是固定大小的，所以相对比较简单
+难度加大点就是让窗口长度大于等于k即可，见linkcode：617. 最大平均值子数组 II
 '''
 
 
 class Solution:
-    """
-    @param nums: an array
-    @param k: an integer
-    @return: the maximum average value
-    """
     def findMaxAverage(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: float
+        """
         maxSum = curSum = sum(nums[:k])
         for i in range(k, len(nums)):
-            curSum += nums[i] - nums[i-k]
+            curSum += nums[i] - nums[i - k]
             maxSum = max(maxSum, curSum)
         return maxSum / k
 
@@ -36,7 +49,16 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
-        testArgs.append([[1,12,-5,-6,50,3], 4, 12.75])
+        testArgs.append([])
+        testArgs.append([])
+        testArgs.append([])
+        testArgs.append([])
+        testArgs.append([])
+        testArgs.append([])
+        testArgs.append([])
+        testArgs.append([])
+        testArgs.append([])
+        testArgs.append([])
 
         return testArgs
 
