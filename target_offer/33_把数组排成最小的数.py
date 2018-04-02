@@ -14,6 +14,27 @@ __date__ = '2018/2/10 20:22'
 '''
 from functools import cmp_to_key
 
+# cmp_to_key 的实现原理很有意思。。。
+# 其返回一个实现了各种比较方法的类：class K
+# 当key做映射时，会把K当作函数调用，K(obj)
+# 这样实际上是创建（返回）了一个K的实例（实在是妙啊！）
+# 也就相当于把参与比较的元素映射成了一个K的实例
+# 来看构造函数就明白了：
+# def __init__(self, obj):
+#     self.obj = obj
+# 就是把obj保存起来了而已
+# 关键看其中实现的各种比较方法，比如：
+# def __lt__(self, other):
+#     return mycmp(self.obj, other.obj) < 0
+# 在遇到两两比较时，比如"<"，就会触发该方法，然后把另一个obj当作other传进来比较
+# 怎么比较？mycmp就是cmp_to_key(mycmp)的参数，就是自己定义的含有两个参数的lambda！
+# 所以我们梳理一下cmp_to_key是如何把含有两个参数的lambda转换成只含有一个参数的lambda的：
+# 传入的含有两个参数的lambda被当作比较函数，在后面遇到两两比较时被触发调用，
+# 而转换成只含有一个参数的lambda实际上是转换成一个构造函数为只含有一个参数的类K，
+# 只不过其调用方式刚好和只含有一个参数的lambda一致，让人以为真的转换成只含有一个参数的lambda
+# 所以key返回的对象必须是可比较对象，不管是lambda实现还是类实现
+# py3为什么要去掉cmp而只保留key，因为key比cmp更高效：
+# 在每一个元素上，key只会被调用1次，而cmp这个双参数比较函数则会在每一次两两比较时被调用
 
 class Solution:
     def PrintMinNumber(self, numbers):
