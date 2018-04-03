@@ -29,7 +29,7 @@ class Solution:
             result.append([])  # 用来保存当前层次结点的值
             # len(queue)保证了每次只会遍历当前层次的结点，
             # 后加入的结点（即下一层结点）下一循环才会被遍历
-            for i in range(len(queue)):
+            for _ in range(len(queue)):
                 cur = queue.pop(0)
                 result[-1].append(cur.val)
                 if cur.left:

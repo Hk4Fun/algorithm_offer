@@ -90,6 +90,18 @@ class Solution:
             if r1 == len(s) - 1 or r2 == len(s) - 1: break
         return s[start:end + 1]
 
+    def Manacher(self, s):
+        T = '#'.join('^{}$'.format(s))  # ^和$是哨兵，可以避免边界检查，且防止后面在分片时溢出，妙！
+        P = [0] * len(T)
+        C = R = 0
+        maxLen, center = -float('inf'), 0
+        for i in range(1, len(T) - 1):
+            P[i] = (R > i) and min(R - i, P[2 * C - i])  # 求出起始扩充半径
+            while T[i + 1 + P[i]] == T[i - 1 - P[i]]: P[i] += 1  # 尝试扩充，失败自动退出，边界有哨兵不用检查越界
+            if i + P[i] > R: C, R = i, i + P[i]  # 更新最右边界和最右边界的中心
+            if P[i] > maxLen: maxLen, center = P[i], i  # 更新最大回文半径
+        return s[(center - maxLen) // 2:(center + maxLen) // 2]  # 别忘了这些都是填充字符后的索引和半径，所以最后都要//2
+
 
 # ================================测试代码================================
 
