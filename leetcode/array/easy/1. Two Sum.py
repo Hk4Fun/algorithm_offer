@@ -1,7 +1,7 @@
 __author__ = 'Hk4Fun'
 __date__ = '2018/3/24 18:15'
 '''题目描述：
-Given an array of integers, return indices of the two numbers such that 
+Given an array of integers, return indices of the two nums such that 
 they add up to a specific target.
 You may assume that each input would have exactly one solution, 
 and you may not use the same element twice.
@@ -12,10 +12,13 @@ Because nums[0] + nums[1] = 2 + 7 = 9,
 return [0, 1].
 '''
 '''主要思路：
-时间O（n），空间0（n）
+思路1：时间O（n），空间0（n）
 用字典建立哈希表：
 从左至右扫描数组，对于每个数字n，字典键为target-n，值为对应的数组下标，
 如果n在字典中已经存在，说明之前出现过该数的配对数n'，否则target-n'不会等于它，下标直接获得
+
+思路2：时间O（nlogn），空间0（n）
+复制原数组并排序然后首尾双指针，找到后在原数组中找到该数字的下标（前提：数组无重复数字）
 '''
 
 
