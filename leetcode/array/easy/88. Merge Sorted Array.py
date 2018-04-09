@@ -10,7 +10,7 @@ The number of elements initialized in nums1 and nums2 are m and n respectively.
 '''
 '''主要思路：
 时间O（n），空间O（1）:
-采取从后往前的思路（这里的nums1已经扩容）
+双指针，采取从后往前的思路（这里的nums1已经扩容）
 '''
 
 
@@ -24,7 +24,7 @@ class Solution:
     """
 
     def merge1(self, nums1, m, nums2, n):
-        i, j = m - 1, n - 1  # 从后往前比较
+        i, j = m - 1, n - 1  # 两个指针都从后往前比较
         for k in range(m + n - 1, -1, -1):
             if i < 0:
                 nums1[k] = nums2[j]
