@@ -317,6 +317,7 @@ class Solution:
             pre = None
             cur = start
             while cur:
+                # pre, cur.next, cur, = cur, pre, cur.next
                 next = cur.right
                 cur.right = pre
                 pre = cur

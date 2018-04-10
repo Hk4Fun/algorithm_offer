@@ -7,8 +7,7 @@ __date__ = '2018/1/30 15:24'
 '''主要思路：
 思路1：定义三个指针，分别指向当前遍历到的结点、它的前一个结点以及后一个结点
        指向后一个结点的指针是为了防止链表断裂，因为需要把当前结点的下一个指针指向前一个结点
-思路2：递归实现，具体见代码
-思路3：头插法，将当前遍历到的结点插入（指向）链表的头部，最终链表反转，具体细节见代码注释
+思路2：递归实现
 '''
 
 
@@ -19,18 +18,20 @@ class ListNode:
 
 
 class Solution:
-    def ReverseList1(self, pHead):
-        pReverseHead = None
-        pNode = pHead
-        pPrev = None
-        while pNode:
-            pNext = pNode.next  # 先保存下一个结点，防止断裂
-            if not pNext:
-                pReverseHead = pNode
-            pNode.next = pPrev
-            pPrev = pNode
-            pNode = pNext
-        return pReverseHead
+    def ReverseList1(self, pHead):  # 4行代码搞定
+        pre, cur = None, pHead
+        while cur:
+            # pre, cur.next, cur, = cur, pre, cur.next
+            # 不能 pre, cur, cur.right = cur, cur.right, pre，否则后面cur.right中的cur是已经更新的cur
+            # 因此必须先保存cur.right，至于pre在哪个位置都行，因为它没引用cur
+            # 所以为了代码更加容易理解，可以重新调整一下顺序：从后往前
+            cur.next, cur, pre = pre, cur.next, cur
+            # 上面的一行等于下面四行
+            # next = cur.next  # 先保存下一个结点防止断裂
+            # cur.next = pre
+            # pre = cur
+            # cur = next
+        return pre
 
     def ReverseList2(self, pHead):
         if not pHead:
@@ -47,18 +48,6 @@ class Solution:
         pHead.next = None  # 反转后记得将头指针next指向None，否则最后两个结点成环
         return pReverseHead
 
-    def ReverseList3(self, pHead):
-        if not pHead:
-            return
-        pReverseHead = pHead  # 当前反转链表头部即为原链表头部
-        pNode = pHead.next  # pNode永远指向将要插入头部的结点
-        while pNode:
-            pHead.next = pNode.next  # 先把pNode的下一个结点给pHead
-            pNode.next = pReverseHead  # 然后才把pNode的下一个结点指向反转链表头部pReverseHead
-            pReverseHead = pNode  # 更新反转链表头部为当前遍历到的结点
-            pNode = pHead.next  # 反转下一个结点，注意pHead不动，最终会变成尾结点
-        return pReverseHead  # 返回反转链表头部
-
 
 # ================================测试代码================================
 from Test import Test
@@ -66,6 +55,9 @@ from Test import Test
 
 class MyTest(Test):
     def my_test_code(self):
+        self.debug = False  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.TEST_NUM = 1  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
+
         # 只需在此处填写自己的测试代码
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
