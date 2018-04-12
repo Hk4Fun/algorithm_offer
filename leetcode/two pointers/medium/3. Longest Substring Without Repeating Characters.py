@@ -11,7 +11,7 @@ Note that the answer must be a substring, "pwke" is a subsequence and not a subs
 '''
 '''主要思路：
 时间O（n），空间O（1）（字母种类有限，所以空间为常数）
-the basic idea is, keep a hashmap which stores the characters in string as keys and their positions as values, 
+keep a hashmap which stores the characters in string as keys and their positions as values, 
 and keep two pointers which define the max substring. 
 move the right pointer to scan through the string , 
 and meanwhile update the hashmap. If the character is already in the hashmap, 

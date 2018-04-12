@@ -29,6 +29,15 @@ __date__ = '2018/2/11 21:53'
                                               =O[lcm(m+1,n+1)-(m+1)+m']
                                               =O[lcm(m+1,n+1)-(x+1)]
                                               =O[lcm(m,n)]，空间复杂度O(1)
+思路5：结合思路3和思路4。
+       不用计算两个链表的长度差，根据思路4，两个链表指针（p1,p2）都从头开始一起遍历，
+       但是p1来到末尾时指向另一个链表的头结点（不是指向原链表的头结点），p2也一样。
+       这样第一次遍历时，短的链表指针（假如为p1）来到长链表（假如为l2）的头结点，
+       此时p2还在l2上，且p2距离末尾（l2-l1）。p2来到l1头结点时，p1在l2上距离末尾（l2-(l2-l1)）
+       此时p1的位置正好就是思路3中长指针先出发来到二者长度差的位置，下面一起遍历一定能够相遇，
+       即使没有公共结点，也会在None处一起返回（相当于相遇），相当于转化成思路3   
+       整个过程最坏情况下p1、p2各遍历两个链表一次，所以时间复杂度O(m+n)，空间复杂度O(1)。
+       注意这个思路和思路4只是在指针来到末尾时指回哪里有区别，其他一致，但复杂度降低了                                   
 '''
 
 
@@ -112,6 +121,14 @@ class Solution:
             pNode1 = pNode1.next if pNode1 else pHead1
             pNode2 = pNode2.next if pNode2 else pHead2
         return pNode1
+    
+    def FindFirstCommonNode5(self, pHead1, pHead2):
+        pNode1 = pHead1
+        pNode2 = pHead2
+        while pNode1 != pNode2:
+            pNode1 = pNode1.next if pNode1 else pHead2
+            pNode2 = pNode2.next if pNode2 else pHead1
+        return pNode1
 
 
 # ================================测试代码================================
@@ -124,7 +141,8 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
-        self.debug = False
+        self.debug = False  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.TEST_NUM = 10  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
         testArgs = []
 
         # 第一个公共结点在链表中间
@@ -243,6 +261,11 @@ class MyTest(Test):
 
     def convert(self, result, *func_arg):
         return result
+
+    def checked(self, result, expected, *func_arg):
+        # 在此处填写比较器，测试返回的结果是否正确
+        if not result and not expected: return True
+        return result.val == expected.val
 
 
 if __name__ == '__main__':
