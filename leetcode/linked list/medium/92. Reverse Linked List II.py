@@ -1,15 +1,19 @@
 __author__ = 'Hk4Fun'
-__date__ = '2018/4/12 14:21'
+__date__ = '2018/4/16 21:38'
 '''题目描述：
-Given a sorted linked list, delete all duplicates such that each element appear only once.
+Reverse a linked list from position m to n. Do it in-place and in one-pass.
 
-For example,
-Given 1->1->2, return 1->2.
-Given 1->1->2->3->3, return 1->2->3.
+For example:
+Given 1->2->3->4->5->NULL, m = 2 and n = 4,
+return 1->4->3->2->5->NULL.
+
+Note:
+Given m, n satisfy the following condition:
+1 ≤ m ≤ n ≤ length of list.
 '''
 '''主要思路：
 时间O（n），空间O（1）
-迭代or递归
+头插法
 '''
 
 
@@ -20,25 +24,31 @@ class ListNode:
 
 
 class Solution:
-    """
-    :type head: ListNode
-    :rtype: ListNode
-    """
+    def reverseBetween(self, head, m, n):
+        """
+        :type head: ListNode
+        :type m: int
+        :type n: int
+        :rtype: ListNode
+        """
+        if m == n: return head
+        dummy = pre = ListNode(0)
+        dummy.next = head
+        for _ in range(m - 1):
+            pre = pre.next
+        start, then = pre.next, pre.next.next
 
-    def deleteDuplicates_iteratively(self, head):
-        if not head: return
-        cur = head
-        while cur.next:
-            if cur.val == cur.next.val:
-                cur.next = cur.next.next
-            else:
-                cur = cur.next
-        return head
-
-    def deleteDuplicates_recursively(self, head):
-        if not head or not head.next: return head
-        head.next = self.deleteDuplicates_recursively(head.next)
-        return head.next if head.val == head.next.val else head
+        # 1 - 2 - 3 - 4 - 5; m = 2; n = 4 - --> pre = 1, start = 2, then = 3
+        # dummy-> 1 -> 2 -> 3 -> 4 -> 5
+        for _ in range(n - m):
+            # pre.next, start.next, then.next, = then, then.next, pre.next
+            start.next = then.next
+            then.next = pre.next
+            pre.next = then
+            then = start.next
+        # first reversing: dummy->1 - 3 - 2 - 4 - 5; pre = 1, start = 2, then = 4
+        # second reversing: dummy->1 - 4 - 3 - 2 - 5; pre = 1, start = 2, then = 5(finish)
+        return dummy.next
 
 
 # ================================测试代码================================

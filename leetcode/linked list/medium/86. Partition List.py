@@ -1,15 +1,12 @@
 __author__ = 'Hk4Fun'
-__date__ = '2018/4/12 14:21'
+__date__ = '2018/4/16 21:05'
 '''题目描述：
-Given a sorted linked list, delete all duplicates such that each element appear only once.
 
-For example,
-Given 1->1->2, return 1->2.
-Given 1->1->2->3->3, return 1->2->3.
 '''
 '''主要思路：
 时间O（n），空间O（1）
-迭代or递归
+思路类似于target_offer/14_使奇数位于偶数前面.py，但不用空间O(n)，
+因为可以用链表指针串起来
 '''
 
 
@@ -20,25 +17,22 @@ class ListNode:
 
 
 class Solution:
-    """
-    :type head: ListNode
-    :rtype: ListNode
-    """
-
-    def deleteDuplicates_iteratively(self, head):
-        if not head: return
-        cur = head
-        while cur.next:
-            if cur.val == cur.next.val:
-                cur.next = cur.next.next
+    def partition(self, head, x):
+        """
+        :type head: ListNode
+        :type x: int
+        :rtype: ListNode
+        """
+        dummy1 = l = ListNode(0)
+        dummy2 = h = ListNode(0)
+        while head:
+            if head.val < x:
+                l.next = l = head
             else:
-                cur = cur.next
-        return head
-
-    def deleteDuplicates_recursively(self, head):
-        if not head or not head.next: return head
-        head.next = self.deleteDuplicates_recursively(head.next)
-        return head.next if head.val == head.next.val else head
+                h.next = h = head
+            head = head.next
+        l.next, h.next = dummy2.next, None
+        return dummy1.next
 
 
 # ================================测试代码================================
