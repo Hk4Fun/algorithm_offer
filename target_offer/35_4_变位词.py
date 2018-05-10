@@ -6,20 +6,15 @@ __date__ = '2018/2/11 15:53'
 例如listen和silent、evil和live。请完成一个函数，判断输入的两个字符串是否为变位词。
 '''
 '''主要思路：
-思路1：pythonic，利用python的set数据结构快速判断
-思路2：将word1和word2建成两张哈希表，记录出现的次数，看两张表是否相等
-思路3: 思路2在空间上的优化。只需用word1建立一张表（在表上添加记录，做加法），
+思路1：将word1和word2建成两张哈希表，记录出现的次数，看两张表是否相等
+思路2: 思路2在空间上的优化。只需用word1建立一张表（在表上添加记录，做加法），
        而word2在这张表上查询并做减法，最后若表中所有键的值都为0，则说明为变位词，否则不是
 '''
 
 
 class Solution:
-    def Anagram1(self, word1, word2):
-        if word1 == None or word1 == None:
-            return
-        return set(word1) == set(word2)
 
-    def Anagram2(self, word1, word2):
+    def Anagram1(self, word1, word2):
         if word1 == None or word1 == None:
             return
         # 这里不能table1 = table1 = [0] * 26，因为后面会改变其中一个，另一个也会一起改变，因为列表的引用是同一个
@@ -32,7 +27,7 @@ class Solution:
             table2[index] = table2[index] + 1
         return table1 == table2
 
-    def Anagram3(self, word1, word2):
+    def Anagram2(self, word1, word2):
         if word1 == None or word1 == None:
             return
         table = [0] * 26
@@ -73,6 +68,9 @@ class MyTest(Test):
         # word1和word2均为None
         testArgs.append([None, None, None])
 
+        testArgs.append(["aacc", "ccac", False])
+        testArgs.append(['aa', 'a', False])
+
         return testArgs
 
     def convert(self, result, *func_arg):
@@ -80,5 +78,4 @@ class MyTest(Test):
 
 
 if __name__ == '__main__':
-    solution = Solution()
-    MyTest(solution=solution).start_test()
+    MyTest(Solution()).start_test()
