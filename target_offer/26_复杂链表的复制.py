@@ -33,58 +33,59 @@ class RandomListNode:
         self.next = None
         self.random = None
 
+
 class Solution:
     def Clone1(self, pHead):
-            if not pHead:
-                return
-            # 第一步，复制原链表上的每一个节点，并用next连接起来
-            pCloneHead = RandomListNode(pHead.label)
-            pClonePre = pCloneHead
-            pNode = pHead.next
-            while pNode:
-                pCloned = RandomListNode(pNode.label)
-                pClonePre.next = pCloned
-                pNode = pNode.next
-                pClonePre = pCloned
-            # 第二步，链接复制链表每个结点的random结点
-            pNode = pHead
-            pCloned = pCloneHead
-            while pNode:
-                pRandom = pNode.random
-                if pRandom:
-                    pOld = pHead  # 从原链表头结点开始遍历
-                    pCloneRandom = pCloneHead  # 复制链表也同时从头遍历
-                    while pOld != pRandom:  # 直到来到原链表的random结点
-                        pOld = pOld.next
-                        pCloneRandom = pCloneRandom.next
-                    pCloned.random = pCloneRandom  # 此时的pCloneRandom正好也指向自己的random结点
-                pNode = pNode.next
-                pCloned = pCloned.next
-            return pCloneHead
+        if not pHead:
+            return
+        # 第一步，复制原链表上的每一个节点，并用next连接起来
+        pCloneHead = RandomListNode(pHead.label)
+        pClonePre = pCloneHead
+        pNode = pHead.next
+        while pNode:
+            pCloned = RandomListNode(pNode.label)
+            pClonePre.next = pCloned
+            pNode = pNode.next
+            pClonePre = pCloned
+        # 第二步，链接复制链表每个结点的random结点
+        pNode = pHead
+        pCloned = pCloneHead
+        while pNode:
+            pRandom = pNode.random
+            if pRandom:
+                pOld = pHead  # 从原链表头结点开始遍历
+                pCloneRandom = pCloneHead  # 复制链表也同时从头遍历
+                while pOld != pRandom:  # 直到来到原链表的random结点
+                    pOld = pOld.next
+                    pCloneRandom = pCloneRandom.next
+                pCloned.random = pCloneRandom  # 此时的pCloneRandom正好也指向自己的random结点
+            pNode = pNode.next
+            pCloned = pCloned.next
+        return pCloneHead
 
     def Clone2(self, pHead):
-            if not pHead:
-                return
-            # 第一步，复制原链表上的每一个节点，并用next连接起来
-            pCloneHead = RandomListNode(pHead.label)
-            pClonePre = pCloneHead
-            pNode = pHead.next
-            dict = {pHead: pCloneHead}  # 同时建立字典dict[N]=N';
-            while pNode:
-                pCloned = RandomListNode(pNode.label)
-                dict[pNode] = pCloned
-                pClonePre.next = pCloned
-                pNode = pNode.next
-                pClonePre = pCloned
-            # 第二步，链接复制链表每个结点的random结点
-            pNode = pHead
-            pCloned = pCloneHead
-            while pNode:
-                if pNode.random:
-                    pCloned.random = dict[pNode.random]  # dict[S]=S'
-                pNode = pNode.next
-                pCloned = pCloned.next
-            return pCloneHead
+        if not pHead:
+            return
+        # 第一步，复制原链表上的每一个节点，并用next连接起来
+        pCloneHead = RandomListNode(pHead.label)
+        pClonePre = pCloneHead
+        pNode = pHead.next
+        dict = {pHead: pCloneHead}  # 同时建立字典dict[N]=N';
+        while pNode:
+            pCloned = RandomListNode(pNode.label)
+            dict[pNode] = pCloned
+            pClonePre.next = pCloned
+            pNode = pNode.next
+            pClonePre = pCloned
+        # 第二步，链接复制链表每个结点的random结点
+        pNode = pHead
+        pCloned = pCloneHead
+        while pNode:
+            if pNode.random:
+                pCloned.random = dict[pNode.random]  # dict[S]=S'
+            pNode = pNode.next
+            pCloned = pCloned.next
+        return pCloneHead
 
     def Clone3(self, pHead):
         # 复制原始链表的每个结点, 将复制的结点链接在其原始结点的后面
@@ -135,6 +136,7 @@ class MyTest(Test):
     def my_test_code(self):
         self.debug = False  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
         self.TEST_NUM = 1000  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
+
         # 只需在此处填写自己的测试代码
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
