@@ -31,9 +31,9 @@ All the integers in the given input belong to the range: [-1e7, 1e7].
 
 思路1（时间O（nlogn），空间O（1））：
 先排序，然后双指针i=0，j=1
-如果nums[i]+k<j,则i++
-如果nums[i]+k>j,则j++
-如果nums[i]+k=j,则count++，i++
+如果nums[i]+k<nums[j],则i++
+如果nums[i]+k>nums[j],则j++
+如果nums[i]+k=nums[j],则count++，i++
 i++时遇到相等的直接略过，避免重复计算，同时保证j>i
 
 思路2（时间O（n），空间O（n））：
