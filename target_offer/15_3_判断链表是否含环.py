@@ -18,9 +18,8 @@ class ListNode:
 
 
 class Solution:
-    def isCircle(self, head):
-        if not head:
-            return
+    def isCircle1(self, head):
+        if not head: return
         fast = slow = head  # 两个指针同时从头结点出发
         while fast.next:  # fast走到链表末尾时结束遍历
             fast = fast.next
@@ -29,8 +28,17 @@ class Solution:
             else:  # 说明fast来到了倒数第一个结点，可以判断是单向链表了，直接返回
                 return False
             slow = slow.next  # slow一次只走一步
-            if fast == slow:  # fast判断一下是否走到了slow的位置
+            if fast is slow:  # fast判断一下是否走到了slow的位置
                 return True
+        return False
+
+    def isCircle2(self, head):
+        if not head: return
+        fast = slow = head
+        while fast.next and fast.next.next:
+            fast = fast.next.next
+            slow = slow.next
+            if slow is fast: return True
         return False
 
 

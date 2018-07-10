@@ -19,27 +19,20 @@ class ListNode:
 
 class Solution:
     def ListIntersect(self, headA, headB):
-        if not headA or not headB:
-            return
+        if not headA or not headB: return
         nodeA = headA
         while nodeA.next:  # 找到listA的尾结点
             nodeA = nodeA.next
         nodeA.next = headA  # 连接listA的尾节点连接到其头部
-
         fast = slow = headB  # 再在listB中判断是否有环
-        while fast.next:
-            fast = fast.next
-            if fast.next:
-                fast = fast.next
-            else:
-                return False
+        while fast.next and fast.next.next:
+            fast = fast.next.next
             slow = slow.next
-            if fast == slow:
-                break
-        if fast.next == None:
+            if slow is fast: break
+        else:  # 正常退出循环说明不含环
             return False
-
-        index = 0  # 开始寻找入口点
+        # 开始寻找入口点
+        index = 0
         pHead = headB
         pMeet = fast
         while pHead != pMeet:

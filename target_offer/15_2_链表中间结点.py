@@ -19,9 +19,8 @@ class ListNode:
 
 
 class Solution:
-    def FindMiddleNode(self, head):
-        if not head:
-            return
+    def FindMiddleNode1(self, head):
+        if not head: return
         pNode1 = pNode2 = head  # 两个指针同时从头结点出发
         while pNode1.next:  # 走得快的指针走到链表末尾时结束遍历
             pNode1 = pNode1.next  # 第一个指针一次走两步，但如果来到倒数第二个结点时就只能走一步了
@@ -29,6 +28,14 @@ class Solution:
                 pNode1 = pNode1.next
             pNode2 = pNode2.next  # 第二个指针一次只走一步
         return pNode2  # 返回走得慢的指针（第二个指针）
+
+    def FindMiddleNode2(self, head):
+        if not head: return
+        slow = fast = head
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
 
 
 # ================================测试代码================================
@@ -51,16 +58,20 @@ class MyTest(Test):
 
         testArgs = []
 
-        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8]), 5])  # 链表个数为偶数
-        testArgs.append([linkNodes([1, 2, 3, 4, 5]), 3])  # 链表个数为奇数
-        testArgs.append([linkNodes([1]), 1])  # 只有一个结点的链表
-        testArgs.append([linkNodes([]), None])  # 空链表
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8]), [4,5]])  # 链表个数为偶数
+        testArgs.append([linkNodes([1, 2, 3, 4, 5]), [3]])  # 链表个数为奇数
+        testArgs.append([linkNodes([1]), [1]])  # 只有一个结点的链表
+        testArgs.append([linkNodes([]), [None]])  # 空链表
 
         return testArgs
 
     def convert(self, result, *func_arg):
         # 在此处填写转换函数，将测试结果转换成其他形式
         return result.val if result else result
+
+    def checked(self, result, expected, *func_arg):
+        # 在此处填写比较器，测试返回的结果是否正确
+        return result == expected[0] or result == expected[1]
 
 
 if __name__ == '__main__':

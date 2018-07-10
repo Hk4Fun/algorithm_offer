@@ -29,7 +29,7 @@ class Test:
         try:
             total_time = 0
             for i in range(1 if self.debug else self.TEST_NUM):
-                func_arg_copy = copy.deepcopy(func_arg) # 防止func_arg被原地修改
+                func_arg_copy = copy.deepcopy(func_arg)  # 防止func_arg被原地修改
                 start = timeit.default_timer()
                 self.methods[int(method_num) - 1](*func_arg_copy)
                 end = timeit.default_timer()
@@ -64,9 +64,8 @@ class Test:
             for j, testArg in enumerate(testArgs_copy):
                 print('Test for {}_{}:'.format(method.__name__, j + 1))
                 self.test(i + 1, testArg[-1], *tuple(testArg[:-1]))
-            print('Result of Testing {}: {} / {}, {:.2f}%'.format(method.__name__,
-                                                                  self.pass_num, test_num,
-                                                                  (self.pass_num / test_num) * 100))
+            fmt = 'Result of Testing {}: {} / {}, {:.2f}%'
+            print(fmt.format(method.__name__, self.pass_num, test_num, (self.pass_num / test_num) * 100))
             if self.pass_num:
                 time = sum(self.time_pool) / self.pass_num
                 print('Total ', end='')

@@ -25,41 +25,31 @@ class ListNode:
 
 class Solution:
     def ListLenAndCircleLen(self, head):
-        if not head:
-            return
+        if not head: return
         fast = slow = head
         # 先判断是否含环
-        while fast.next:
-            fast = fast.next
-            if fast.next:
-                fast = fast.next
-            else:
-                return False
+        while fast.next and fast.next.next:
+            fast = fast.next.next
             slow = slow.next
-            if fast == slow:
-                break
-        if fast.next == None:
+            if slow is fast: break
+        else:  # 正常退出循环说明不含环
             return False
-
         # 第二次遍历计算环长
-        CirLen = 0
         fast = fast.next.next  # 先让fast和slow错开
         slow = slow.next
-        CirLen += 1
-        while fast != slow:
+        CirLen = 1
+        while fast is not slow:
             fast = fast.next.next
             slow = slow.next
             CirLen += 1
-
         # 寻找入口点
         Head2EntryLen = 0
         pHead = head  # 指向头结点
         pMeet = fast  # 指向相遇点
-        while pHead != pMeet:  # 二者还没相遇之前一直走下去
+        while pHead is not pMeet:  # 二者还没相遇之前一直走下去
             pHead = pHead.next
             pMeet = pMeet.next
             Head2EntryLen += 1
-
         return Head2EntryLen + CirLen, CirLen
 
 

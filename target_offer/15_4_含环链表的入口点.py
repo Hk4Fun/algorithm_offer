@@ -29,25 +29,20 @@ class ListNode:
 
 class Solution:
     def CircleEntry(self, head):
-        if not head:
-            return
+        if not head: return
         fast = slow = head
-        while fast.next:  # 先判断是否含环
-            fast = fast.next
-            if fast.next:
-                fast = fast.next
-            else:
-                return False
+        # 先判断是否含环
+        while fast.next and fast.next.next:
+            fast = fast.next.next
             slow = slow.next
-            if fast == slow:
-                break
-        if fast.next == None:
+            if slow is fast: break
+        else: # 正常退出循环说明不含环
             return False
-
-        index = 0  # 开始寻找入口点
+        # 寻找入口点
+        index = 0
         pHead = head  # 指向头结点
         pMeet = fast  # 指向相遇点
-        while pHead != pMeet:  # 二者还没相遇之前一直走下去
+        while pHead is not pMeet:  # 二者还没相遇之前一直走下去
             pHead = pHead.next
             pMeet = pMeet.next
             index += 1

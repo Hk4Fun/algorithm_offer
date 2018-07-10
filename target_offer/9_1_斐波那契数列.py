@@ -14,6 +14,7 @@ https://leetcode.com/problems/climbing-stairs/solution/
 思路5：生成器，pythonic，O(n)
 思路6：矩阵，转化成矩阵的乘方，然后用递归，实现代码量大，不实用，O(logn)
 思路7：公式法，最直接暴力，这里不实现，O(logn)，因为要乘方，至少O(logn)
+思路8：最简单最直接，a, b = b, a + b
 '''
 
 
@@ -81,6 +82,12 @@ class Solution:
         if n <= 1:
             return n
         return MatrixPower(n - 1)[0][0]
+
+    def Fibonacci8(self, n):
+        a, b = 0, 1
+        for _ in range(n):
+            a, b = b, a + b
+        return a
 
 
 # ================================测试代码================================

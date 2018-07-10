@@ -32,24 +32,22 @@ __date__ = '2018/1/6 17:57'
 
 class Solution:
     def reOrderArray1(self, array):
-        length = len(array)
-        evenNum = length - sum([i & 1 for i in array])  # 统计偶数个数
+        evenNum = len(array) - sum([i & 1 for i in array])  # 统计偶数个数
         i = 0
         while evenNum:
             if not array[i] & 1:  # 遇到偶数则冒泡到最后面
-                for j in range(i + 1, length):
+                for j in range(i + 1, len(array)):
                     array[j - 1], array[j] = array[j], array[j - 1]
-                evenNum -= 1  # 冒泡个数加一，等于偶数个数时结束，但i不加，因为已经往前挪了一位
+                evenNum -= 1  # 冒泡个数减1，但i不加1，因为已经往前挪了一位
             else:  # 遇到奇数就往后索引
                 i += 1
         return array
 
     def reOrderArray2(self, array):
-        length = len(array)
         evenBegin = sum([i & 1 for i in array])  # 统计奇数个数，为偶数开始位置
         oddBegin = 0  # 奇数开始位置
-        newArray = [None] * length
-        for i in range(length):
+        newArray = [None] * len(array)
+        for i in range(len(array)):
             if array[i] & 1:
                 newArray[oddBegin] = array[i]
                 oddBegin += 1
