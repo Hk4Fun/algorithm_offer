@@ -22,18 +22,16 @@ class TreeNode:
 class Solution:
     # 返回从上到下每个节点值列表，例：[1,2,3]
     def PrintFromTopToBottom(self, root):
-        if not root:
-            return []
-
+        if not root: return []
         result = []
         queue = [root]
         while queue:
-            currentRoot = queue.pop(0)
-            result.append(currentRoot.val)
-            if currentRoot.left:
-                queue.append(currentRoot.left)
-            if currentRoot.right:
-                queue.append(currentRoot.right)
+            cur = queue.pop(0)
+            result.append(cur.val)
+            if cur.left:
+                queue.append(cur.left)
+            if cur.right:
+                queue.append(cur.right)
         return result
 
 

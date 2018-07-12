@@ -48,20 +48,18 @@ class ListNode:
 
 
 class Solution:
-    # 暴力枚举，时间复杂度=O(mn)，空间复杂度=O(1)
+    # 暴力枚举，时间复杂度 = O(mn)，空间复杂度 = O(1)
     def FindFirstCommonNode1(self, pHead1, pHead2):
-        if not pHead1 or not pHead2:
-            return
+        if not pHead1 or not pHead2: return
         pNode1 = pHead1
         while pNode1:
             pNode2 = pHead2
             while pNode2:
-                if pNode1 == pNode2:  # 注意比较的是结点是否一样，不是结点的值
-                    return pNode1
+                if pNode1 is pNode2: return pNode1  # 注意比较的是结点是否一样，不是结点的值
                 pNode2 = pNode2.next
             pNode1 = pNode1.next
 
-    # 栈实现，时间复杂度=空间复杂度=O(m+n)
+    # 栈实现，时间复杂度 = 空间复杂度 = O(m+n)
     def FindFirstCommonNode2(self, pHead1, pHead2):
         def PutInStack(pHead):  # 把链表结点放进辅助栈里
             pNode = pHead
@@ -71,18 +69,12 @@ class Solution:
                 pNode = pNode.next
             return stack
 
-        if not pHead1 or not pHead2:
-            return
-        stack1 = PutInStack(pHead1)
-        stack2 = PutInStack(pHead2)
+        if not pHead1 or not pHead2: return
+        stack1, stack2 = PutInStack(pHead1), PutInStack(pHead2)
         while stack1 and stack2:
-            pNode1 = stack1.pop()
-            pNode2 = stack2.pop()
-            if pNode1 != pNode2:
-                return pNode1.next
-
-        # 链表来到末尾，说明两个链表重合（可能部分重合），
-        # 则第一个公共结点就是较短链表头结点
+            pNode1, pNode2 = stack1.pop(), stack2.pop()
+            if pNode1 is not pNode2: return pNode1.next
+        # 链表来到末尾，说明两个链表重合（可能部分重合），则第一个公共结点就是较短链表头结点
         return pHead1 if not stack1 else pHead2
 
     # 先走若干步，时间复杂度=O(m+n)，空间复杂度=O(1)
@@ -108,24 +100,23 @@ class Solution:
         for i in range(LengthDiff):  # 较长的链表先走长度之差的步数
             pListHeadLong = pListHeadLong.next
 
-        while pListHeadLong and pListHeadShort and pListHeadLong != pListHeadShort:  # 再同时遍历
+        while pListHeadLong and pListHeadShort and (pListHeadLong is not pListHeadShort):  # 再同时遍历
             pListHeadLong = pListHeadLong.next
             pListHeadShort = pListHeadShort.next
         return pListHeadLong  # 包含了无公共结点的情况（即返回None）
 
     # 同时从头开始遍历，时间复杂度=O[lcm(m,n)]，空间复杂度=O(1)
     def FindFirstCommonNode4(self, pHead1, pHead2):
-        pNode1 = pHead1
-        pNode2 = pHead2
-        while pNode1 != pNode2:
+        pNode1, pNode2 = pHead1, pHead2
+        while pNode1 is not pNode2:
             pNode1 = pNode1.next if pNode1 else pHead1
             pNode2 = pNode2.next if pNode2 else pHead2
         return pNode1
-    
+
+    # 注意与上一解法比较
     def FindFirstCommonNode5(self, pHead1, pHead2):
-        pNode1 = pHead1
-        pNode2 = pHead2
-        while pNode1 != pNode2:
+        pNode1, pNode2 = pHead1, pHead2
+        while pNode1 is not pNode2:
             pNode1 = pNode1.next if pNode1 else pHead2
             pNode2 = pNode2.next if pNode2 else pHead1
         return pNode1
@@ -142,7 +133,7 @@ class MyTest(Test):
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
         self.debug = False  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
-        self.TEST_NUM = 10  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
+        self.TEST_NUM = 10000  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
         testArgs = []
 
         # 第一个公共结点在链表中间

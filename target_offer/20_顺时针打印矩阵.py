@@ -11,7 +11,8 @@ __date__ = '2018/1/31 15:58'
 则依次打印出数字 1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
 '''
 '''主要思路：
-思路1： 由外向内一圈一圈打印，每一圈从左上角开始顺时针打印
+思路1（时间O（n*m）, 空间（1））： 
+        由外向内一圈一圈打印，每一圈从左上角开始顺时针打印
         左上角的坐标总是x=y，标记为（start,start）,
         由于每打印一圈，行列都减少2，所以圈数=(min(行，列)+1)//2
         每一圈的打印分四个步骤，且这四个步骤的执行是有条件的，因为里面那一圈并不完整：
@@ -23,9 +24,10 @@ __date__ = '2018/1/31 15:58'
         2、从上到下打印一列，条件：当前打印圈的行数>=2且列数>=1
         3、从右到左打印一行，条件：当前打印圈的行数>=2且列数>=2
         4、从下到上打印一列，条件：当前打印圈的行数>=3且列数>=2
-思路2： 上面的思路是矩阵不动，打印按顺时针，那么可以逆向思维：
-        只需从左到右打印矩阵的第一列，然后删除第一列，矩阵逆时针转动
-        再从左到右打印矩阵的第一列，以此类推，最后矩阵为空时结束打印
+思路2（时间O（(m+n)*n*m）, 空间（1））： 
+        上面的思路是矩阵不动，打印按顺时针，那么可以逆向思维：
+        只需从左到右打印矩阵的第一行，然后删除第一行，矩阵逆时针转动
+        再从左到右打印矩阵的第一行，以此类推，最后矩阵为空时结束打印
 '''
 
 
@@ -55,10 +57,8 @@ class Solution:
                 for i in range(endY - 1, start, -1):
                     result.append(matrix[i][start])
 
-        if not matrix:
-            return
-        rows = len(matrix)
-        cols = len(matrix[0])
+        if not matrix: return
+        rows, cols = len(matrix), len(matrix[0])
         result = []
         for start in range((min(rows, cols) + 1) >> 1):
             PrintMatrixInCircle(matrix, result, cols - (start << 1), rows - (start << 1), start)
@@ -66,8 +66,7 @@ class Solution:
 
     def PrintMatrix2(self, matrix):
         def turn(matrix):  # 逆时针旋转矩阵
-            if not matrix:
-                return
+            if not matrix: return
             matrix_turn = []
             for i in range(len(matrix[0]) - 1, -1, -1):
                 row = []

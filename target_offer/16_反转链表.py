@@ -21,9 +21,9 @@ class Solution:
     def ReverseList1(self, pHead):  # 4行代码搞定
         pre, cur = None, pHead
         while cur:
-            # pre, cur.next, cur, = cur, pre, cur.next
-            # 不能 pre, cur, cur.right = cur, cur.right, pre，否则后面cur.right中的cur是已经更新的cur
-            # 因此必须先保存cur.right，至于pre在哪个位置都行，因为它没引用cur
+            # pre, cur.next, cur = cur, pre, cur.next
+            # 不能 pre, cur, cur.next = cur, cur.next, pre，否则后面cur.next中的cur是已经更新的cur
+            # 因此必须先保存cur.next，至于pre在哪个位置都行，因为它没引用cur
             # 所以为了代码更加容易理解，可以重新调整一下顺序：从后往前
             cur.next, cur, pre = pre, cur.next, cur
             # 上面的一行等于下面四行

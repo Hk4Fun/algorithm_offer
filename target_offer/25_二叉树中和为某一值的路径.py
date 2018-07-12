@@ -26,7 +26,7 @@ class Solution:
             path.append(root.val)
 
             # 如果是叶结点，并且路径上结点的和等于输入的值，则找到新的路径
-            isLeaf = not (root.left or root.right)
+            isLeaf = not root.left and not root.right
             if currentSum == expectedSum and isLeaf:
                 all_path.append(path[:])  # 注意这里应该是path的拷贝，否则后面path改变，这里也会一起改变
 
