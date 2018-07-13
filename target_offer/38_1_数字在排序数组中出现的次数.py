@@ -24,9 +24,7 @@ class Solution:
         def GetFirstK(data, k, start, end):
             if start > end:
                 return -1
-
-            mid = (start + end) >> 1
-
+            mid = start + ((end - start) >> 1)
             if data[mid] > k:
                 end = mid - 1
             elif data[mid] < k:
@@ -40,9 +38,7 @@ class Solution:
         def GetLastK(data, k, start, end):
             if start > end:
                 return -1
-
-            mid = (start + end) >> 1
-
+            mid = start + ((end - start) >> 1)
             if data[mid] > k:
                 end = mid - 1
             elif data[mid] < k:
@@ -55,20 +51,20 @@ class Solution:
 
         if not data:
             return 0
-        number = 0
+        count = 0
         length = len(data)
         first = GetFirstK(data, k, 0, length - 1)
         last = GetLastK(data, k, 0, length - 1)
         if first > -1:  # first>-1则last>-1
-            number = last - first + 1
-        return number
+            count = last - first + 1
+        return count
 
     def GetNumberOfK3(self, data, k):
         def GetFirstK(data, k):
             start = 0
             end = len(data) - 1
-            mid = (start + end) >> 1
             while start <= end:
+                mid = start + ((end - start) >> 1)
                 if data[mid] > k:
                     end = mid - 1
                 elif data[mid] < k:
@@ -77,14 +73,13 @@ class Solution:
                     end = mid - 1
                 else:
                     return mid
-                mid = (start + end) >> 1
             return -1
 
         def GetLastK(data, k):
             start = 0
             end = len(data) - 1
-            mid = (start + end) >> 1
             while start <= end:
+                mid = start + ((end - start) >> 1)
                 if data[mid] > k:
                     end = mid - 1
                 elif data[mid] < k:
@@ -93,7 +88,6 @@ class Solution:
                     start = mid + 1
                 else:
                     return mid
-                mid = (start + end) >> 1
             return -1
 
         if not data:
