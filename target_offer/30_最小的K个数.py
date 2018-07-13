@@ -39,7 +39,7 @@ class Solution:
         if not numbers or k < 1 or k > len(numbers):
             return []
         start, end = 0, len(numbers) - 1
-        # 以下为二分， 只不过没有分界线不再是mid，而是通过partition求得
+        # 以下为二分， 只不过分界线不再是mid，而是通过partition求得
         while start <= end:
             index = partition(numbers, start, end)
             if index > k - 1:
@@ -81,7 +81,7 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
-        self.debug = True
+        self.debug = False
         testArgs = []
 
         # k小于数组的长度

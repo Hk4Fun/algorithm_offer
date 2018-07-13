@@ -86,8 +86,7 @@ class Solution:
 
     def FindGreatestSumOfSubArray4(self, array):
         # 简化版
-        if not array:
-            return
+        if not array: return
         curSum = maxSum = array[0]
         for num in array[1:]:
             curSum = max(num, curSum + num)

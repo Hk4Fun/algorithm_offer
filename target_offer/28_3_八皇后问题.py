@@ -71,22 +71,22 @@ class Solution:
 
     def EightQueen4(self, queenList):
         def convert(try_bit, row):
-            # 将尝试的bit位转换为对应的列号
             for col, bit in enumerate(bin(try_bit)[-1:1:-1]):  # 注意去掉前面的'0b'并反转字符串
                 if bit == '1':
                     a_result[row] = col
                     return
 
         def queen(left, mid, right, row):
-            if mid == (1 << length) - 1:
+            if mid == (1 << length) - 1:  # mid全为1，说明已经填充完毕
                 all_result.append(a_result[:])
                 return
             allow_bits = ~(left | mid | right) & ((1 << length) - 1)  # &((1 << length) - 1)是为了只保留后面相应长度的比特位
-            while allow_bits:
+            while allow_bits:  # 有可尝试的位置
                 try_bit = allow_bits & (-allow_bits)  # 取出最右边的'1'
-                convert(try_bit, row)
+                convert(try_bit, row)  # 将尝试的bit位转换为对应的列号
+                # 到下一行后原先的left和right也要跟着一起移动一位
                 queen((left | try_bit) << 1, mid | try_bit, (right | try_bit) >> 1, row + 1)
-                allow_bits -= try_bit  # 减去已经尝试的的位置，准备尝试下一个位置
+                allow_bits -= try_bit  # 去掉已经尝试的的位置，准备尝试下一个位置
 
         if queenList:
             length = len(queenList)
@@ -107,6 +107,7 @@ class MyTest(Test):
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
         self.debug = False
+        self.TEST_NUM = 50
         testArgs = []
 
         testArgs.append([range(3), None])

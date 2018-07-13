@@ -3,7 +3,6 @@ __date__ = '2018/3/23 1:25'
 '''
 http://ox186n2j0.bkt.clouddn.com/sorting.png
 '''
-from random import shuffle
 
 
 class Solution:
@@ -196,7 +195,7 @@ class Solution:
         quick(arr, 0, len(arr) - 1)
         return arr
 
-    def quick_3way(self, arr):   # 三向切分，荷兰国旗问题，对于含有较多重复字符的排序效率高
+    def quick_3way(self, arr):  # 三向切分，荷兰国旗问题，对于含有较多重复字符的排序效率高
         def quick(arr, left, right):
             if left < right:
                 pivot = arr[left]  # 选择首位作为枢轴，先记录下来，因为后面会被交换

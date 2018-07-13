@@ -33,31 +33,23 @@ class Solution:
     def Convert1(self, pRootOfTree):
         def ConvertNode(pNode):
             nonlocal pLastNodeInList  # 指向当前双向链表的最后一个结点
-            if not pNode:
-                return
+            if not pNode: return
             pCurrent = pNode
             # 转换左子树
-            if pCurrent.left:
-                ConvertNode(pCurrent.left)
+            ConvertNode(pCurrent.left)
             # 与当前双向链表的最后一个结点互相连接
             pCurrent.left = pLastNodeInList
-            if pLastNodeInList:
-                pLastNodeInList.right = pCurrent
+            pLastNodeInList.right = pCurrent
             pLastNodeInList = pCurrent  # 更新当前双向链表的最后一个结点
             # 转换右子树
-            if pCurrent.right:
-                ConvertNode(pCurrent.right)
+            ConvertNode(pCurrent.right)
 
-        if not pRootOfTree:
-            return
-        pLastNodeInList = None
+        if not pRootOfTree: return
+        dummy = pLastNodeInList = TreeNode(0)
         ConvertNode(pRootOfTree)
-        # pLastNodeInList 指向双向链表的尾结点
-        # 我们需要返回头结点
-        pHeadOfList = pLastNodeInList
-        while pHeadOfList and pHeadOfList.left:
-            pHeadOfList = pHeadOfList.left
-        return pHeadOfList
+        head = dummy.right # 伪结点的右边是真正的头结点
+        head.left = None # 去掉伪结点
+        return head
 
     def Convert2(self, pRootOfTree):
         def ConvertNode(pRootOfTree):

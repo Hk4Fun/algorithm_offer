@@ -52,7 +52,7 @@ class Solution:
             result = []
             for i in range(len(string)):  # 遍历string的每一个字符
                 result.append(string[i])  # 先添加该字符到组合结果中
-                for j in combination(string[i + 1:]):
+                for j in combination(string[i + 1:]): # 与前面的字符无关了
                     result.append(string[i] + j)  # 再把该字符与后面部分的组合结果中的每一项拼接
             return result
 
