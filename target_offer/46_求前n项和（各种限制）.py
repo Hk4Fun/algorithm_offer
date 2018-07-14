@@ -17,7 +17,6 @@ __date__ = '2018/2/17 23:55'
        且在计算a*b%mod的时候，往往较大的数计算a＊b会超出long long int的范围，
        这个时候使用快速乘法可以边计算边取模而不会溢出
 思路5：利用公式，(n+1)n/2 = (n^2+n)/2，除2用位运算替代，乘方调用math中的pow()来替代
-思路6：pythonic， 使用sum()
 '''
 
 
@@ -33,7 +32,7 @@ class Solution:
             return 0
 
     def Sum3(self, n):
-        def sum0(n):
+        def sum0(_):
             return 0
 
         def sumN(n):
@@ -62,9 +61,6 @@ class Solution:
     def Sum5(self, n):
         import math
         return (int(math.pow(n, 2)) + n) >> 1
-
-    def Sum6(self, n):
-        return sum(range(1, n + 1))
 
 
 # ================================测试代码================================

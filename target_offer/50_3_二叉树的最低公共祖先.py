@@ -29,9 +29,9 @@ __date__ = '2018/2/19 18:44'
 前两题都是根据二叉树本身的性质（搜索二叉树的有序性以及满二叉树的编号规律）进行寻找，
 而这一题的解法是通用的，且这里的思路2的递归框架更是具有通用性，
 它在39_2的思路2中其实已经体现出来了：后序遍历树，使树自下而上传递信息，
-根据这些信息构造相同结构的新的信息往上传，类似与承上启下，这里是承下启上
+根据这些信息构造相同结构的新的信息往上传，类似承上启下，这里是承下启上
 '''
-
+from collections import deque
 
 class TreeNode:
     def __init__(self, x):
@@ -44,7 +44,7 @@ class Solution:
     def findParent1(self, root, pNode1, pNode2):
         def find_path(path, root, pNode):  # 前序遍历记录根节点到其他结点的路径
             path.append(root)  # 先把当前结点加入路径
-            if root == pNode:  # 来到该结点，说明找到课路径
+            if root == pNode:  # 来到该结点，说明找到路径
                 return True
             if root.left and find_path(path, root.left, pNode):  # 从左边开始找
                 return True
@@ -55,20 +55,20 @@ class Solution:
 
         if not root or not pNode1 or not pNode2:
             return
-        path1 = []
+        path1 = deque()
         find_path(path1, root, pNode1)
-        path2 = []
+        path2 = deque()
         find_path(path2, root, pNode2)
         last = None
         while path1 and path2:
             if path1[0] == path2[0]:
                 last = path1[0]
-            path1.pop(0)
-            path2.pop(0)
+            path1.popleft()
+            path2.popleft()
         return last
 
     def findParent2(self, root, pNode1, pNode2):
-        if not root or root == pNode1 or root == pNode2: return root
+        if not root or root is pNode1 or root is pNode2: return root
         left = self.findParent2(root.left, pNode1, pNode2)
         right = self.findParent2(root.right, pNode1, pNode2)
         return root if left and right else left or right
@@ -87,7 +87,7 @@ class MyTest(Test):
             rootNode.left = leftNode
             rootNode.right = rightNode
 
-        self.debug = False
+        self.debug = True
         testArgs = []
 
         #        1
@@ -120,6 +120,9 @@ class MyTest(Test):
 
     def convert(self, result, *func_arg):
         return result
+
+    def checked(self, result, expected, *func_arg):
+        return result.val == expected.val if result else result == expected
 
 
 if __name__ == '__main__':

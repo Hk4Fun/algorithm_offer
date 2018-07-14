@@ -29,9 +29,9 @@ class Solution:
         num = 1
         while queue:
             cur = queue.pop(0)
-            if cur[0] == pNode1:
+            if cur[0] is pNode1:
                 num1 = cur[1]
-            if cur[0] == pNode2: # 考虑到两个结点可能为同一结点，不能用elif
+            if cur[0] is pNode2:  # 考虑到两个结点可能为同一结点，不能用elif
                 num2 = cur[1]
             if cur[0].left:
                 num += 1
@@ -39,6 +39,7 @@ class Solution:
             if cur[0].right:
                 num += 1
                 queue.append((cur[0].right, num))
+        # 寻找最长前缀，为父节点编号
         while num1 != num2:
             if num1 > num2:
                 num1 >>= 1
@@ -72,6 +73,7 @@ class MyTest(Test):
     def my_test_code(self):
         self.debug = True  # debug模式下每个测试用例只测试一遍，默认情况下关闭debug模式
         testArgs = []
+
         # 只需在此处填写自己的测试代码
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
@@ -109,6 +111,9 @@ class MyTest(Test):
 
     def convert(self, result, *func_arg):
         return result
+
+    def checked(self, result, expected, *func_arg):
+        return result.val == expected.val if result else result == expected
 
 
 if __name__ == '__main__':

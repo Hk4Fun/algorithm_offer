@@ -14,12 +14,11 @@ __date__ = '2018/2/14 16:31'
        不为0（因为这两个数一定不一样），那么二进制中一定有一个位置为1。那么我们可以以最右边的1
        为标准，把整个数组中该位为1的数划分为一组，为0的划分为一组。这样做一举两得：一来把那两个
        出现一次的数分开了，二来把成对的数放在了同一个数组里了（因为相同的数其二进制位一致）。
-思路2（时间复杂度O(n^2)，空间复杂度O(n)）：
+思路2（时间复杂度O(n)，空间复杂度O(n)）：
        暴力枚举，遍历整个数组，同时用一个临时数组来存放之前出现过的数字。如果当前数字在临时数组中
        存在，则把该数字在临时数组中删除；如果不存在就直接放进临时数组中。这样最终的临时数组就
        只剩下只出现一次的数。
-思路3：pythonic, 使用collections中的Counter，其时间复杂度和空间复杂度明显是比较大的，但可以看出：
-       没有什么是python不能一行解决的，如果有就两行！
+思路3：pythonic, 使用collections中的Counter，其时间复杂度和空间复杂度明显是比较大的
 '''
 
 
@@ -31,10 +30,9 @@ class Solution:
             for i in array:
                 xor_sum ^= i
             a = b = 0
+            last1 = (-xor_sum) & xor_sum # 取出最右边的1
             for i in array:
-                # ~xor_sum + 1使最右边的1和后面的0不变，前面的位全部取反，
-                # & xor_sum 后就把xor_sum最右边的1筛选出来，其他位为0
-                if i & ((~xor_sum + 1) & xor_sum):
+                if i & last1:
                     a ^= i
                 else:
                     b ^= i
@@ -42,13 +40,13 @@ class Solution:
 
     def FindNumsAppearOnce2(self, array):
         if array and len(array) > 1:
-            tmp = []
+            res = set()
             for i in array:
-                if i in tmp:
-                    tmp.remove(i)
+                if i in res:
+                    res.remove(i)
                 else:
-                    tmp.append(i)
-            return tmp
+                    res.add(i)
+            return res
 
     def FindNumsAppearOnce3(self, array):
         from collections import Counter

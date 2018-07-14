@@ -46,6 +46,7 @@ class MyTest(Test):
             rootNode.right = rightNode
 
         testArgs = []
+        self.debug = True
 
         #        4
         #    /      \
@@ -73,12 +74,13 @@ class MyTest(Test):
         testArgs.append([treeNode4, treeNode4, treeNode4, treeNode4])
         testArgs.append([None, None, None, None])
 
-
-
         return testArgs
 
     def convert(self, result, *func_arg):
         return result
+
+    def checked(self, result, expected, *func_arg):
+        return result.val == expected.val if result else result == expected
 
 
 if __name__ == '__main__':
