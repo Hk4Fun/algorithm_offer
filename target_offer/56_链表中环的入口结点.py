@@ -33,17 +33,12 @@ class Solution:
         def isLoop(pHead):
             # 判断是否含环，不含环返回False，含环则返回相遇点
             fast = slow = pHead
-            while fast.next:
-                fast = fast.next
-                if fast.next:  # 确定fast是否能再走一步
-                    fast = fast.next
-                else:  # None说明来到尾部，即不含环
-                    return False
+            while fast.next and fast.next.next:
+                fast = fast.next.next
                 slow = slow.next
-                if fast == slow:
+                if slow is fast:
                     return slow
-            if not fast.next:
-                return False
+            return False
 
         def loopLen(meetNode):
             # 返回环的长度
@@ -71,17 +66,12 @@ class Solution:
         def isLoop(pHead):
             # 判断是否含环，不含环返回False，含环则返回相遇点
             fast = slow = pHead
-            while fast.next:
-                fast = fast.next
-                if fast.next:  # 确定fast是否能再走一步
-                    fast = fast.next
-                else:  # None说明来到尾部，即不含环
-                    return False
+            while fast.next and fast.next.next:
+                fast = fast.next.next
                 slow = slow.next
-                if fast == slow:
+                if slow is fast:
                     return slow
-            if not fast.next:
-                return False
+            return False
 
         if not pHead:
             return
@@ -117,6 +107,7 @@ class MyTest(Test):
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
         testArgs = []
+        self.debug = True
 
         # 单向链表，多个结点
         node1 = ListNode(1)
@@ -177,6 +168,9 @@ class MyTest(Test):
 
     def convert(self, result, *func_arg):
         return result
+
+    def checked(self, result, expected, *func_arg):
+        return result.val == expected.val if result else result == expected
 
 
 if __name__ == '__main__':

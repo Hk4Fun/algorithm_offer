@@ -23,12 +23,12 @@ class Solution:
     def parent1(self, pRoot, node):
         if not pRoot or not node:
             return
-        if pRoot == node:
+        if pRoot is node:
             return pRoot
         queue = [pRoot]
         while queue:
             parent = queue.pop(0)
-            if parent.left == node or parent.right == node:
+            if parent.left is node or parent.right is node:
                 return parent
             if parent.left:
                 queue.append(parent.left)
@@ -39,7 +39,7 @@ class Solution:
         def postOrder(root, node):
             if not root:
                 return
-            if root.left == node or root.right == node:
+            if root.left is node or root.right is node:
                 return root
             parent = postOrder(root.left, node)
             if parent:  # 找到就一路返回
@@ -48,19 +48,19 @@ class Solution:
 
         if not pRoot or not node:
             return
-        if pRoot == node:
+        if pRoot is node:
             return pRoot
         return postOrder(pRoot, node)
 
     def parent3(self, pRoot, node):
         if not pRoot or not node:
             return
-        if pRoot == node:
+        if pRoot is node:
             return pRoot
         stack = []
         while stack or pRoot:
             while pRoot:
-                if pRoot.left == node or pRoot.right == node:
+                if pRoot.left is node or pRoot.right is node:
                     return pRoot
                 stack.append(pRoot)
                 pRoot = pRoot.left
@@ -148,6 +148,9 @@ class MyTest(Test):
 
     def convert(self, result, *func_arg):
         return result
+
+    def checked(self, result, expected, *func_arg):
+        return result.val == expected.val if result else result == expected
 
 
 if __name__ == '__main__':
