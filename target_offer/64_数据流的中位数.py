@@ -7,6 +7,8 @@ __date__ = '2018/2/26 0:35'
 '''
 '''主要思路：
 构建大根堆和小根堆，则插入O(logn)，取中位数O(1)
+如果用一个数组存储所有到来数据，然后在取中位数时排序返回，则插入O(1)，取中位数O(nlogn)
+由此可见，动态构建大根堆和小根堆相当于把排序时间平分到每次插入操作中，这样在获取中位数时可以O(1)
 有两个条件要满足：
 1、保证数据平均分配到两个堆中，即两个堆中数据的数目之差不能超过1；
 2、保证大根堆里所有数据都要小于小根堆中的数据
@@ -25,12 +27,12 @@ __date__ = '2018/2/26 0:35'
        取数时若总数个数为奇数则直接取大堆堆顶，偶数时取两堆堆顶平均值
 这里构建堆用heapq，其构建的都是小根堆（优先队列），所以为了构建大根堆需要在存数取数时加上负号
 '''
+import heapq
 
 
 class Solution:
     # 返回data中每增加一个数后的中位数序列列表
     def StreamMedian1(self, data):
-        import heapq
         def Insert(num):
             if not maxHeap or -num >= maxHeap[0]:  # 加上负号构建大顶堆，所以比较符号也要改变方向
                 heapq.heappush(maxHeap, -num)  # 小于等于大堆最大数（堆顶），则插入大堆中
@@ -56,11 +58,10 @@ class Solution:
             return result
 
     def StreamMedian2(self, data):
-        import heapq
         def Insert(num):
             self.count += 1  # 先计数
             if self.count % 2:  # 奇数时，新加入的元素应当进入大根堆
-                # 注意不是直接进入大根堆，而是经小根堆筛选后取小根堆中最大元素进入大根堆
+                # 注意不是直接进入大根堆，而是经小根堆筛选后取小根堆中最小元素进入大根堆
                 heapq.heappush(maxHeap, -heapq.heappushpop(minHeap, num))
             else:  # 偶数时，新加入的元素，应当进入小根堆
                 # 注意不是直接进入小根堆，而是经大根堆筛选后取大根堆中最大元素进入小根堆

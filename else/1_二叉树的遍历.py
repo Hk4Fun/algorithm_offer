@@ -242,9 +242,7 @@ class Solution:
             return
         stack, res = [(root, False)], []
         while stack:
-            cur = stack[-1][0]
-            visited = stack[-1][1]
-            stack.pop()
+            cur, visited = stack.pop()
             if not cur:
                 continue
             if visited:
@@ -274,8 +272,7 @@ class Solution:
             return
         stack, res = [[root, NONE]], []
         while stack:
-            cur = stack[-1][0]
-            state = stack[-1][1]
+            cur, state = stack[-1]
             if state == when:  # 在对应时机输出
                 res.append(cur.val)
             if state == NONE:  # NONE --> LEFT_DONE
@@ -292,12 +289,12 @@ class Solution:
 
     '''
     无论递归还是非递归，其空间复杂度都为O(n)，只不过前序、中序和后序的递归用的是系统栈，而剩下的
-    非递归是自己维护栈或者队列。那有没有一种二叉树遍历算法的空间复杂度为O(n)呢？Morris遍历！
-    Morris遍历算法最神奇的地方就是，只需要常数的空间即可在O(n)时间内完成二叉树的遍历。
+    非递归是自己维护栈或者队列。那有没有一种二叉树遍历算法的空间复杂度为O(1)呢？Morris遍历！
+    Morris遍历算法最神奇的地方就在于只需要常数的空间即可在O(n)时间内完成二叉树的遍历。
     O(1)空间进行遍历的困难之处在于遍历子结点的时候如何重新返回其父节点。
-    因此在Morris遍历算法中，通过修改叶子结点的左右空指针来指向其后继结点来实现的。
+    因此在Morris遍历算法中，通过修改叶子结点的左右空指针来指向其后继结点来实现。
     其思路来源于线索二叉树的遍历，只不过线索二叉树在遍历前需要将整棵二叉树线索化，且修改了空指针。
-    Morris遍历算法取其精华去其糟粕，一边线索化一边遍历，且只线索化后继指针，
+    而Morris遍历算法取其精华去其糟粕，一边线索化一边遍历，且只线索化后继指针，
     同时将使用过的线索化指针改回空指针，从而使整棵二叉树在遍历完成后还原。
     Morris遍历算法：
     1、当cur来到一个结点P的时候看它有没有左子树，没有的话无论前序中序都输出该结点，cur向右子树移动；
@@ -317,11 +314,11 @@ class Solution:
             pre = None
             cur = start
             while cur:
-                # pre, cur.next, cur, = cur, pre, cur.next
-                next = cur.right
-                cur.right = pre
-                pre = cur
-                cur = next
+                cur.right, cur, pre = pre, cur.right, cur
+                # next = cur.right
+                # cur.right = pre
+                # pre = cur
+                # cur = next
             return pre
 
         def print_reverse(start):
@@ -338,7 +335,7 @@ class Solution:
         res = []
         while cur:
             if not cur.left:
-                res.append(cur.val)  # 无论前序中序都输出该结点，当后序不能直接输出，因为右结点可能还没遍历到
+                res.append(cur.val)  # 无论前序中序都输出该结点，后序不能直接输出，因为右结点可能还没遍历到
                 cur = cur.right  # 向右子树遍历
             else:
                 last_right = cur.left
@@ -370,7 +367,7 @@ from Test import Test
 
 class MyTest(Test):
     def my_test_code(self):
-        self.debug = False  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.debug = True  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
         self.TEST_NUM = 10  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
         testArgs = []
 

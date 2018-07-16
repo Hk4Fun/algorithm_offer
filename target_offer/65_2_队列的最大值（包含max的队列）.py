@@ -15,18 +15,18 @@ __date__ = '2018/3/6 13:47'
 这就要求在入队时保存当前元素的入队次序。这里设置为（元素，次序）
 取最大值时，最大队列的队首就是当前队列的最大值
 '''
-
+from collections import deque
 
 class Solution:
     def __init__(self):
         self.queue = []
-        self.maxQueue = []
+        self.maxQueue = deque([])
         self.currentIndex = 0  # 当前元素的入队次序
 
     def push_back(self, num):
         self.queue.append((num, self.currentIndex))
         while self.maxQueue and num >= self.maxQueue[-1][0]:
-            self.maxQueue.pop(-1)
+            self.maxQueue.pop()
         self.maxQueue.append((num, self.currentIndex))
         self.currentIndex += 1
 
@@ -34,7 +34,7 @@ class Solution:
         if not self.queue or not self.maxQueue:
             return
         if self.maxQueue[0][1] == self.queue[0][1]:
-            self.maxQueue.pop(0)
+            self.maxQueue.popleft()
         self.queue.pop(0)
 
     def max(self):
