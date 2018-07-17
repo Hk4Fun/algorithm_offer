@@ -23,13 +23,13 @@ class Solution:
         if not pushV or not popV or len(pushV) != len(popV):
             return False
         stack = []
-        j = 0
-        for i in pushV:
-            stack.append(i)
-            while stack and stack[-1] == popV[j]:
+        i = 0
+        for num in pushV:
+            stack.append(num)
+            while stack and stack[-1] == popV[i]:
+                i += 1
                 stack.pop()
-                j += 1
-        return False if stack else True
+        return i == len(popV)
 
 
 # ================================测试代码================================
