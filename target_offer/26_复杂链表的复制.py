@@ -90,36 +90,32 @@ class Solution:
     def Clone3(self, pHead):
         # 复制原始链表的每个结点, 将复制的结点链接在其原始结点的后面
         def CloneNodes(pHead):
-            pNode = pHead
-            while pNode:
-                pCloned = RandomListNode(pNode.label)
-                pCloned.next = pNode.next
-                pNode.next = pCloned
-                pNode = pCloned.next
+            cur = pHead
+            while cur:
+                clone = RandomListNode(cur.label)
+                clone.next = cur.next
+                cur.next = clone
+                cur = clone.next
 
         # 将复制链表中结点的random指针链接到被复制结点random指针的后一个结点
         def ConnectRandomNodes(pHead):
-            pNode = pHead
-            while pNode:
-                pCloned = pNode.next
-                if pNode.random:
-                    pCloned.random = pNode.random.next
-                pNode = pCloned.next
+            cur = pHead
+            clone = pHead.next
+            while cur:
+                clone.random = cur.random.next if cur.random else None
+                cur = clone.next
+                clone = cur.next if cur else None
 
         # 拆分链表, 将原始链表的结点组成新的链表, 复制结点组成复制后的链表
         def ReconnectNodes(pHead):
-            pNode = pHead
-            pClonedHead = pClonedNode = pNode.next
-            pNode.next = pClonedNode.next
-            pNode = pNode.next  # 到这里pClonedNode在前，pNode在后，
-
-            while pNode:
-                pClonedNode.next = pNode.next  # pNode的下一个与pClonedNode链接
-                pClonedNode = pClonedNode.next  # pClonedNode顺着链接后移一格
-                pNode.next = pClonedNode.next  # pClonedNode把下一个与pNode链接
-                pNode = pNode.next  # pNode顺着链接后移一格，保证pClonedNode在前，pNode在后
-
-            return pClonedHead
+            cur = pHead
+            cloneHead = clone = pHead.next
+            while cur:
+                cur.next = clone.next
+                cur = cur.next
+                clone.next = cur.next if cur else None
+                clone = clone.next
+            return cloneHead
 
         if not pHead:
             return
@@ -134,7 +130,7 @@ from Test import Test
 
 class MyTest(Test):
     def my_test_code(self):
-        self.debug = False  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.debug = True  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
         self.TEST_NUM = 1000  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
 
         # 只需在此处填写自己的测试代码
