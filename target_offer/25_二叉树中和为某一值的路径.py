@@ -19,7 +19,7 @@ class TreeNode:
 
 class Solution:
     # 返回二维列表，内部每个列表表示找到的路径
-    def FindPath(self, root, expectedSum):
+    def FindPath1(self, root, expectedSum):
         def find(root, currentSum, expectedSum, path, all_path):
             # 每遍历一个结点就把该结点加入路径中，更新currentSum
             currentSum += root.val
@@ -53,7 +53,21 @@ class Solution:
             find(root, currentSum, expectedSum, path, all_path)
         return all_path
 
+    def FindPath2(self, root, expectNumber):
+        # 简化版
+        def find(root, cursum):
+            if not root: return
+            path.append(root.val)
+            cursum += root.val
+            if not root.left and not root.right and cursum == expectNumber:
+                res.append(path[:])
+            find(root.left, cursum)
+            find(root.right, cursum)
+            path.pop()
 
+        res, path = [], []
+        find(root, 0)
+        return res
 # ================================测试代码================================
 from Test import Test
 
@@ -68,6 +82,7 @@ class MyTest(Test):
             rootNode.right = rightNode
 
         testArgs = []
+        self.debug = True
 
         # 有两条路径上的结点和为22
         #     10
