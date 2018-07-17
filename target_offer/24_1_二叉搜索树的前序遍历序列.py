@@ -18,7 +18,7 @@ __date__ = '2018/2/2 15:03'
 
 
 class Solution:
-    def VerifySquenceOfBST(self, pre_sequence):
+    def VerifySquenceOfBST1(self, pre_sequence):
         if not pre_sequence:
             return False
 
@@ -41,15 +41,29 @@ class Solution:
         # 判断左子树是不是二叉搜索树
         left = True
         if i > 1:
-            left = self.VerifySquenceOfBST(pre_sequence[1:i])
+            left = self.VerifySquenceOfBST1(pre_sequence[1:i])
 
         # 判断右子树是不是二叉搜索树
         right = True
         if i < length:
-            right = self.VerifySquenceOfBST(pre_sequence[i:])
+            right = self.VerifySquenceOfBST1(pre_sequence[i:])
 
         return left and right
 
+    def VerifySquenceOfBST2(self, pre_sequence):
+        # 简化版
+        def verify(seq):
+            if not seq or len(seq) == 1: return True
+            root = seq[0]
+            for i in range(1, len(seq)): # i会成为函数局部变量
+                if seq[i] > root: break
+            i += 1 # 进入右子树区域
+            for j in range(i, len(seq)):
+                if seq[j] < root: return False
+            return verify(seq[1:i]) and verify(seq[i:])
+
+        if not pre_sequence: return False
+        return verify(pre_sequence)
 
 # ================================测试代码================================
 from Test import Test
@@ -61,6 +75,7 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
         testArgs = []
+        self.debug = True
 
         testArgs.append([[10, 6, 4, 8, 14, 12, 16], True])
         testArgs.append([[5, 4, 7, 6], True])
