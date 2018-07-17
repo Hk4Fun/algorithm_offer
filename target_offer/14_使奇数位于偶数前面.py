@@ -44,17 +44,17 @@ class Solution:
         return array
 
     def reOrderArray2(self, array):
-        evenBegin = sum([i & 1 for i in array])  # 统计奇数个数，为偶数开始位置
-        oddBegin = 0  # 奇数开始位置
-        newArray = [None] * len(array)
-        for i in range(len(array)):
-            if array[i] & 1:
-                newArray[oddBegin] = array[i]
-                oddBegin += 1
+        even = sum(i & 1 for i in array)  # 统计奇数个数，为偶数开始位置
+        odd = 0  # 奇数开始位置
+        res = [0] * len(array)
+        for i in array:
+            if i & 1:
+                res[odd] = i
+                odd += 1
             else:
-                newArray[evenBegin] = array[i]
-                evenBegin += 1
-        return newArray
+                res[even] = i
+                even += 1
+        return res
 
     # def reOrderArray3(self, array):
     #     if len(array) == 1:
