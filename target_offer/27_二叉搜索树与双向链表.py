@@ -31,22 +31,19 @@ class TreeNode:
 
 class Solution:
     def Convert1(self, pRootOfTree):
-        def ConvertNode(pNode):
-            nonlocal pLastNodeInList  # 指向当前双向链表的最后一个结点
-            if not pNode: return
-            pCurrent = pNode
-            # 转换左子树
-            ConvertNode(pCurrent.left)
+        def convert(root):
+            nonlocal last  # 指向当前双向链表的最后一个结点
+            if not root: return
+            convert(root.left)
             # 与当前双向链表的最后一个结点互相连接
-            pCurrent.left = pLastNodeInList
-            pLastNodeInList.right = pCurrent
-            pLastNodeInList = pCurrent  # 更新当前双向链表的最后一个结点
-            # 转换右子树
-            ConvertNode(pCurrent.right)
+            root.left = last
+            last.right = root
+            last = root  # 更新当前双向链表的最后一个结点
+            convert(root.right)
 
         if not pRootOfTree: return
-        dummy = pLastNodeInList = TreeNode(0)
-        ConvertNode(pRootOfTree)
+        dummy = last = TreeNode(0)
+        convert(pRootOfTree)
         head = dummy.right # 伪结点的右边是真正的头结点
         head.left = None # 去掉伪结点
         return head
@@ -95,6 +92,7 @@ class MyTest(Test):
             rootNode.right = rightNode
 
         testArgs = []
+        self.debug = True
 
         #       10
         #    /      \

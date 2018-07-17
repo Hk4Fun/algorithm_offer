@@ -42,13 +42,12 @@ class Solution:
         # 以下为二分， 只不过分界线不再是mid，而是通过partition求得
         while start <= end:
             index = partition(numbers, start, end)
-            if index > k - 1:
+            if index > k - 1:  # 最小的k个数，则第k小的数下标为k-1
                 end = index - 1
             elif index < k - 1:
                 start = index + 1
             else:
                 return numbers[:k]
-        return []
 
     def KLeastNumbers2(self, numbers, k):
         import heapq
@@ -81,7 +80,7 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
-        self.debug = False
+        self.debug = True
         testArgs = []
 
         # k小于数组的长度

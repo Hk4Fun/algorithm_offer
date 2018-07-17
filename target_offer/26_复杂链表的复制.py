@@ -89,7 +89,7 @@ class Solution:
 
     def Clone3(self, pHead):
         # 复制原始链表的每个结点, 将复制的结点链接在其原始结点的后面
-        def CloneNodes(pHead):
+        def clone(pHead):
             cur = pHead
             while cur:
                 clone = RandomListNode(cur.label)
@@ -98,7 +98,7 @@ class Solution:
                 cur = clone.next
 
         # 将复制链表中结点的random指针链接到被复制结点random指针的后一个结点
-        def ConnectRandomNodes(pHead):
+        def connect(pHead):
             cur = pHead
             clone = pHead.next
             while cur:
@@ -107,7 +107,7 @@ class Solution:
                 clone = cur.next if cur else None
 
         # 拆分链表, 将原始链表的结点组成新的链表, 复制结点组成复制后的链表
-        def ReconnectNodes(pHead):
+        def reconnect(pHead):
             cur = pHead
             cloneHead = clone = pHead.next
             while cur:
@@ -117,11 +117,10 @@ class Solution:
                 clone = clone.next
             return cloneHead
 
-        if not pHead:
-            return
-        CloneNodes(pHead)
-        ConnectRandomNodes(pHead)
-        return ReconnectNodes(pHead)
+        if not pHead: return
+        clone(pHead)
+        connect(pHead)
+        return reconnect(pHead)
 
 
 # ================================测试代码================================

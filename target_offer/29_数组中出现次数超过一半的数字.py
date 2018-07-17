@@ -64,26 +64,20 @@ class Solution:
         return result
 
     def MoreThanHalfNum2(self, numbers):
-        def CheckMoreThanHalf(numbers, length, result):
-            return True if sum(numbers[i] == result for i in range(length)) > length >> 1 else False
-
-        length = len(numbers)
-        if not numbers:
-            return 0
-
-        master = numbers[0]  # 先让第一个数作为守阵地的士兵，
-        HP = 1  # 初始都为一滴HP
-        for i in range(1, length):
-            if HP == 0:  # 当HP削减为0时，以下一个数作为守阵地的士兵
-                master = numbers[i]
-                HP = 1
-            elif numbers[i] == master:  # 遇到相同元素，相当于支援兵，补血，HP+1
-                HP += 1
-            else:  # 遇到不相同元素，相当于敌人，掉血，HP-1
-                HP -= 1
-        if not CheckMoreThanHalf(numbers, length, master):  # 防止该士兵坐收渔翁之利
-            master = 0
-        return master
+        if not numbers: return 0
+        master = numbers[0]  # 先让第一个数作为守阵地的士兵
+        hp = 1  # 初始都为一滴HP
+        for num in numbers[1:]:
+            if hp == 0:  # 当HP削减为0时，以下一个数作为守阵地的士兵
+                master = num
+                hp = 1
+            elif num == master:
+                hp += 1  # 遇到相同元素，相当于支援兵，补血，HP+1
+            else:
+                hp -= 1  # 遇到不相同元素，相当于敌人，掉血，HP-1
+        # 防止该士兵坐收渔翁之利
+        isHalf = sum(1 for num in numbers if num == master) > len(numbers) >> 1
+        return master if isHalf else 0
 
     def MoreThanHalfNum3(self, numbers):
         if not numbers:
@@ -112,6 +106,7 @@ class MyTest(Test):
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
         testArgs = []
+        self.debug = True
 
         # 存在出现次数超过数组长度一半的数字
         testArgs.append([[1, 2, 3, 2, 2, 2, 5, 4, 2], 2])
