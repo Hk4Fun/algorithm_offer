@@ -31,7 +31,7 @@ class Solution:
     def GetNext1(self, pNode):
         if not pNode or not pNode.parent:
             return
-        if pNode.parent.left == pNode and pNode.parent.right:
+        if pNode.parent.left is pNode and pNode.parent.right:
             pNode = pNode.parent.right
             while True:
                 if pNode.left:

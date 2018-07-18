@@ -27,23 +27,18 @@ class ListNode:
 
 class Solution:
     def deleteDuplication1(self, pHead):
-        if not pHead:
-            return
-        pre = None  # pre一开始初始化为None，因为还没有开始确定唯一结点
-        cur = pHead
+        if not pHead: return
+        pre = dummy = ListNode(0) # 使用伪结点
+        dummy.next = cur = pHead
         while cur:
-            if cur.next and cur.next.val == cur.val:  # 找到重复的结点
+            if cur.next and cur.next.val == cur.val: # 遇到相等的结点
                 val = cur.val
-                while cur and cur.val == val:  # 连续删除与当前结点值重复的结点
-                    cur = cur.next  # python有垃圾回收，所以直接后移即可
-                if not pre:  # 如果pre始终为None，说明从头结点开始就重复了，直接把头结点改掉
-                    pHead = cur  # 连续删除重复结点后当前指针指向第一个不同的结点
-                else:
-                    pre.next = cur  # 将第一个不同的结点链接到pre后面
-            else:  # 没有找到重复结点，确定是唯一结点
-                pre = cur  # 把pre往后移
-                cur = cur.next  # cur也后移
-        return pHead
+                while cur and cur.val == val: # 连续删除重复结点
+                    pre.next = cur.next
+                    cur = cur.next
+            else:
+                pre, cur = pre.next, cur.next
+        return dummy.next # 伪结点的下一个结点就是链表头结点
 
     def deleteDuplication2(self, pHead):
         if not pHead or not pHead.next:  # 只有0个或1个结点时直接返回

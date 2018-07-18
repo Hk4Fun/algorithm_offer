@@ -87,12 +87,11 @@ class Solution:
         return before
 
     def EntryNodeOfLoop3(self, pHead):
-        tmp = []
+        tmp = set()
         p = pHead
         while p:
-            if p in tmp:
-                return p
-            tmp.append(p)
+            if p in tmp: return p
+            tmp.add(p)
             p = p.next
 
 

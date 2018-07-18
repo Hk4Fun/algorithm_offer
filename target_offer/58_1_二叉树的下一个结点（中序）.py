@@ -35,7 +35,7 @@ class Solution:
                 pNode = pNode.left
             return pNode
         while pNode.parent:  # 没有右子树则向上找到第一个当前结点是其父结点左孩子的结点的父结点
-            if pNode.parent.left == pNode:
+            if pNode.parent.left is pNode:
                 return pNode.parent
             pNode = pNode.parent
         # 退到了根节点仍没找到则返回None

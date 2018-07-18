@@ -37,7 +37,7 @@ class Solution:
         if pNode.right:
             return pNode.right
         while pNode.parent:
-            if pNode.parent.right and pNode.parent.right != pNode:
+            if pNode.parent.right and pNode.parent.right is not pNode:
                 return pNode.parent.right
             pNode = pNode.parent
 

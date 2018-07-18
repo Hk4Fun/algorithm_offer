@@ -60,44 +60,39 @@ class Solution:
         return count
 
     def GetNumberOfK3(self, data, k):
-        def GetFirstK(data, k):
-            start = 0
-            end = len(data) - 1
-            while start <= end:
-                mid = start + ((end - start) >> 1)
-                if data[mid] > k:
-                    end = mid - 1
-                elif data[mid] < k:
-                    start = mid + 1
-                elif mid > start and data[mid - 1] == k:
-                    end = mid - 1
+        def firstK(data, k):
+            l, r = 0, len(data) - 1
+            while l <= r:
+                m = l + ((r - l) >> 1)
+                if data[m] < k:
+                    l = m + 1
+                elif data[m] > k:
+                    r = m - 1
                 else:
-                    return mid
+                    if m == 0 or data[m - 1] < k:
+                        return m
+                    else:
+                        r = m - 1
             return -1
 
-        def GetLastK(data, k):
-            start = 0
-            end = len(data) - 1
-            while start <= end:
-                mid = start + ((end - start) >> 1)
-                if data[mid] > k:
-                    end = mid - 1
-                elif data[mid] < k:
-                    start = mid + 1
-                elif mid < end and data[mid + 1] == k:
-                    start = mid + 1
+        def lastK(data, k):
+            l, r = 0, len(data) - 1
+            while l <= r:
+                m = l + ((r - l) >> 1)
+                if data[m] < k:
+                    l = m + 1
+                elif data[m] > k:
+                    r = m - 1
                 else:
-                    return mid
+                    if m == len(data) - 1 or data[m + 1] > k:
+                        return m
+                    else:
+                        l = m + 1
             return -1
 
-        if not data:
-            return 0
-        number = 0
-        first = GetFirstK(data, k)
-        last = GetLastK(data, k)
-        if first > -1:  # first>-1则last>-1
-            number = last - first + 1
-        return number
+        if not data: return 0
+        first, last = firstK(data, k), lastK(data, k)
+        return last - first + 1 if first != -1 else 0
 
     def GetNumberOfK4(self, data, k):
         return data.count(k) if data else 0
@@ -114,6 +109,7 @@ class MyTest(Test):
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
         testArgs = []
+        self.debug = True
 
         # 查找的数字出现在数组的中间
         testArgs.append([[1, 2, 3, 3, 3, 3, 4, 5], 3, 4])
