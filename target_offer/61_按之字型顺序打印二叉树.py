@@ -62,7 +62,7 @@ class Solution:
         queue = [pRoot]
         while queue:
             result.append([])
-            for i in range(len(queue)):
+            for _ in range(len(queue)):
                 cur = queue.pop(0)
                 if next == 0: # 奇数层把出队的结点放到列表后面
                     result[-1].append(cur.val)

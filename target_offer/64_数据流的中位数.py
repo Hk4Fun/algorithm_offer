@@ -60,7 +60,7 @@ class Solution:
     def StreamMedian2(self, data):
         def Insert(num):
             self.count += 1  # 先计数
-            if self.count % 2:  # 奇数时，新加入的元素应当进入大根堆
+            if self.count & 1:  # 奇数时，新加入的元素应当进入大根堆
                 # 注意不是直接进入大根堆，而是经小根堆筛选后取小根堆中最小元素进入大根堆
                 heapq.heappush(maxHeap, -heapq.heappushpop(minHeap, num))
             else:  # 偶数时，新加入的元素，应当进入小根堆
