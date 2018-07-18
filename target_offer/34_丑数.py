@@ -88,8 +88,8 @@ class Solution:
             # 竞争产生下一个丑数
             uglyNumbers.append(min(uglyNumbers[index2] * 2, uglyNumbers[index3] * 3, uglyNumbers[index5] * 5))
             # 把思路2中的三个并列的while简化成三个并列的if
-            # 则三个if只有一个会执行，也就是说只有一个标记会往后移，就是那个在上面竞争胜利的那个标记
-            # 胜利的标记后移，而其他两个失败的标记原地不动，因为它俩还有胜利的机会
+            # 可能会有多个标记竞争胜利，即丑数恰好是前面标记所在值的公倍数
+            # 因此必须是并列的if，不能if...elif...else
             if uglyNumbers[-1] == uglyNumbers[index2] * 2: index2 += 1
             if uglyNumbers[-1] == uglyNumbers[index3] * 3: index3 += 1
             if uglyNumbers[-1] == uglyNumbers[index5] * 5: index5 += 1
@@ -106,7 +106,7 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
-        self.debug = False
+        self.debug = True
         testArgs = []
 
         testArgs.append([1, 1])

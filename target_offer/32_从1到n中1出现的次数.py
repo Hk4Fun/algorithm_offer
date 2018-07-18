@@ -61,11 +61,11 @@ class Solution:
         while weight <= n:
             high = n // weight  # 第i位的高位，包含第i位
             low = n % weight  # 第i位的低位
-            curr = high % 10  # 第i位本身
+            cur = high % 10  # 第i位本身
             base = (high // 10) * weight  # 计算基础值，high//10就不含第i位了
-            if curr < x:  # 第i位小于x
+            if cur < x:  # 第i位小于x
                 count += base
-            elif curr > x:  # 第i位大于x
+            elif cur > x:  # 第i位大于x
                 count += base + weight
             else:  # 第i位等于x
                 count += base + low + 1
