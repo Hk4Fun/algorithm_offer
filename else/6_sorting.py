@@ -3,12 +3,13 @@ __date__ = '2018/3/23 1:25'
 '''
 http://ox186n2j0.bkt.clouddn.com/sorting.png
 '''
+from heapq import heappush, heappop
 
 
 class Solution:
     def bubble(self, arr):
-        for i in range(1, len(arr)):
-            for j in range(len(arr) - i):
+        for i in range(len(arr) - 1):  # 外层循环总次数 = 数组长度 - 1
+            for j in range(len(arr) - i - 1):  # 内层循环次数随着外层循环次数的增加而减少
                 if arr[j] > arr[j + 1]:
                     arr[j], arr[j + 1] = arr[j + 1], arr[j]
         return arr
@@ -24,23 +25,23 @@ class Solution:
         return arr
 
     def selection(self, arr):
-        for i in range(len(arr)):
-            minIndex = i
-            for j in range(i + 1, len(arr)):
-                if arr[j] < arr[minIndex]:
-                    minIndex = j
-            if minIndex != i:  # 最小值下标没有移动就不用交换
-                arr[i], arr[minIndex] = arr[minIndex], arr[i]
+        for i in range(len(arr)):  # i为起始索引，找出起始索引之后的最小值交换过来
+            minIdx = i  # 先把起始索引作为最小索引
+            for j, v in enumerate(arr[i + 1:], start=i + 1):  # j从起始索引后开始找最小值
+                if v < arr[minIdx]: minIdx = j  # 找到就更新该最小索引
+            if minIdx != i:  # 最小索引没有移动就不用交换，这个判断可以省去
+                arr[i], arr[minIdx] = arr[minIdx], arr[i]
         return arr
 
     def insertion(self, arr):
-        for i in range(1, len(arr)):  # 从下标1开始
-            preIndex = i - 1
-            cur = arr[i]
-            while preIndex >= 0 and arr[preIndex] > cur:
-                arr[preIndex + 1] = arr[preIndex]
-                preIndex -= 1
-            arr[preIndex + 1] = cur
+        # 其实应从下标1开始, 因为arr[0]默认已经排好序，但不影响
+        # 使用enumerate的好处是可以提前把要插入的数抽取出来，因为后面该位置可能会被覆盖
+        for i, v in enumerate(arr):
+            j = i - 1
+            while j >= 0 and arr[j] > v:  # j向前遍历，直到找到比v小的数为止
+                arr[j + 1] = arr[j]  # v要最终是要插到j+1的位置的，所以先把该数往后覆盖
+                j -= 1
+            arr[j + 1] = v  # v插到j+1的位置
         return arr
 
     def insertion_sentinel(self, arr):
@@ -79,35 +80,27 @@ class Solution:
         gap = len(arr) // 3
         while gap > 0:
             # 内循环就是插入排序，只不过增量为gap
-            for i in range(gap, len(arr)):
-                preIndex = i - gap
+            for i, v in enumerate(arr):
+                j = i - gap
                 cur = arr[i]
-                while preIndex >= 0 and arr[preIndex] > cur:
-                    arr[preIndex + gap] = arr[preIndex]
-                    preIndex -= gap
-                arr[preIndex + gap] = cur
+                while j >= 0 and arr[j] > cur:
+                    arr[j + gap] = arr[j]
+                    j -= gap
+                arr[j + gap] = cur
             gap //= 3
         return arr
 
     def merge_u2d_1(self, arr):  # u2d：up-to-down，自顶向下
         # 容易理解但是发生多次数组的复制
-        def merge(left, right):
+        def merge(l, r):
             res = []
-            while left and right:
-                if left[0] <= right[0]:
-                    res.append(left.pop(0))
-                else:
-                    res.append(right.pop(0))
-            while left:
-                res.append(left.pop(0))
-            while right:
-                res.append(right.pop(0))
-            return res
+            while l and r:
+                # l.pop(0) 太耗时的话可以用索引来指示进度
+                res.append(l.pop(0)) if l[0] <= r[0] else res.append(r.pop(0))
+            return res + l + r  # left和right必有一个为空
 
-        if len(arr) < 2:
-            return arr
-        mid = len(arr) >> 1
-        return merge(self.merge_u2d_1(arr[:mid]), self.merge_u2d_1(arr[mid:]))
+        if len(arr) < 2: return arr
+        return merge(self.merge_u2d_1(arr[::2]), self.merge_u2d_1(arr[1::2]))  # 分片巧妙地把数组一分为二
 
     def merge_u2d_2(self, arr):
         # 不好理解，但只需复制数组一次
@@ -167,7 +160,13 @@ class Solution:
             size += size
         return arr
 
-    def quick(self, arr):
+    def quick_simple(self, arr):  # pythonic，但空间复杂度增加了，并且不是原地排序
+        if len(arr) <= 1: return arr
+        l = self.quick_simple([i for i in arr[1:] if i <= arr[0]])  # 选择第一个数作为基准
+        r = self.quick_simple([i for i in arr[1:] if i > arr[0]])
+        return l + [arr[0]] + r
+
+    def quick(self, arr):  # 实现原地排序
         def partition(arr, left, right):
             i, j = left, right
             # 这里把枢轴单独提取出来可以避免后序的交换操作，可以直接覆盖
@@ -191,7 +190,7 @@ class Solution:
                 quick(arr, left, index - 1)
                 quick(arr, index + 1, right)
 
-        # shuffle(arr) # 使用shuffle随机打乱数组规律，但这样反而影响了排序的效率？
+        # shuffle(arr) # 使用shuffle随机打乱数组规律，但这样可能会影响了排序的效率
         quick(arr, 0, len(arr) - 1)
         return arr
 
@@ -243,6 +242,12 @@ class Solution:
         quick(arr, 0, len(arr) - 1)
         return arr
 
+    def heap_simple(self, arr):  # 使用标准库的数据结构heapq
+        tmp = []
+        for v in arr:
+            heappush(tmp, v)
+        return [heappop(tmp) for _ in range(len(tmp))]
+
     def heap_max(self, arr):
         def heapify(arr, i, end):  # 将arr[i]下沉（sink）至合适位置，下沉范围小于end
             # 下沉操作：如果该结点比两个子结点都大就结束下沉，否则选择子结点中最大那个交换来下沉
@@ -275,7 +280,7 @@ from Test import Test
 class MyTest(Test):
     def my_test_code(self):
         self.debug = False  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
-        self.TEST_NUM = 5  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
+        self.TEST_NUM = 10  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
         testArgs = []
 
         # 只需在此处填写自己的测试代码
