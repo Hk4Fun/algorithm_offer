@@ -10,7 +10,7 @@ class Solution:
     def bubble(self, arr):
         for i in range(len(arr) - 1):  # 外层循环总次数 = 数组长度 - 1
             for j in range(len(arr) - i - 1):  # 内层循环次数随着外层循环次数的增加而减少
-                if arr[j] > arr[j + 1]: # 为了保证冒泡排序的稳定性，这里不能用>=
+                if arr[j] > arr[j + 1]:  # 为了保证冒泡排序的稳定性，这里不能用>=
                     arr[j], arr[j + 1] = arr[j + 1], arr[j]
         return arr
 
@@ -28,9 +28,10 @@ class Solution:
         for i in range(len(arr)):  # i为起始索引，找出起始索引之后的最小值交换过来
             minIdx = i  # 先把起始索引作为最小索引
             for j, v in enumerate(arr[i + 1:], start=i + 1):  # j从起始索引后开始找最小值
-                if v < arr[minIdx]: minIdx = j  # 找到就更新该最小索引
+                if v < arr[minIdx]:
+                    minIdx = j  # 找到就更新该最小索引
             if minIdx != i:  # 最小索引没有移动就不用交换，这个判断可以省去
-                arr[i], arr[minIdx] = arr[minIdx], arr[i] # 这里不能保证稳定性，如：5，8，5，2
+                arr[i], arr[minIdx] = arr[minIdx], arr[i]  # 这里不能保证稳定性，如：5，8，5，2
         return arr
 
     def insertion(self, arr):
@@ -78,15 +79,14 @@ class Solution:
 
     def shell(self, arr):
         gap = len(arr) // 3
-        while gap > 0:
+        while gap:
             # 内循环就是插入排序，只不过增量为gap
             for i, v in enumerate(arr):
                 j = i - gap
-                cur = arr[i]
-                while j >= 0 and arr[j] > cur:
+                while j >= 0 and arr[j] > v:
                     arr[j + gap] = arr[j]
                     j -= gap
-                arr[j + gap] = cur
+                arr[j + gap] = v
             gap //= 3
         return arr
 
@@ -97,7 +97,7 @@ class Solution:
             while l and r:
                 # l.pop(0) 太耗时的话可以用索引来指示进度
                 res.append(l.pop(0)) if l[0] <= r[0] else res.append(r.pop(0))
-            return res + l + r  # left和right必有一个为空
+            return res + l + r  # l和r必有一个为空
 
         if len(arr) < 2: return arr
         return merge(self.merge_u2d_1(arr[::2]), self.merge_u2d_1(arr[1::2]))  # 分片巧妙地把数组一分为二
@@ -167,10 +167,10 @@ class Solution:
         return l + [arr[0]] + r
 
     def quick(self, arr):  # 实现原地排序
-        def partition(arr, left, right):
-            i, j = left, right
+        def partition(arr, l, r):
+            i, j = l, r
             # 这里把枢轴单独提取出来可以避免后序的交换操作，可以直接覆盖
-            pivot = arr[left]  # 选择首位作为枢轴
+            pivot = arr[l]  # 选择首位作为枢轴
             while i < j:
                 while i < j and arr[j] > pivot: j -= 1
                 if i < j:
@@ -183,23 +183,23 @@ class Solution:
             arr[i] = pivot
             return i
 
-        def quick(arr, left, right):
-            if left < right:
+        def quick_sort(arr, l, r):
+            if l < r:
                 # 类似前序遍历
-                index = partition(arr, left, right)
-                quick(arr, left, index - 1)
-                quick(arr, index + 1, right)
+                index = partition(arr, l, r)
+                quick_sort(arr, l, index - 1)
+                quick_sort(arr, index + 1, r)
 
         # shuffle(arr) # 使用shuffle随机打乱数组规律，但这样可能会影响了排序的效率
-        quick(arr, 0, len(arr) - 1)
+        quick_sort(arr, 0, len(arr) - 1)
         return arr
 
     def quick_3way(self, arr):  # 三向切分，荷兰国旗问题，对于含有较多重复字符的排序效率高
-        def quick(arr, left, right):
-            if left < right:
-                pivot = arr[left]  # 选择首位作为枢轴，先记录下来，因为后面会被交换
-                lt, gt = left, right  # lt指向第一个等于枢轴的数， gt指向待确定区的最后一个元素，即大于区的前面那个数
-                i = left + 1  # i指向待定区的第一个元素
+        def quick(arr, l, r):
+            if l < r:
+                pivot = arr[l]  # 选择首位作为枢轴，先记录下来，因为后面会被交换
+                lt, gt = l, r  # lt指向第一个等于枢轴的数， gt指向待确定区的最后一个元素，即大于区的前面那个数
+                i = l + 1  # i指向待定区的第一个元素
                 while i <= gt:
                     if arr[i] < pivot:  # 小于枢轴，则交换后lt和i都往后移一位
                         arr[i], arr[lt] = arr[lt], arr[i]
@@ -210,33 +210,33 @@ class Solution:
                         gt -= 1
                     else:
                         i += 1  # 等于枢轴则i后移一位即可不用交换
-                # 现在 arr[left:lt-1] < arr[lt:gt] = pivot < arr[gt+1:right]
-                quick(arr, left, lt - 1)
-                quick(arr, gt + 1, right)
+                # 现在 arr[l:lt-1] < arr[lt:gt] = pivot < arr[gt+1:r]
+                quick(arr, l, lt - 1)
+                quick(arr, gt + 1, r)
 
         # shuffle(arr) # 使用shuffle随机打乱数组规律，但这样反而影响了排序的效率？
         quick(arr, 0, len(arr) - 1)
         return arr
 
     def quick_2way(self, arr):  # 将等于区和大于区合并，其实与quick()一样
-        def partition(arr, left, right):
-            # arr[left]作为枢轴,到最后再换过去
-            lt = i = left + 1  # lt指向小于区的右边，i指向待定区，一开始都一样
-            while i <= right:
-                if arr[i] < arr[left]:
+        def partition(arr, l, r):
+            # arr[l]作为枢轴,到最后再换过去
+            lt = i = l + 1  # lt指向小于区的右边，i指向待定区，一开始都一样
+            while i <= r:
+                if arr[i] < arr[l]:
                     arr[i], arr[lt] = arr[lt], arr[i]
                     lt += 1
                 i += 1
-            # 现在pivot=arr[left],arr[left+1:lt-1]<arr[lt:]
-            arr[lt - 1], arr[left] = arr[left], arr[lt - 1]  # 注意和lt-1交换
+            # 现在pivot=arr[l],arr[l+1:lt-1]<arr[lt:]
+            arr[lt - 1], arr[l] = arr[l], arr[lt - 1]  # 注意和lt-1交换
             return lt - 1
 
-        def quick(arr, left, right):
-            if left < right:
+        def quick(arr, l, r):
+            if l < r:
                 # 类似前序遍历
-                index = partition(arr, left, right)
-                quick(arr, left, index - 1)
-                quick(arr, index + 1, right)
+                index = partition(arr, l, r)
+                quick(arr, l, index - 1)
+                quick(arr, index + 1, r)
 
         # shuffle(arr) # 使用shuffle随机打乱数组规律，但这样反而影响了排序的效率？
         quick(arr, 0, len(arr) - 1)
@@ -252,13 +252,13 @@ class Solution:
         def heapify(arr, i, end):  # 将arr[i]下沉（sink）至合适位置，下沉范围小于end
             # 下沉操作：如果该结点比两个子结点都大就结束下沉，否则选择子结点中最大那个交换来下沉
             while True:
-                left = 2 * i + 1  # 注意arr下标是从0开始的，所以这里多加一个1
-                right = left + 1
+                l, r = 2 * i + 1, 2 * i + 2
                 largest = i
-                if left < end and arr[left] > arr[largest]:
-                    largest = left
-                if right < end and arr[right] > arr[largest]:
-                    largest = right
+                # 找到三者中的最大者
+                if l < end and arr[l] > arr[largest]:
+                    largest = l
+                if r < end and arr[r] > arr[largest]:
+                    largest = r
                 if largest == i: break  # 最大就是自己，则结束下沉
                 arr[i], arr[largest] = arr[largest], arr[i]  # 否则和最大子结点交换
                 i = largest  # 继续下沉
@@ -270,7 +270,7 @@ class Solution:
             heapify(arr, 0, end)  # 然后把刚交换到堆顶的数下沉至合适位置
         return arr
 
-    def sort(self, arr): # 使用标准库的排序函数，做性能对比
+    def sort(self, arr):  # 使用标准库的排序函数，做性能对比
         return sorted(arr)
 
 
