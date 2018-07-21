@@ -10,7 +10,7 @@ class Solution:
     def bubble(self, arr):
         for i in range(len(arr) - 1):  # 外层循环总次数 = 数组长度 - 1
             for j in range(len(arr) - i - 1):  # 内层循环次数随着外层循环次数的增加而减少
-                if arr[j] > arr[j + 1]:
+                if arr[j] > arr[j + 1]: # 为了保证冒泡排序的稳定性，这里不能用>=
                     arr[j], arr[j + 1] = arr[j + 1], arr[j]
         return arr
 
@@ -30,7 +30,7 @@ class Solution:
             for j, v in enumerate(arr[i + 1:], start=i + 1):  # j从起始索引后开始找最小值
                 if v < arr[minIdx]: minIdx = j  # 找到就更新该最小索引
             if minIdx != i:  # 最小索引没有移动就不用交换，这个判断可以省去
-                arr[i], arr[minIdx] = arr[minIdx], arr[i]
+                arr[i], arr[minIdx] = arr[minIdx], arr[i] # 这里不能保证稳定性，如：5，8，5，2
         return arr
 
     def insertion(self, arr):
@@ -269,6 +269,9 @@ class Solution:
             arr[0], arr[end] = arr[end], arr[0]  # 把堆顶的最大值与参与堆排的数组末尾交换
             heapify(arr, 0, end)  # 然后把刚交换到堆顶的数下沉至合适位置
         return arr
+
+    def sort(self, arr): # 使用标准库的排序函数，做性能对比
+        return sorted(arr)
 
 
 # ================================测试代码================================
