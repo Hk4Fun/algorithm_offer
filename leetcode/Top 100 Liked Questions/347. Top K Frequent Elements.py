@@ -14,10 +14,10 @@ where n is the array's size.
 '''
 '''主要思路：
 思路1：时间O（n），空间O（n）
-dict + partition
+hashtable + partition
 
 思路2：时间O(n + klogn) ，空间O（n）  
-dict + heapq（maxheap）
+hashtable（dict） + maxheap（heapq）
 
 思路3：
 pythonic, one line solution
