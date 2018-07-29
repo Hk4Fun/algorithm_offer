@@ -5,7 +5,7 @@ __date__ = '2018/2/9 16:41'
 输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4
 '''
 '''主要思路：
-思路1（时间O(nlogk)，空间O(1)）：
+思路1（时间O(n)，空间O(1)）：
 基于Partition的算法, 只有当我们可以修改输入的数组时可用。
 利用Partition找到第(k-1)小的数(从0开始)，则数组左边的k个数字就是最小的k个数字
 （这k个数字不一定是排序的）
@@ -39,7 +39,7 @@ class Solution:
         if not numbers or k < 1 or k > len(numbers):
             return []
         start, end = 0, len(numbers) - 1
-        # 以下为二分， 只不过分界线不再是mid，而是通过partition求得
+        # 以下类似二分， 只不过分界线不再是mid，而是通过partition求得
         while start <= end:
             index = partition(numbers, start, end)
             if index > k - 1:  # 最小的k个数，则第k小的数下标为k-1

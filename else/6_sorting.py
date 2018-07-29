@@ -249,7 +249,7 @@ class Solution:
         return [heappop(tmp) for _ in range(len(tmp))]
 
     def heap_max(self, arr):
-        def heapify(arr, i, end):  # 将arr[i]下沉（sink）至合适位置，下沉范围小于end
+        def sink(arr, i, end):  # 将arr[i]下沉至合适位置，下沉范围小于end
             # 下沉操作：如果该结点比两个子结点都大就结束下沉，否则选择子结点中最大那个交换来下沉
             while True:
                 l, r = 2 * i + 1, 2 * i + 2
@@ -263,11 +263,11 @@ class Solution:
                 arr[i], arr[largest] = arr[largest], arr[i]  # 否则和最大子结点交换
                 i = largest  # 继续下沉
 
-        for i in range(len(arr) // 2, -1, -1):  # 先建最大堆
-            heapify(arr, i, len(arr))
+        for i in range(len(arr) // 2, -1, -1):  # 先建最大堆,O(n)
+            sink(arr, i, len(arr))
         for end in range(len(arr) - 1, 0, -1):  # 注意end到1就可以结束了，剩arr[0]一定是最小的
             arr[0], arr[end] = arr[end], arr[0]  # 把堆顶的最大值与参与堆排的数组末尾交换
-            heapify(arr, 0, end)  # 然后把刚交换到堆顶的数下沉至合适位置
+            sink(arr, 0, end)  # 然后把刚交换到堆顶的数下沉至合适位置
         return arr
 
     def sort(self, arr):  # 使用标准库的排序函数，做性能对比
