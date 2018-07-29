@@ -42,6 +42,8 @@ Output:
         n & (n - 1)：去掉最右边的1
         n & -n：取出最右边的1
         n = [n & (n - 1)] + [n & -n] = n & [n - 1 - n] = n & -1 = n
+        
+思路5：pythonic，magic method
 '''
 
 
@@ -93,6 +95,17 @@ class Solution:
         for mask in range(3, 1 << len(nums)):  # 0，1，2 属于基本case，已经填写过
             res[mask] = res[mask & -mask] + res[mask & mask - 1]
         return res
+
+    def subsets5(self, nums):
+        class FakeList(list):
+            def __len__(self):
+                return 1 << len(nums)
+
+            def __getitem__(self, mask):
+                return [num for i, num in enumerate(nums) if (1 << i) & mask]
+
+        return [FakeList()[i] for i in range(1 << len(nums))]
+        # return FakeList() # leetcode上可以直接返回FakeList()，因为oj会执行类似上面的过程（偷个懒）
 
 
 # ================================测试代码================================
