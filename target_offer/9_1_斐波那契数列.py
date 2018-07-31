@@ -15,33 +15,36 @@ https://leetcode.com/problems/climbing-stairs/solution/
 思路6：矩阵，转化成矩阵的乘方，然后用递归，实现代码量大，不实用，O(logn)
 思路7：公式法，最直接暴力，这里不实现，O(logn)，因为要乘方，至少O(logn)
 思路8：最简单最直接，a, b = b, a + b
+思路9：思路1，但使用 functools.lru_cache 来缓存
 '''
+
+from functools import lru_cache
 
 
 class Solution:
-    def Fibonacci1(self, n):  # 非线性递归
-        return n if n <= 1 else self.Fibonacci1(n - 1) + self.Fibonacci1(n - 2)
+    def fib1(self, n):  # 非线性递归
+        return n if n <= 1 else self.fib1(n - 1) + self.fib1(n - 2)
 
-    def Fibonacci2(self, n):  # 线性递归
+    def fib2(self, n):  # 线性递归
         def fib(a, b, n):
             return 1 if n == 1 else a + fib(b, a + b, n - 1)
 
         return n if n <= 1 else fib(0, 1, n)
 
-    def Fibonacci3(self, n):  # 尾递归
+    def fib3(self, n):  # 尾递归
         def fib(a, b, n):
             return a if n == 0 else fib(b, a + b, n - 1)
 
         return n if n <= 1 else fib(0, 1, n)
 
-    def Fibonacci4(self, n):
-        tempArray = [0, 1]
+    def fib4(self, n):
+        arr = [0, 1]
         if n >= 2:
             for i in range(2, n + 1):
-                tempArray[i & 1] = tempArray[0] + tempArray[1]  # 注意这里 i&1 的巧妙
-        return tempArray[n & 1]
+                arr[i & 1] = arr[0] + arr[1]  # 注意这里 i&1 的巧妙
+        return arr[n & 1]
 
-    def Fibonacci5(self, n):
+    def fib5(self, n):
         def fib(n):
             a, b = 0, 1
             for i in range(n + 1):
@@ -50,7 +53,7 @@ class Solution:
 
         return [i for i in fib(n)][n]
 
-    def Fibonacci6(self, n):
+    def fib6(self, n):
         def MatrixMultipy(matrix1, matrix2):
             # result = []
             # for i in range(len(matrix1)):
@@ -83,11 +86,17 @@ class Solution:
             return n
         return MatrixPower(n - 1)[0][0]
 
-    def Fibonacci8(self, n):
+    def fib8(self, n):
         a, b = 0, 1
         for _ in range(n):
             a, b = b, a + b
         return a
+
+    @lru_cache(maxsize=None)
+    def fib9(self, n):
+        if n < 2:
+            return n
+        return self.fib9(n - 1) + self.fib9(n - 2)
 
 
 # ================================测试代码================================
