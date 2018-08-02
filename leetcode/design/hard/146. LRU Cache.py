@@ -50,7 +50,7 @@ class Node:  # 双向链表结点
 class LRUCache1:
     def __init__(self, capacity):
         self.capacity = capacity
-        self.cache = dict()
+        self.cache = {}
         self.head = Node(0, 0)  # dummy head
         self.tail = Node(0, 0)  # dummy tail
         self.head.next = self.tail
@@ -98,7 +98,7 @@ class LRUCache1:
 class LRUCache2:
     def __init__(self, capacity):
         self.capacity = capacity
-        self.cache = dict()
+        self.cache = {}
         self.next = self.pre = self  # 双向环形链表
 
     def get(self, key):
@@ -266,7 +266,7 @@ class LRUCache:
         return format.format(self.hit, self.miss, self.maxsize, self.cursize)
 
     def cache_clear(self):
-        self.cache = dict()
+        self.cache = {}
         self.head = Node(0, 0)
         self.tail = Node(0, 0)
         self.head.next = self.tail
