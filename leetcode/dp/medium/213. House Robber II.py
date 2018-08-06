@@ -19,7 +19,7 @@ determine the maximum amount of money you can rob tonight without alerting the p
 随便选一个断开点，设这个点左边那家店是i，右边那家店是i+1，分别考虑这两家店是否纳入抢的范围内：
 1、不抢第i家店，也就是不把第i家店放在打算抢的范围内，这样就转换成了House Robber，
    使得即使其动态规划的结果中i+1和i-1被抢了也不会触发警报；
-2、把第i家店考虑在打算抢的范围内，但是不抢第i+1家店，再次转换成了House Robber，
+2、不抢第i+1家店，也就是不把第i+1家店放在打算抢的范围内，再次转换成了House Robber，
    这样即使i和i+2被抢了也不用担心触发警报
 3、i和i+1都不抢，这种情况其实在情况1和情况2中已经包含了。
 

@@ -15,8 +15,7 @@ __date__ = '2018/2/20 17:41'
        （下标和它相等）的数字交换，交换前先检查一下如果那个数字和它相等那么就找到了重复数字了，
        没有必要交换，遍历下一个。
 思路2（时间O(n), 空间O(n)）：
-       哈希法，用一个临时数组来存放出现过的数字，例如tmp[3]==True，表示3出现过了，
-       False表示未出现过，以此来找出重复的数字
+       使用集合缓存出现过的数字
 
 '''
 
@@ -24,38 +23,31 @@ __date__ = '2018/2/20 17:41'
 class Solution:
     # 返回重复数字的列表，没有直接返回-1
     def duplicate1(self, numbers):
-        if not numbers:
-            return -1
-        duplicate_num = []
+        if not numbers: return -1
+        res = []
         length = len(numbers)
         for i in numbers:
-            if i < 0 or i > length - 1:
-                return -1
+            if i < 0 or i > length - 1: return -1
         for i in range(length):
             # 当再次遍历到那个重复数字时该重复数字是在正确位置上的，所以不会进入while循环
             while numbers[i] != i:  # 这里用while而不是if是因为交换过来的数字还没被检查过
                 if numbers[i] == numbers[numbers[i]]:
-                    duplicate_num.append(numbers[i])
+                    res.append(numbers[i])
                     break  # 找到了就跳到下一个，因为没有发生交换
                 else:
                     index = numbers[i]  # 这里必须把numbers[i]抽出来而不能直接带入下面的表达式中
                     numbers[i], numbers[index] = numbers[index], numbers[i]
-        return duplicate_num if duplicate_num else -1
+        return res if res else -1
 
     def duplicate2(self, numbers):
-        if not numbers:
-            return -1
-        tmp = [False] * len(numbers)
-        duplicate_num = []
-        length = len(numbers)
-        for i in range(length):
-            if numbers[i] < 0 or numbers[i] > length - 1:
-                return -1
-            elif tmp[numbers[i]] == True:
-                duplicate_num.append(numbers[i])
-            else:
-                tmp[numbers[i]] = True
-        return duplicate_num if duplicate_num else -1
+        if not numbers: return -1
+        seen = set()
+        res = []
+        for num in numbers:
+            if num in seen:
+                res.append(num)
+            seen.add(num)
+        return res if res else -1
 
 
 # ================================测试代码================================
@@ -67,7 +59,7 @@ class MyTest(Test):
         # 只需在此处填写自己的测试代码
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
-
+        self.debug = Test
         testArgs = []
 
         # 重复数字是最小的数字
