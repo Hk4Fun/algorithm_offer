@@ -10,35 +10,46 @@ from union_find import QuickFind, QuickUnion, WQuickUnion, WQuickUnionWithPC
 
 class TestUnionFind(unittest.TestCase):
     def setUp(self):
-        self.fp = open('tinyUF.txt', 'r')
-        self.n = int(self.fp.readline())
+        testfile = ('tinyUF.txt', 'mediumUF.txt')
+        self.fps = list(map(lambda file: open(file, 'r'), testfile))
+        self.ns = list(map(lambda fp: int(fp.readline()), self.fps))
 
     def tearDown(self):
-        self.fp.close()
+        for fp in self.fps:
+            fp.close()
 
-    def _getpq(self):
-        return map(int, self.fp.readline().split(' '))
+    def _getpq(self, fp):
+        return map(int, fp.readline().split(' '))
 
-    def _test(self, uf):
-        for _ in range(self.n):
-            uf.union(*self._getpq())
-        self.assertEqual(uf.connected(0, 7), True)
-        self.assertEqual(uf.connected(2, 3), False)
-        self.assertEqual(uf.count(), 2)
-        self.fp.seek(0, 0)
-        self.fp.readline()
+    def _test(self, uf, fp, n):
+        for _ in range(n):
+            uf.union(*self._getpq(fp))
+        if n == self.ns[0]: # tinyUF.txt
+            self.assertEqual(uf.connected(0, 7), True)
+            self.assertEqual(uf.connected(2, 3), False)
+            self.assertEqual(uf.count(), 2)
+        elif n == self.ns[1]: # mediumUF.txt
+            self.assertEqual(uf.connected(43, 69), True)
+            self.assertEqual(uf.connected(0, 7), False)
+            self.assertEqual(uf.count(), 66)
+        fp.seek(0, 0)
+        fp.readline()
 
     def testQuickFind(self):
-        self._test(QuickFind(self.n))
+        for fp, n in zip(self.fps, self.ns):
+            self._test(QuickFind(n), fp, n)
 
     def testQuickUnion(self):
-        self._test(QuickUnion(self.n))
+        for fp, n in zip(self.fps, self.ns):
+            self._test(QuickUnion(n), fp, n)
 
     def testWQuickUnion(self):
-        self._test(WQuickUnion(self.n))
+        for fp, n in zip(self.fps, self.ns):
+            self._test(WQuickUnion(n), fp, n)
 
     def testWQuickUnionWithPC(self):
-        self._test(WQuickUnionWithPC(self.n))
+        for fp, n in zip(self.fps, self.ns):
+            self._test(WQuickUnionWithPC(n), fp, n)
 
 
 if __name__ == '__main__':
