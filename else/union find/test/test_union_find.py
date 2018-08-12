@@ -11,8 +11,8 @@ from union_find import QuickFind, QuickUnion, WQuickUnion, WQuickUnionWithPC
 class TestUnionFind(unittest.TestCase):
     def setUp(self):
         testfile = ('tinyUF.txt', 'mediumUF.txt')
-        self.fps = list(map(lambda file: open(file, 'r'), testfile))
-        self.ns = list(map(lambda fp: int(fp.readline()), self.fps))
+        self.fps = [open(file, 'r') for file in testfile]
+        self.ns = [int(fp.readline()) for fp in self.fps]
 
     def tearDown(self):
         for fp in self.fps:
@@ -24,11 +24,11 @@ class TestUnionFind(unittest.TestCase):
     def _test(self, uf, fp, n):
         for _ in range(n):
             uf.union(*self._getpq(fp))
-        if n == self.ns[0]: # tinyUF.txt
+        if n == self.ns[0]:  # tinyUF.txt
             self.assertEqual(uf.connected(0, 7), True)
             self.assertEqual(uf.connected(2, 3), False)
             self.assertEqual(uf.count(), 2)
-        elif n == self.ns[1]: # mediumUF.txt
+        elif n == self.ns[1]:  # mediumUF.txt
             self.assertEqual(uf.connected(43, 69), True)
             self.assertEqual(uf.connected(0, 7), False)
             self.assertEqual(uf.count(), 66)
