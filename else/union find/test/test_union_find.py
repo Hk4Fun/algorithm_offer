@@ -32,8 +32,6 @@ class TestUnionFind(unittest.TestCase):
             self.assertEqual(uf.connected(43, 69), True)
             self.assertEqual(uf.connected(0, 7), False)
             self.assertEqual(uf.count(), 66)
-        fp.seek(0, 0)
-        fp.readline()
 
     def testQuickFind(self):
         for fp, n in zip(self.fps, self.ns):
