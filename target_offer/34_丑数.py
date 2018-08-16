@@ -89,7 +89,7 @@ class Solution:
             uglyNumbers.append(min(uglyNumbers[index2] * 2, uglyNumbers[index3] * 3, uglyNumbers[index5] * 5))
             # 把思路2中的三个并列的while简化成三个并列的if
             # 可能会有多个标记竞争胜利，即丑数恰好是前面标记所在值的公倍数
-            # 因此必须是并列的if，不能if...elif...else
+            # 因此必须是并列的if，不能if...elif...data_structures
             if uglyNumbers[-1] == uglyNumbers[index2] * 2: index2 += 1
             if uglyNumbers[-1] == uglyNumbers[index3] * 3: index3 += 1
             if uglyNumbers[-1] == uglyNumbers[index5] * 5: index5 += 1

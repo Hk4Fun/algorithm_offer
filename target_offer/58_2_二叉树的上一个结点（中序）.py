@@ -54,7 +54,7 @@ class Solution:
     #     treeNodes = []
     #     midTraversal(cur, treeNodes)
     #     index = treeNodes.index(pNode)
-    #     return treeNodes[index - 1] if index != 0 else None
+    #     return treeNodes[index - 1] if index != 0 data_structures None
 
 
 # ================================测试代码================================

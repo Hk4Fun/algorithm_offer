@@ -5,10 +5,10 @@ __date__ = '2018/4/28 23:19'
 '''
 '''主要思路：
 思路1：时间O（n），空间O（n）
-else/1_二叉树的遍历.py pre_in_order_iteration2
+data_structures/二叉树的遍历.py pre_in_order_iteration2
 
 思路2：时间O（n），空间O（1）
-else/1_二叉树的遍历.py morris
+data_structures/二叉树的遍历.py morris
 '''
 
 

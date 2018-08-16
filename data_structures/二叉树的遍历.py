@@ -188,7 +188,7 @@ class Solution:
     #             res.append(cur.val)
     #             stack.pop()
     #             pre = cur
-    #         else:  # 否则说明该结点有左孩子或右孩子且都没被访问过，直接入栈
+    #         data_structures:  # 否则说明该结点有左孩子或右孩子且都没被访问过，直接入栈
     #             if cur.right:
     #                 stack.append(cur.right)
     #             if cur.left:

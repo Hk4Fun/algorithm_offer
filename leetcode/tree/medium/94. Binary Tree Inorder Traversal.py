@@ -17,7 +17,7 @@ Follow up: Recursive solution is trivial, could you do it iteratively?
 '''
 '''主要思路：
 时间O（n），空间O（n）
-详见else/1_二叉树的遍历.py
+详见else/二叉树的遍历.py
 这里采用其中的pre_in_order_iteration2和morris
 '''
 

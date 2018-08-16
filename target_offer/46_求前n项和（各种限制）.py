@@ -3,7 +3,7 @@ __date__ = '2018/2/17 23:55'
 
 '''题目描述：
 求1+2+3+...+n，
-要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+要求不能使用乘除法、for、while、if、data_structures、switch、case等关键字及条件判断语句（A?B:C）。
 '''
 '''主要思路：
 思路1：递归实现，利用and运算的短路原则退出递归
