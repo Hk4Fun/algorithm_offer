@@ -45,17 +45,18 @@ class Solution:
     def isValid1(self, s):
         stack = []
         for ch in s:
-            if stack:
-                if ch == ')' and stack[-1] == '(':
-                    stack.pop()
-                elif ch == ']' and stack[-1] == '[':
-                    stack.pop()
-                elif ch == '}' and stack[-1] == '{':
-                    stack.pop()
-                else:
-                    stack.append(ch)
-            else:
+            if ch in '([{':
                 stack.append(ch)
+            else:  # ch in ')]}'
+                if not stack:
+                    return False
+                top = stack.pop()
+                if ch == ')' and top != '(':
+                    return False
+                elif ch == ']' and top != '[':
+                    return False
+                elif ch == '}' and top != '{':
+                    return False
         return not stack
 
     def isValid2(self, s):  # 上一思路的精简版
