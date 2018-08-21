@@ -37,11 +37,12 @@ Output: true
 
 
 class Solution:
-    def isValid(self, s):
-        """
-        :type s: str
-        :rtype: bool
-        """
+    """
+    :type s: str
+    :rtype: bool
+    """
+
+    def isValid1(self, s):
         stack = []
         for ch in s:
             if stack:
@@ -53,11 +54,26 @@ class Solution:
                     stack.pop()
                 else:
                     stack.append(ch)
-            elif ch in ')]}':
-                return False
             else:
                 stack.append(ch)
         return not stack
+
+    def isValid2(self, s):  # 上一思路的精简版
+        pair = {')': '(', ']': '[', '}': '{'}
+        stack = []
+        for ch in s:
+            if stack and ch in pair:
+                if stack[-1] != pair[ch]:
+                    return False
+                stack.pop()
+            else:
+                stack.append(ch)
+        return not stack
+
+    def isValid3(self, s):  # pythonic
+        while '()' in s or '{}' in s or '[]' in s:
+            s = s.replace('{}', '').replace('()', '').replace('[]', '')
+        return True if s == '' else False
 
 
 # ================================测试代码================================
