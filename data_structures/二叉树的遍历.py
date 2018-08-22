@@ -37,14 +37,17 @@ class Solution:
     至于层序遍历一般只用非递归，队列实现
     '''
     # def seq_order_iteration(self, root):
-    #     queue, res = [root], []
-    #     while queue:
-    #         cur = queue.pop(0)
-    #         res.append(cur.val)
-    #         if cur.left:
-    #             queue.append(cur.left)
-    #         if cur.right:
-    #             queue.append(cur.right)
+    #     res, level = [], [root]
+    #     while level:
+    #         next_level = []
+    #         res.append([])
+    #         for cur in level:
+    #             res[-1].append(cur.val)
+    #             if cur.left:
+    #                 next_level.append(cur.left)
+    #             if cur.right:
+    #                 next_level.append(cur.right)
+    #         level = next_level
     #     return res
 
     '''
@@ -114,7 +117,9 @@ class Solution:
 
     '''
     上面代码中入栈时是前序遍历的时机，而出栈时是中序遍历的时机，每个结点都经历一次入栈和出栈，
-    所以每个结点实际上被访问了2次。其实入栈和出栈是对称操作，那么在代码的实现上也可以是‘对称’的。
+    所以每个结点实际上被访问了2次。其实入栈和出栈是对称操作，那么在代码的实现上也可以是‘对称’的:
+    如果当前结点不为空，那么就进栈并来到左结点，否则出栈并来到右结点
+    进栈前是前序遍历的访问时机，出栈后是中序遍历的访问时机
     '''
 
     def pre_in_order_iteration2(self, root):
@@ -122,7 +127,7 @@ class Solution:
             return
         stack, res = [], []
         cur = root
-        while stack or cur:
+        while stack or cur: # 注意这里的循环条件
             if cur:
                 res.append(cur.val)  # 前序visit，入栈前访问
                 stack.append(cur)
@@ -137,9 +142,9 @@ class Solution:
     后序遍历的非递归有两种思路：
     思路1：两个栈实现。
     借助前序遍历的非递归实现，在访问根结点时不要直接访问，应等左右结点访问了才轮到它，
-    所以应把它压入另外一个栈；而在压入第一个栈时先压左结点再压右结点，
-    这样在它们被当作根结点时就会被弹出并压入第二个栈，于是右结点在下左结点在上；
-    最后从依次弹出第二个栈的结点访问之顺序就是（左结点，右结点，根结点）
+    所以应把它压入另外一个栈（第二个栈），然后把的左右结点分别压入第一个栈；
+    而在压入第一个栈时先压左结点再压右结点，这样在它们被当作根结点时就会被弹出并压入第二个栈，
+    于是右结点在下左结点在上，最后依次弹出第二个栈的结点访问之顺序就是（左结点，右结点，根结点）
     1、将根结点压入stack1；
     2、弹出stack1的栈顶结点，并把该结点压入stack2；
     3、将当前结点的左孩子和右孩子先后分别压入stack1，转入步骤2；
