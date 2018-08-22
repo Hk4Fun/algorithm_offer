@@ -28,17 +28,17 @@ class ListNode:
 class Solution:
     def deleteDuplication1(self, pHead):
         if not pHead: return
-        pre = dummy = ListNode(0) # 使用伪结点
+        pre = dummy = ListNode(0)  # 使用伪结点
         dummy.next = cur = pHead
         while cur:
-            if cur.next and cur.next.val == cur.val: # 遇到相等的结点
+            if cur.next and cur.next.val == cur.val:  # 遇到相等的结点
                 val = cur.val
-                while cur and cur.val == val: # 连续删除重复结点
+                while cur and cur.val == val:  # 连续删除重复结点
                     pre.next = cur.next
                     cur = cur.next
             else:
                 pre, cur = pre.next, cur.next
-        return dummy.next # 伪结点的下一个结点就是链表头结点
+        return dummy.next  # 伪结点的下一个结点就是链表头结点
 
     def deleteDuplication2(self, pHead):
         if not pHead or not pHead.next:  # 只有0个或1个结点时直接返回

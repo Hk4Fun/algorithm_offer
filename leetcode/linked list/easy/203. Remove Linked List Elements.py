@@ -10,8 +10,9 @@ Return: 1 --> 2 --> 3 --> 4 --> 5
 '''主要思路：
 时间O（n），空间O（1）
 思路1：类似于leetcode/linked list/easy/83. Remove Duplicates from Sorted List.py
-        需要借助一个虚拟头结点
+        虽然不是排好序的链表，但这里告诉你要删除的是哪个重复的结点（val）
 思路2：不用借助虚拟头结点，用pre
+思路3：递归，对比 83. Remove Duplicates from Sorted List.py 的递归解法
 '''
 
 
@@ -29,13 +30,13 @@ class Solution:
     """
 
     def removeElements1(self, head, val):
-        cur = dummy = ListNode(0)
+        dummy = pre = ListNode(0)
         dummy.next = head
-        while cur and cur.next:
-            if cur.next.val == val:
-                cur.next = cur.next.next
+        while pre.next:
+            if pre.next.val == val:
+                pre.next = pre.next.next
             else:
-                cur = cur.next
+                pre = pre.next
         return dummy.next
 
     def removeElements2(self, head, val):
@@ -49,6 +50,11 @@ class Solution:
                 pre = cur
             cur = cur.next
         return head
+
+    def removeElements3(self, head, val):
+        if head is None: return
+        head.next = self.removeElements3(head.next, val)
+        return head.next if head.val == val else head
 
 
 # ================================测试代码================================
