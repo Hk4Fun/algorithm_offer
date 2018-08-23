@@ -73,8 +73,10 @@ class WQuickUnion(QuickUnion):  # WeightedQuickUnion(加权QuickUnion)
         # 将小树的根节点连接到大树的根节点
         if self.size[pid] < self.size[qid]:
             self.id[pid] = qid
+            self.size[qid] += self.size[pid]
         else:
             self.id[qid] = pid
+            self.size[pid] += self.size[qid]
         self.n -= 1
 
 
