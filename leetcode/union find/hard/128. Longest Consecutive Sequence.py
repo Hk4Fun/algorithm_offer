@@ -16,7 +16,7 @@ Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefor
 先排序（如果过要求不能原地修改数组就要额外O（n）的空间，否则原地排序即可），然后线性扫描
 
 思路2（时间O（n），空间O（n））
-借助 union find 的思想，借助一个字典（hash table）实现
+借助 union_find 的思想，借助一个字典（hash table）实现
 
 思路3（时间O（n），空间O（n））
 利用集合，线性扫描，最简洁的思路

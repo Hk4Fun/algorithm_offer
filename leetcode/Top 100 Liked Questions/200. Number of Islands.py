@@ -25,7 +25,7 @@ Input:
 Output: 3
 '''
 '''主要思路：
-思路1：union find (quick-union)
+思路1：union_find (quick-union)
 
 思路2：dfs
 
