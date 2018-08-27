@@ -14,29 +14,29 @@ __date__ = '2018/2/14 16:31'
        不为0（因为这两个数一定不一样），那么二进制中一定有一个位置为1。那么我们可以以最右边的1
        为标准，把整个数组中该位为1的数划分为一组，为0的划分为一组。这样做一举两得：一来把那两个
        出现一次的数分开了，二来把成对的数放在了同一个数组里了（因为相同的数其二进制位一致）。
+       我们其实还可以再优化一下：在第二次循环时，只需把标准位是1的数异或起来就可以了，
+       那么最终结果就是那两个数字中的一个，此时把该数与第一次循环的异或结果再次异或就可以拿到另一个数了
 思路2（时间复杂度O(n)，空间复杂度O(n)）：
        暴力枚举，遍历整个数组，同时用一个临时数组来存放之前出现过的数字。如果当前数字在临时数组中
        存在，则把该数字在临时数组中删除；如果不存在就直接放进临时数组中。这样最终的临时数组就
        只剩下只出现一次的数。
-思路3：pythonic, 使用collections中的Counter，其时间复杂度和空间复杂度明显是比较大的
+
+该题可以扩展为数组中有两个数出现了奇数次（次数不一定相等，也不一定为1），
+其他数都出现了偶数次（次数不一定相等，也不一定为2），其解题思路没有任何改动
 '''
 
 
 class Solution:
-    # 返回[a,b] 其中a，b是出现一次的两个数字
     def FindNumsAppearOnce1(self, array):
         if array and len(array) > 1:
-            xor_sum = 0
+            xor_sum = a = 0
             for i in array:
                 xor_sum ^= i
-            a = b = 0
-            last1 = (-xor_sum) & xor_sum # 取出最右边的1
+            last1 = (-xor_sum) & xor_sum  # 取出最右边的1
             for i in array:
                 if i & last1:
                     a ^= i
-                else:
-                    b ^= i
-            return [a, b]
+            return [a, a ^ xor_sum]
 
     def FindNumsAppearOnce2(self, array):
         if array and len(array) > 1:
@@ -47,10 +47,6 @@ class Solution:
                 else:
                     res.add(i)
             return res
-
-    def FindNumsAppearOnce3(self, array):
-        from collections import Counter
-        return list(map(lambda c: c[0], Counter(array).most_common()[-2:])) if (array and len(array) > 1) else None
 
 
 # ================================测试代码================================
@@ -70,6 +66,8 @@ class MyTest(Test):
         testArgs.append([[4, 6], {4, 6}])
 
         testArgs.append([[4, 6, 1, 1, 1, 1], {4, 6}])
+
+        testArgs.append([[4, 4, 4, 6, 6, 6, 1, 1, 1, 1, 2, 2], {4, 6}])
 
         testArgs.append([[1], None])
 

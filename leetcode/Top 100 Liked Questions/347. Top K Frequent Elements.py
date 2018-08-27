@@ -36,19 +36,14 @@ class Solution:
 
     def topKFrequent1(self, nums, k):
         def partition(arr, l, r):
-            i, j = l, r
-            pivot = arr[l]
-            while i < j:
-                while i < j and arr[j][1] <= pivot[1]: j -= 1
-                if i < j:
-                    arr[i] = arr[j]
-                    i += 1
-                while i < j and arr[i][1] >= pivot[1]: i += 1
-                if i < j:
-                    arr[j] = arr[i]
-                    j -= 1
-            arr[i] = pivot
-            return i
+            pivot = arr[l]  # 选择首位作为枢轴
+            while l < r:
+                while l < r and arr[r] >= pivot: r -= 1
+                arr[l] = arr[r]
+                while l < r and arr[l] <= pivot: l += 1
+                arr[r] = arr[l]
+            arr[l] = pivot
+            return l
 
         tmp = {}
         for num in nums:
@@ -56,11 +51,11 @@ class Solution:
         items = list(tmp.items())
         l, r = 0, len(items) - 1
         while l <= r:
-            index = partition(items, l, r)
-            if index < k - 1:
-                l = index + 1
-            elif index > k - 1:
-                r = index - 1
+            idx = partition(items, l, r)
+            if idx < k - 1:
+                l = idx + 1
+            elif idx > k - 1:
+                r = idx - 1
             else:
                 return [item[0] for item in items[:k]]
 

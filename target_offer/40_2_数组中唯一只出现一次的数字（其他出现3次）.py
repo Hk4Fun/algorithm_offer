@@ -12,6 +12,8 @@ __date__ = '2018/3/5 23:36'
 先排序，则没有连续出现3次的那个数字就是
 思路3（时间O(n), 空间O(n)）：
 建立哈希表，查表找到出现1次的那个数字
+
+该题可以很容易拓展到“其他数字都出现k次”的情况，其解题思路不变
 '''
 
 
@@ -35,8 +37,7 @@ class Solution:
         return result if result >> 31 == 0 else ~(result ^ 0xffffffff)
 
     def FindNumberAppearingOnce2(self, numbers):
-        if not numbers:
-            return
+        if not numbers: return
         numbers.sort()
         length = len(numbers)
         for i in range(0, length, 3):
@@ -45,15 +46,11 @@ class Solution:
             return numbers[i]
 
     def FindNumberAppearingOnce3(self, numbers):
-        if not numbers:
-            return
-        hashTable = {}
+        if not numbers: return
+        map = {}
         for num in numbers:
-            if num in hashTable.keys():
-                hashTable[num] += 1
-            else:
-                hashTable[num] = 1
-        for i, v in hashTable.items():
+            map[num] = map.setdefault(num, 0) + 1
+        for i, v in map.items():
             if v == 1:
                 return i
 
