@@ -21,7 +21,10 @@ __date__ = '2018/1/4 3:20'
        所以n最后一定被全部变为0，循环退出；但python就有区别了，
        python的整数位数不止32位，所以在负数情况下1的位数会多出很多，
        所以应先&0xffffffff，保留后面32位，前面全部变成0
-思路5：平行算法，有点类似于二分，
+思路5：与思路4差不多，但是利用了另外一个位运算的技巧：n -= n & (-n) 
+       其中右边的 n & (-n) 就是取出最右边的1，相当于：n & (~n + 1)
+       然后原数减去这个最右边的1即可
+思路6：平行算法，有点类似于二分，
        原理：若相邻的两个bit为00则相加为00， 相邻的两个bit为01或10则相加为01，
        相邻两个数为11则相加为10，即相邻位相加，结果就是它们的1的个数，重复这个过程，
        直到只剩下一位。例如0x11530828的二进制1个数统计过程如下：
@@ -31,11 +34,11 @@ __date__ = '2018/1/4 3:20'
         2         4         1         2 
         6                   3
         9
-思路6：MIT HAKMEM算法：http://blog.csdn.net/msquare/article/details/4536388
+思路7：MIT HAKMEM算法：http://blog.csdn.net/msquare/article/details/4536388
        其中涉及到一个求模运算，可能会减慢速度，可以用其他运算替代，
        C = A % B 等价于 C = A – B * (A / B)
        （考虑到负数的情况不能用&63替代%63）
-思路7：先&0xffffffff保留后32位，再使用python内置方法 bin(n)，
+思路8：先&0xffffffff保留后32位，再使用python内置方法 bin(n)，
        将n转成2进制字符串，然后再用 count('1') 统计字符1的个数
        （&0xffffffff也可以2**32+n替代）
 '''
@@ -64,21 +67,30 @@ class Solution:
             n &= 0xffffffff  # 去掉前面的1
         while n:  # 不必控制循环次数
             count += 1
-            n &= (n - 1)
+            n &= (n - 1)  # 抹去最右边的1
         return count
 
     def NumberOf1InBinary5(self, n):
+        count = 0
+        if n < 0:
+            n &= 0xffffffff  # 去掉前面的1
+        while n:  # 不必控制循环次数
+            count += 1
+            n -= n & (-n)  # 取出最右边的1并抹（减）去
+        return count
+
+    def NumberOf1InBinary6(self, n):
         n = (n & 0x55555555) + ((n >> 1) & 0x55555555)
         n = (n & 0x33333333) + ((n >> 2) & 0x33333333)
         n = (n & 0x0f0f0f0f) + ((n >> 4) & 0x0f0f0f0f)
         n = (n & 0x00ff00ff) + ((n >> 8) & 0x00ff00ff)
         return (n & 0x0000ffff) + ((n >> 16) & 0x0000ffff)
 
-    def NumberOf1InBinary6(self, n):
+    def NumberOf1InBinary7(self, n):
         tmp = n - ((n >> 1) & 0o33333333333) - ((n >> 2) & 0o11111111111)
         return ((tmp + (tmp >> 3)) & 0o30707070707) % 63
 
-    def NumberOf1InBinary7(self, n):  # pythonic
+    def NumberOf1InBinary8(self, n):  # pythonic
         return bin(n).count('1') if n > 0 else bin(n & 0xffffffff).count('1')
 
 
