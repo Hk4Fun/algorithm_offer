@@ -16,7 +16,7 @@ where n is the array's size.
 思路1：时间O（n），空间O（n）
 hashtable + partition
 
-思路2：时间O(n + klogn) ，空间O（n）  
+思路2：时间O(nlogk) ，空间O（n+k）  
 hashtable（dict） + maxheap（heapq）
 
 思路3：
@@ -24,7 +24,7 @@ pythonic, one line solution
 '''
 
 from collections import Counter
-from heapq import heapify, heappop
+from heapq import heapify, heappushpop
 
 
 class Solution:
@@ -68,12 +68,12 @@ class Solution:
         tmp = {}
         for num in nums:
             tmp[num] = tmp.setdefault(num, 0) + 1
-        tmp = [(-item[1], item[0]) for item in list(tmp.items())]
-        heapify(tmp)  # O（n）
-        res = []
-        for i in range(k):  # O（klogn）
-            res.append(heappop(tmp)[1])
-        return res
+        items = list(tmp.items())
+        queue = [(item[1], item[0]) for item in items[:k]]
+        heapify(queue)  # O(k)
+        for item in items[k:]:  # O((n-k)log(k))
+            heappushpop(queue, (item[1], item[0]))
+        return [item[1] for item in queue]
 
     def topKFrequent3(self, nums, k):
         return list(list(zip(*Counter(nums).most_common(k)))[0])
