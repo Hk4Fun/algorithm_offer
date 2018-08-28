@@ -15,6 +15,9 @@ There are many calls to sumRange function.
 '''主要思路：
 思路1（初始化时间O（1），求和时间O（n），空间O（1））
 思路2（初始化时间O（n），求和时间O（1），空间O（n））
+
+扩展：这里不涉及数组的更新操作（immutable），所以可以dp，否则得用线段树来解决，见
+leetcode/segment tree/medium/307. Range Sum Query - Mutable.py
 '''
 
 
@@ -36,23 +39,13 @@ class NumArray1:
 
 class NumArray2:
     def __init__(self, nums):
-        self.dp = nums[:]  # 不能改变原数组，所以只能缓存
-        for i in range(1, len(nums)):
-            self.dp[i] += self.dp[i - 1]
-
-    def sumRange(self, i, j):
-        return self.dp[j] - (self.dp[i - 1] if i > 0 else 0)
-
-
-class NumArray3:  # NumArray2的改进
-    def __init__(self, nums):
         """
         initialize your data structure here.
         :type nums: List[int]
         """
         self.dp = [0]
         for num in nums:
-            self.dp += self.dp[-1] + num,
+            self.dp += (self.dp[-1] + num), # 注意这里的逗号
 
     def sumRange(self, i, j):
         """
@@ -61,4 +54,4 @@ class NumArray3:  # NumArray2的改进
         :type j: int
         :rtype: int
         """
-        return self.dp[j + 1] - self.dp[i]
+        return self.dp[j + 1] - self.dp[i]  # 本来是dp[j]-dp[i-1]，但实际向右偏移了1个位置，所以全部+1
