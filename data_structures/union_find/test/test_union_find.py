@@ -5,7 +5,7 @@ import unittest
 import sys
 
 sys.path.append('..')
-from union_find import QuickFind, QuickUnion, WQuickUnion, WQuickUnionWithPC
+from union_find import QuickFind, QuickUnion, WQuickUnion, WQuickUnionWithPC, DQuickUnion, DQuickUnionWithPC
 
 
 class TestUnionFind(unittest.TestCase):
@@ -45,9 +45,17 @@ class TestUnionFind(unittest.TestCase):
         for fp, n in zip(self.fps, self.ns):
             self._test(WQuickUnion(n), fp, n)
 
+    def testDQuickUnion(self):
+        for fp, n in zip(self.fps, self.ns):
+            self._test(DQuickUnion(n), fp, n)
+
     def testWQuickUnionWithPC(self):
         for fp, n in zip(self.fps, self.ns):
             self._test(WQuickUnionWithPC(n), fp, n)
+
+    def testDQuickUnionWithPC(self):
+        for fp, n in zip(self.fps, self.ns):
+            self._test(DQuickUnionWithPC(n), fp, n)
 
 
 if __name__ == '__main__':
