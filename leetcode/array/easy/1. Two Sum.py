@@ -29,12 +29,12 @@ class Solution:
         :type target: int
         :rtype: List[int]
         """
-        if len(nums) > 1:
-            d = {}
-            for i, n in enumerate(nums):
-                if n in d:
-                    return [d[n], i]
-                d[target - n] = i
+        dic = {}
+        for i, v in enumerate(nums):
+            if target - v in dic:
+                return [dic[target - v], i]
+            else:
+                dic[v] = i
 
 
 # ================================测试代码================================
