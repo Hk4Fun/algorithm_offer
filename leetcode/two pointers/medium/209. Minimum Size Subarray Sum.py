@@ -30,7 +30,7 @@ class Solution:
     def minSubArrayLen1(self, s, nums):
         if not nums: return 0
         i = j = 0
-        min_len = len(nums) + 1
+        min_len = len(nums) + 1  # min_len初始值取一个max_int
         length = 1
         total = nums[0]
         while j < len(nums):
@@ -48,7 +48,22 @@ class Solution:
                 length -= 1
         return min_len if min_len != len(nums) + 1 else 0
 
-    def minSubArrayLen2(self, s, nums):  # 简化版
+    def minSubArrayLen2(self, s, nums):  # 简化一下
+        l, r = 0, -1  # nums[l...r]为滑动窗口，初始窗口没有包含任何数
+        total = 0
+        min_len = len(nums) + 1
+        while l < len(nums):  # r到了右边界不动时，l还可以往右边界移动
+            if total < s and r + 1 < len(nums):
+                r += 1
+                total += nums[r]
+            else:
+                total -= nums[l]
+                l += 1
+            if total >= s:
+                min_len = min(min_len, r - l + 1)
+        return min_len if min_len != len(nums) + 1 else 0
+
+    def minSubArrayLen3(self, s, nums):  # 另一种实现
         total = left = 0
         min_len = len(nums) + 1
         for right, n in enumerate(nums):
@@ -66,8 +81,8 @@ from Test import Test
 
 class MyTest(Test):
     def my_test_code(self):
-        self.debug = True  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
-        self.TEST_NUM = 1  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
+        self.debug = False  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.TEST_NUM = 1000  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
         testArgs = []
         # 只需在此处填写自己的测试代码
         # testArgs中每一项是一次测试，每一项由两部分构成
