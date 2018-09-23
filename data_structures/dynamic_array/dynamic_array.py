@@ -93,7 +93,7 @@ class DynamicArray:
             for e in self._data:
                 yield e
         except ValueError:
-            raise StopIteration
+            return  # raise StopIteration
 
     @property
     def capacity(self):
