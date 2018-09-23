@@ -9,15 +9,15 @@ from dynamic_array import DynamicArray
 class TestDynamicArray:
     def test_init_repr(self):
         arr = DynamicArray()
-        assert arr.__repr__() == '[]'
+        assert arr.__repr__() == 'DynamicArray([])'
         arr = DynamicArray([])
-        assert arr.__repr__() == '[]'
+        assert arr.__repr__() == 'DynamicArray([])'
         arr = DynamicArray([1, 2, 3])
-        assert arr.__repr__() == '[1,2,3]'
+        assert arr.__repr__() == 'DynamicArray([1,2,3])'
         arr = DynamicArray({1, 2, 3})
-        assert arr.__repr__() == '[1,2,3]'
+        assert arr.__repr__() == 'DynamicArray([1,2,3])'
         arr = DynamicArray((1, 2, 3))
-        assert arr.__repr__() == '[1,2,3]'
+        assert arr.__repr__() == 'DynamicArray([1,2,3])'
         with pytest.raises(TypeError):
             DynamicArray(1)
 
@@ -38,8 +38,12 @@ class TestDynamicArray:
         arr = DynamicArray(list(range(10)))
         for i in range(10):
             assert arr[i] == i
+        for i in range(1, 11):
+            assert arr[-i] == arr[10 - i]
         with pytest.raises(IndexError):
             tmp = arr[10]
+        with pytest.raises(IndexError):
+            tmp = arr[-11]
 
     def test_setitem(self):
         arr = DynamicArray()
@@ -51,6 +55,17 @@ class TestDynamicArray:
         with pytest.raises(IndexError):
             arr[1] = 2
 
+    def test_delitem(self):
+        arr = DynamicArray()
+        with pytest.raises(IndexError):
+            del arr[0]
+        arr.append(1)
+        del arr[0]
+        assert arr == DynamicArray()
+        arr.extend([1, 2, 3])
+        del arr[1]
+        assert arr == DynamicArray([1, 3])
+
     def test_contains(self):
         arr = DynamicArray()
         assert (0 in arr) is False
@@ -58,6 +73,20 @@ class TestDynamicArray:
         assert (1 in arr) is True
         assert (2 in arr) is True
         assert (3 in arr) is False
+
+    def test_equal(self):
+        arr1 = DynamicArray()
+        arr2 = DynamicArray()
+        assert arr1 == arr2
+        arr2.append(1)
+        assert arr1 != arr2
+        assert arr1 != []
+        assert arr2 != [1]
+        arr1.append(2)
+        assert arr1 != arr2
+        arr1 = DynamicArray([1, 2, 3])
+        arr2 = DynamicArray([3, 2, 1])
+        assert arr1 != arr2
 
     def test_capacity(self):
         arr = DynamicArray()
@@ -86,12 +115,12 @@ class TestDynamicArray:
         arr.clear()
         assert len(arr) == 0
         assert arr.capacity == 0
-        assert arr.__repr__() == '[]'
+        assert arr.__repr__() == 'DynamicArray([])'
         arr = DynamicArray([1, 2, 3])
         arr.clear()
         assert len(arr) == 0
         assert arr.capacity == 0
-        assert arr.__repr__() == '[]'
+        assert arr.__repr__() == 'DynamicArray([])'
 
     def test_count(self):
         arr = DynamicArray([])
@@ -105,15 +134,18 @@ class TestDynamicArray:
     def test_extend(self):
         arr = DynamicArray()
         arr.extend([1, 2, 3])
-        assert arr.__repr__() == '[1,2,3]'
+        assert arr.__repr__() == 'DynamicArray([1,2,3])'
         arr = DynamicArray()
-        arr.extend([])
-        assert arr.__repr__() == '[]'
+        arr.extend(DynamicArray())
+        assert arr.__repr__() == 'DynamicArray([])'
         arr = DynamicArray([1, 2, 3])
         with pytest.raises(TypeError):
             arr.extend(1)
         arr.extend([1, 2, 3])
-        assert arr.__repr__() == '[1,2,3,1,2,3]'
+        assert arr.__repr__() == 'DynamicArray([1,2,3,1,2,3])'
+        arr = DynamicArray([1, 2, 3])
+        arr.extend(DynamicArray([4, 5, 6]))
+        assert arr == DynamicArray([1, 2, 3, 4, 5, 6])
 
     def test_index(self):
         arr = DynamicArray([])
@@ -137,39 +169,39 @@ class TestDynamicArray:
     def test_insert(self):
         arr = DynamicArray()
         arr.insert(0, 0)
-        assert arr.__repr__() == '[0]'
+        assert arr.__repr__() == 'DynamicArray([0])'
         arr = DynamicArray()
         arr.insert(-10, 0)
-        assert arr.__repr__() == '[0]'
+        assert arr.__repr__() == 'DynamicArray([0])'
         arr = DynamicArray()
         arr.insert(100, 0)
-        assert arr.__repr__() == '[0]'
+        assert arr.__repr__() == 'DynamicArray([0])'
         arr = DynamicArray([1, 2, 3])
         arr.insert(0, 0)
-        assert arr.__repr__() == '[0,1,2,3]'
+        assert arr.__repr__() == 'DynamicArray([0,1,2,3])'
         arr.insert(-10, 1)
-        assert arr.__repr__() == '[1,0,1,2,3]'
+        assert arr.__repr__() == 'DynamicArray([1,0,1,2,3])'
         arr.insert(len(arr), 0)
-        assert arr.__repr__() == '[1,0,1,2,3,0]'
+        assert arr.__repr__() == 'DynamicArray([1,0,1,2,3,0])'
         arr.insert(len(arr) + 1, 1)
-        assert arr.__repr__() == '[1,0,1,2,3,0,1]'
+        assert arr.__repr__() == 'DynamicArray([1,0,1,2,3,0,1])'
         arr.insert(3, 5)
-        assert arr.__repr__() == '[1,0,1,5,2,3,0,1]'
+        assert arr.__repr__() == 'DynamicArray([1,0,1,5,2,3,0,1])'
 
     def test_append(self):
         arr = DynamicArray()
         arr.append(1)
-        assert arr.__repr__() == '[1]'
+        assert arr.__repr__() == 'DynamicArray([1])'
         arr.append('')
-        assert arr.__repr__() == '[1,'']'
+        assert arr.__repr__() == 'DynamicArray([1,''])'
         arr.append([])
-        assert arr.__repr__() == '[1,'',[]]'
+        assert arr.__repr__() == 'DynamicArray([1,'',[]])'
         arr.append(())
-        assert arr.__repr__() == '[1,'',[],()]'
+        assert arr.__repr__() == 'DynamicArray([1,'',[],()])'
         arr.append({})
-        assert arr.__repr__() == '[1,'',[],(),{}]'
+        assert arr.__repr__() == 'DynamicArray([1,'',[],(),{}])'
         arr.append(set())
-        assert arr.__repr__() == '[1,'',[],(),{},set()]'
+        assert arr.__repr__() == 'DynamicArray([1,'',[],(),{},set()])'
 
     def test_pop(self):
         arr = DynamicArray([1, 2, 3])
@@ -200,19 +232,155 @@ class TestDynamicArray:
             arr.remove(0)
         arr.extend([1, 2, 3])
         arr.remove(1)
-        assert arr.__repr__() == '[2,3]'
+        assert arr.__repr__() == 'DynamicArray([2,3])'
         arr.remove(3)
-        assert arr.__repr__() == '[2]'
+        assert arr.__repr__() == 'DynamicArray([2])'
         with pytest.raises(ValueError):
             arr.remove(0)
 
     def test_reverse(self):
         arr = DynamicArray()
         arr.reverse()
-        assert arr.__repr__() == '[]'
+        assert arr.__repr__() == 'DynamicArray([])'
         arr.append(1)
         arr.reverse()
-        assert arr.__repr__() == '[1]'
+        assert arr.__repr__() == 'DynamicArray([1])'
         arr = DynamicArray([1, 2, 3])
         arr.reverse()
-        assert arr.__repr__() == '[3,2,1]'
+        assert arr.__repr__() == 'DynamicArray([3,2,1])'
+
+    def test_mutable(self):
+        arr1 = DynamicArray([1, 2, 3])
+        arr2 = arr1
+        arr2[0] = 4
+        assert arr1[0] == 4
+        arr1[2] = 5
+        assert arr2[2] == 5
+        arr1.append(6)
+        assert arr2[-1] == 6
+
+    def test_copy(self):
+        arr1 = DynamicArray()
+        arr2 = arr1.copy()
+        assert arr2 == arr1
+        arr1 = DynamicArray([1, 2, 3])
+        arr2 = arr1.copy()
+        assert arr1 == arr2
+        arr1.append(4)
+        assert arr2 != arr1
+        arr2[0] = 4
+        assert arr2[0] != arr1[0]
+
+    def test_add(self):
+        arr1 = DynamicArray()
+        arr2 = DynamicArray()
+        assert arr1 + arr2 == DynamicArray()
+        assert arr1 == DynamicArray()
+        assert arr2 == DynamicArray()
+        arr1 = DynamicArray([1, 2, 3])
+        arr2 = DynamicArray([4, 5, 6])
+        assert arr1 + arr2 == DynamicArray([1, 2, 3, 4, 5, 6])
+        assert arr2 + arr1 == DynamicArray([4, 5, 6, 1, 2, 3])
+        assert arr1 == DynamicArray([1, 2, 3])
+        assert arr2 == DynamicArray([4, 5, 6])
+        assert arr1 + DynamicArray() == arr1
+        with pytest.raises(TypeError):
+            arr1 + [1, 2, 3]
+
+    def test_iadd(self):
+        arr = DynamicArray()
+        id1 = id(arr)
+        arr += DynamicArray()
+        id2 = id(arr)
+        assert id1 == id2
+        assert arr == DynamicArray()
+
+        arr = DynamicArray([1, 2, 3])
+        id1 = id(arr)
+        arr += DynamicArray()
+        id2 = id(arr)
+        assert id1 == id2
+        assert arr == DynamicArray([1, 2, 3])
+
+        arr += DynamicArray([4, 5, 6])
+        id3 = id(arr)
+        assert id3 == id2
+        assert arr == DynamicArray([1, 2, 3, 4, 5, 6])
+
+        arr += 7,
+        id4 = id(arr)
+        assert id3 == id4
+        assert arr == DynamicArray([1, 2, 3, 4, 5, 6, 7])
+        with pytest.raises(TypeError):
+            arr += 8
+
+    def test_mul(self):
+        arr = DynamicArray()
+        assert arr * 1 == arr
+        assert arr * 10 == arr
+        assert arr == DynamicArray()
+
+        arr = DynamicArray([1, 2, 3])
+        assert arr * 1 == arr
+        assert arr * 2 == DynamicArray([1, 2, 3, 1, 2, 3])
+        assert arr == DynamicArray([1, 2, 3])
+        assert arr * 0 == DynamicArray()
+        assert arr == DynamicArray([1, 2, 3])
+        assert arr * -10 == DynamicArray()
+        assert arr == DynamicArray([1, 2, 3])
+
+        with pytest.raises(TypeError):
+            arr * 1.1
+
+    def test_imul(self):
+        arr = DynamicArray()
+        id1 = id(arr)
+        arr *= 1
+        id2 = id(arr)
+        assert id1 == id2
+        assert arr == DynamicArray()
+        arr *= 0
+        id2 = id(arr)
+        assert id1 == id2
+        assert arr == DynamicArray()
+
+        arr = DynamicArray([1, 2, 3])
+        id1 = id(arr)
+        arr *= 3
+        id2 = id(arr)
+        assert id1 == id2
+        assert arr == DynamicArray([1, 2, 3, 1, 2, 3, 1, 2, 3])
+        arr *= -10
+        id2 = id(arr)
+        assert id1 == id2
+        assert arr == DynamicArray()
+
+        with pytest.raises(TypeError):
+            arr *= 1.1
+
+    def test_hash(self):
+        arr = DynamicArray()
+        with pytest.raises(TypeError):
+            hash(arr)
+
+    def test_iterator(self):
+        arr = DynamicArray([])
+        it = iter(arr)
+        with pytest.raises(StopIteration):
+            next(it)
+
+        arr = DynamicArray([1, 2, 3])
+        it = iter(arr)
+        assert next(it) == 1
+        assert next(it) == 2
+        assert next(it) == 3
+        with pytest.raises(StopIteration):
+            next(it)
+        with pytest.raises(StopIteration):
+            next(it)
+        it = iter(arr)
+        assert next(it) == 1
+
+        assert list(arr) == [1, 2, 3]
+        assert list(arr) == [1, 2, 3]
+
