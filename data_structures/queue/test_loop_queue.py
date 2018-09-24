@@ -11,7 +11,7 @@ class TestLoopQueue:
         assert queue.is_empty() == True
         assert queue.is_full() == True
         assert queue.capacity == 0
-        assert queue.__repr__() == 'Queue: front [] tail'
+        assert queue.__repr__() == 'LoopQueue: front [] tail'
         assert len(queue) == 0
         with pytest.raises(EmptyError):
             queue.front()
@@ -24,7 +24,7 @@ class TestLoopQueue:
         assert queue.is_empty() == True
         assert queue.is_full() == False
         assert queue.capacity == 3
-        assert queue.__repr__() == 'Queue: front [] tail'
+        assert queue.__repr__() == 'LoopQueue: front [] tail'
         assert len(queue) == 0
         with pytest.raises(EmptyError):
             queue.front()
@@ -38,7 +38,7 @@ class TestLoopQueue:
         assert queue.is_empty() == False
         assert queue.is_full() == False
         assert queue.capacity == 3
-        assert queue.__repr__() == 'Queue: front [1,2] tail'
+        assert queue.__repr__() == 'LoopQueue: front [1,2] tail'
         assert len(queue) == 2
         assert queue.front() == 1
 
@@ -46,7 +46,7 @@ class TestLoopQueue:
         assert queue.is_empty() == False
         assert queue.is_full() == True
         assert queue.capacity == 3
-        assert queue.__repr__() == 'Queue: front [1,2,3] tail'
+        assert queue.__repr__() == 'LoopQueue: front [1,2,3] tail'
         assert len(queue) == 3
         assert queue.front() == 1
         with pytest.raises(FullError):
@@ -57,7 +57,7 @@ class TestLoopQueue:
         assert queue.is_empty() == False
         assert queue.is_full() == False
         assert queue.capacity == 3
-        assert queue.__repr__() == 'Queue: front [3] tail'
+        assert queue.__repr__() == 'LoopQueue: front [3] tail'
         assert len(queue) == 1
         assert queue.front() == 3
 
@@ -65,7 +65,7 @@ class TestLoopQueue:
         assert queue.is_empty() == True
         assert queue.is_full() == False
         assert queue.capacity == 3
-        assert queue.__repr__() == 'Queue: front [] tail'
+        assert queue.__repr__() == 'LoopQueue: front [] tail'
         assert len(queue) == 0
         with pytest.raises(EmptyError):
             queue.front()
@@ -76,7 +76,7 @@ class TestLoopQueue:
         assert queue.is_empty() == False
         assert queue.is_full() == False
         assert queue.capacity == 3
-        assert queue.__repr__() == 'Queue: front [4] tail'
+        assert queue.__repr__() == 'LoopQueue: front [4] tail'
         assert len(queue) == 1
         assert queue.front() == 4
 
@@ -85,7 +85,7 @@ class TestLoopQueue:
         assert queue.is_empty() == False
         assert queue.is_full() == True
         assert queue.capacity == 3
-        assert queue.__repr__() == 'Queue: front [4,5,6] tail'
+        assert queue.__repr__() == 'LoopQueue: front [4,5,6] tail'
         assert len(queue) == 3
         assert queue.front() == 4
         with pytest.raises(FullError):

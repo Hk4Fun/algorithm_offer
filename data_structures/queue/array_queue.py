@@ -11,7 +11,7 @@ class ArrayQueue:
         self._data = DynamicArray()
 
     def __repr__(self):
-        return 'Queue: front [{}] tail'.format(','.join(map(str, self._data)))
+        return 'ArrayQueue: front [{}] tail'.format(','.join(map(str, self._data)))
 
     def __len__(self):
         return len(self._data)
@@ -24,17 +24,17 @@ class ArrayQueue:
 
     def enqueue(self, e):
         if self.is_full():
-            raise FullError('Queue is full')
+            raise FullError('ArrayQueue is full')
         self._data.append(e)
 
     def dequeue(self):
         if self.is_empty():
-            raise EmptyError('Queue is empty')
+            raise EmptyError('ArrayQueue is empty')
         return self._data.pop(0)
 
     def front(self):
         if self.is_empty():
-            raise EmptyError('Queue is empty')
+            raise EmptyError('ArrayQueue is empty')
         return self._data[0]
 
     def is_empty(self):
