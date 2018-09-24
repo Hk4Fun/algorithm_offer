@@ -95,3 +95,11 @@ class TestQueue:
         assert queue.front() == 1
         with pytest.raises(FullError):
             queue.enqueue(4)
+
+        assert queue.dequeue() == 1
+        assert queue.is_empty() == False
+        assert queue.is_full() == False
+        assert queue.capacity == 3
+        assert queue.__repr__() == 'Queue: front [2,3] tail'
+        assert len(queue) == 2
+        assert queue.front() == 2
