@@ -2,6 +2,7 @@ __author__ = 'Hk4Fun'
 __date__ = '2018/9/22 17:27'
 
 import ctypes
+import numbers
 from collections import Iterable
 
 
@@ -18,10 +19,15 @@ class DynamicArray:
     def __len__(self):
         return self._n
 
-    def __getitem__(self, i):  # 目前还不支持切片操作
-        if not -self._n <= i < self._n:
-            raise IndexError('invalid index')
-        return self._data[i] if i >= 0 else self._data[self._n + i]
+    def __getitem__(self, i):
+        if isinstance(i, slice):
+            return DynamicArray([self._data[j] for j in range(*(i.indices(self._n)))])
+        elif isinstance(i, numbers.Integral):
+            if not -self._n <= i < self._n:
+                raise IndexError('invalid index')
+            return self._data[i] if i >= 0 else self._data[self._n + i]
+        else:
+            raise TypeError('indices must be integers')
 
     def __setitem__(self, i, e):
         if not 0 <= i < self._n:

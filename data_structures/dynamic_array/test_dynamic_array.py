@@ -45,6 +45,21 @@ class TestDynamicArray:
         with pytest.raises(IndexError):
             tmp = arr[-11]
 
+        arr = DynamicArray([1, 2, 3])
+        assert arr[:] == DynamicArray([1, 2, 3])
+        assert arr[1:] == DynamicArray([2, 3])
+        assert arr[10:] == DynamicArray([])
+        assert arr[-1:] == DynamicArray([3])
+        assert arr[:2] == DynamicArray([1, 2])
+        assert arr[:-1] == DynamicArray([1, 2])
+        assert arr[1:3] == DynamicArray([2, 3])
+        assert arr[::-1] == DynamicArray([3, 2, 1])
+        assert arr[::1] == DynamicArray([1, 2, 3])
+        assert arr[::2] == DynamicArray([1, 3])
+        assert arr[1:3:2] == DynamicArray([2])
+        with pytest.raises(TypeError):
+            tmp = arr[1.4]
+
     def test_setitem(self):
         arr = DynamicArray()
         with pytest.raises(IndexError):
@@ -383,4 +398,3 @@ class TestDynamicArray:
 
         assert list(arr) == [1, 2, 3]
         assert list(arr) == [1, 2, 3]
-
