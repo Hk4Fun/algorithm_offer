@@ -2,12 +2,12 @@ __author__ = 'Hk4Fun'
 __date__ = '2018/9/24 18:35'
 
 import pytest
-from array_queue import ArrayQueue
+from loop_queue import LoopQueue
 from exceptions import EmptyError, FullError
 
 class TestLoopQueue:
     def test_empty_queue(self):
-        queue = ArrayQueue(0)
+        queue = LoopQueue(0)
         assert queue.is_empty() == True
         assert queue.is_full() == True
         assert queue.capacity == 0
@@ -20,7 +20,7 @@ class TestLoopQueue:
         with pytest.raises(FullError):
             queue.enqueue(1)
 
-        queue = ArrayQueue(3)
+        queue = LoopQueue(3)
         assert queue.is_empty() == True
         assert queue.is_full() == False
         assert queue.capacity == 3
@@ -32,7 +32,7 @@ class TestLoopQueue:
             queue.dequeue()
 
     def test_queue(self):
-        queue = ArrayQueue(3)
+        queue = LoopQueue(3)
         queue.enqueue(1)
         queue.enqueue(2)
         assert queue.is_empty() == False

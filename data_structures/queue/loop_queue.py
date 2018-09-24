@@ -8,14 +8,15 @@ from exceptions import EmptyError, FullError
 class LoopQueue:
     def __init__(self, capacity):
         self._capacity = capacity + 1 # important!
-        self._data = DynamicArray()
+        self._data = DynamicArray([None]*self._capacity)
         self._front = self._tail = self._size = 0
 
     def __repr__(self):
         s = ''
         i = self._front
-        while self._front != self._tail:
+        while i != self._tail:
             s += str(self._data[i]) + ','
+            i = (i + 1) % self._capacity
         return 'Queue: front [{}] tail'.format(s[:-1])
 
     def __len__(self):
