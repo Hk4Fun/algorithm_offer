@@ -6,7 +6,7 @@ from array_queue import ArrayQueue
 from exceptions import EmptyError, FullError
 
 
-class TestQueue:
+class TestArrayQueue:
 
     def test_inf_empty_queue(self):
         queue = ArrayQueue()
