@@ -40,10 +40,7 @@ class DynamicArray:
         self.pop(i)
 
     def __repr__(self):
-        s = ''
-        for i in range(self._n):
-            s += '{},'.format(self._data[i])
-        return 'DynamicArray([{}])'.format(s[:-1])
+        return 'DynamicArray([{}])'.format(','.join(map(str, self)))
 
     def __contains__(self, e):
         for i in range(self._n):
@@ -65,8 +62,7 @@ class DynamicArray:
         if not isinstance(other, DynamicArray):
             raise TypeError('can only concatenate DynamicArray (not "{}") to DynamicArray'.format(type(other)))
         new_arr = self.copy()
-        for i in range(len(other)):
-            new_arr.append(other[i])
+        new_arr.extend(other)
         return new_arr
 
     def __iadd__(self, other):
@@ -96,8 +92,13 @@ class DynamicArray:
 
     def __iter__(self):
         try:
+            i = 0
             for e in self._data:
-                yield e
+                if i < self._n:
+                    i += 1
+                    yield e
+                else:
+                    break
         except ValueError:
             return  # raise StopIteration
 
