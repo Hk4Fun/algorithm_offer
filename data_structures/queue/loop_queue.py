@@ -17,7 +17,7 @@ class LoopQueue:
         while i != self._tail:
             s += str(self._data[i]) + ','
             i = (i + 1) % self._capacity
-        return 'LoopQueue: front [{}] tail'.format(s[:-1])
+        return '{}: front [{}] tail'.format(type(self).__name__, s[:-1])
 
     def __len__(self):
         return self._size
@@ -28,12 +28,12 @@ class LoopQueue:
 
     def front(self):
         if self.is_empty():
-            raise EmptyError('LoopQueue is empty')
+            raise EmptyError('{} is empty'.format(type(self).__name__))
         return self._data[self._front]
 
     def enqueue(self, e):
         if self.is_full():
-            raise FullError('LoopQueue is full')
+            raise FullError('{} is full'.format(type(self).__name__))
         self._data[self._tail] = e
         self._size += 1
         self._tail = (self._tail + 1) % self._capacity
