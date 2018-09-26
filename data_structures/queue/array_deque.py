@@ -7,8 +7,11 @@ from exceptions import EmptyError, FullError
 
 class ArrayDeque:
     def __init__(self, capacity=None):
-        self._data = DynamicArray()
         self._capacity = capacity
+        if capacity:
+            self._data = DynamicArray(capacity=capacity)
+        else:
+            self._data = DynamicArray()
 
     def __repr__(self):
         return 'ArrayDeque: front [{}] tail'.format(','.join(map(str, self._data)))
