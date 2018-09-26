@@ -6,9 +6,9 @@ from collections import Iterable
 
 
 class DynamicArray:
-    def __init__(self, iterable=None):
+    def __init__(self, iterable=None, capacity=0):
         self._n = 0  # 实际元素个数
-        self._capacity = 0  # 数组容量
+        self._capacity = capacity  # 数组容量
         self._data = self._make_array(self._capacity)  # 底层数组容器
         if iterable is not None and not isinstance(iterable, Iterable):
             raise TypeError("'{}' object is not iterable".format(type(iterable)))

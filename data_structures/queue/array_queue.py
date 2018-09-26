@@ -8,7 +8,10 @@ from exceptions import EmptyError, FullError
 class ArrayQueue:
     def __init__(self, capacity=None):
         self._capacity = capacity
-        self._data = DynamicArray()
+        if capacity:
+            self._data = DynamicArray(capacity=capacity)
+        else:
+            self._data = DynamicArray()
 
     def __repr__(self):
         return 'ArrayQueue: front [{}] tail'.format(','.join(map(str, self._data)))

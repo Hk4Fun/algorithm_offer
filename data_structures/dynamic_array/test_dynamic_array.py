@@ -20,6 +20,12 @@ class TestDynamicArray:
         assert arr.__repr__() == 'DynamicArray([1,2,3])'
         with pytest.raises(TypeError):
             DynamicArray(1)
+        arr = DynamicArray([], capacity=100)
+        assert len(arr) == 0
+        assert arr.capacity == 100
+        arr.extend([1,2,3])
+        assert arr.capacity == 100
+
 
     def test_length(self):
         arr = DynamicArray()
