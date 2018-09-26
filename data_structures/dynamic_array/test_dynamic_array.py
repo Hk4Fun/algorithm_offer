@@ -219,6 +219,9 @@ class TestDynamicArray:
         assert arr.__repr__() == 'DynamicArray([1,'',[],(),{},set()])'
 
     def test_pop(self):
+        arr = DynamicArray([])
+        with pytest.raises(IndexError):
+            arr.pop()
         arr = DynamicArray([1, 2, 3])
         assert arr.pop() == 3
         assert arr.pop() == 2
