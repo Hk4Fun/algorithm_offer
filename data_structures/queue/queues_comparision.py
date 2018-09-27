@@ -7,6 +7,8 @@ from array_queue import ArrayQueue
 from loop_queue import LoopQueue
 from array_deque import ArrayDeque
 from loop_deque import LoopDeque
+from linked_list_queue import LinkedListQueue
+from linked_list_deque import LinkedListDeque
 
 TEST_NUM = 10000
 
@@ -47,10 +49,19 @@ def deque_exec_time(deque):
 
 if __name__ == '__main__':
     queue = ArrayQueue(TEST_NUM)
-    print('ArrayQueue, time: {}'.format(queue_exec_time(queue)))
+    print('ArrayQueue, time: {} s'.format(queue_exec_time(queue)))
+
+    queue = LinkedListQueue(TEST_NUM)
+    print('LinkedListQueue, time: {} s'.format(queue_exec_time(queue)))
+
     queue = LoopQueue(TEST_NUM)
-    print('LoopQueue, time: {}'.format(queue_exec_time(queue)))
+    print('LoopQueue, time: {} s'.format(queue_exec_time(queue)))
+
     deque = ArrayDeque(TEST_NUM)
-    print('ArrayDeque, time: {}'.format(deque_exec_time(deque)))
+    print('ArrayDeque, time: {} s'.format(deque_exec_time(deque)))
+
+    deque = LinkedListDeque(TEST_NUM)
+    print('LinkedListDeque, time: {} s'.format(deque_exec_time(deque)))
+
     deque = LoopDeque(TEST_NUM)
-    print('LoopDeque, time: {}'.format(deque_exec_time(deque)))
+    print('LoopDeque, time: {} s'.format(deque_exec_time(deque)))
