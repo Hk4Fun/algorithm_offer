@@ -5,7 +5,7 @@ from dynamic_array import DynamicArray
 from exceptions import EmptyError, FullError
 
 
-class LoopQueue:
+class ArrayLoopQueue:
     def __init__(self, capacity):
         self._capacity = capacity + 1 # important!
         self._data = DynamicArray([None]*self._capacity)
