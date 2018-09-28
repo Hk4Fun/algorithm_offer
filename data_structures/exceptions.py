@@ -14,3 +14,6 @@ class EmptyError(BaseError):
 
 class FullError(BaseError):
     pass
+
+class DeserializeError(BaseError):
+    pass
