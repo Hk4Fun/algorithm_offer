@@ -1,7 +1,9 @@
 __author__ = 'Hk4Fun'
 __date__ = '2018/9/29 0:16'
 
+import pytest
 from binary_tree import BinaryTree, TreeNode
+from exceptions import DeserializeError
 
 
 class TestBinaryTree:
@@ -165,3 +167,106 @@ class TestBinaryTree:
         assert tree2.in_order() == [4, 6, 2, 1, 3, 7, 5]
         assert tree2.post_order() == [6, 4, 2, 7, 5, 3, 1]
         assert tree1 == tree2
+
+    def test_is_bst(self):
+        tree = BinaryTree()
+        assert tree.is_bst() is True
+
+        tree = BinaryTree(serialize='1')
+        assert tree.is_bst() is True
+
+        tree = BinaryTree(serialize='1,2,3,4,#,#,5,#,6,#,#,#,#,7,#')
+        assert tree.is_bst() is False
+
+        tree = BinaryTree(serialize='2,1,3')
+        assert tree.is_bst() is True
+
+        tree = BinaryTree(serialize='10,1,20,#,5,15,#')
+        assert tree.is_bst() is True
+
+    def test_is_full(self):
+        tree = BinaryTree()
+        assert tree.is_full() is True
+
+        tree = BinaryTree(serialize='1')
+        assert tree.is_full() is True
+
+        tree = BinaryTree(serialize='2,1,3')
+        assert tree.is_full() is True
+
+        tree = BinaryTree(serialize='10,1,20,#,5,15,#')
+        assert tree.is_full() is False
+
+        tree = BinaryTree(serialize='1,2,3,4,5,6,7')
+        assert tree.is_full() is True
+
+        tree = BinaryTree(serialize='1,#,3,4,#,6,7')
+        assert tree.is_full() is False
+
+    def test_is_complete(self):
+        tree = BinaryTree()
+        assert tree.is_complete() is True
+
+        tree = BinaryTree(serialize='1')
+        assert tree.is_complete() is True
+
+        tree = BinaryTree(serialize='1,#,2')
+        assert tree.is_complete() is False
+
+        tree = BinaryTree(serialize='1,2,#')
+        assert tree.is_complete() is True
+
+        tree = BinaryTree(serialize='2,1,3')
+        assert tree.is_complete() is True
+
+        tree = BinaryTree(serialize='1,2,3,4,#,#,5')
+        assert tree.is_complete() is False
+
+        tree = BinaryTree(serialize='1,2,3,4,5,#,#')
+        assert tree.is_complete() is True
+
+        tree = BinaryTree(serialize='1,2,3,4,5,6,#')
+        assert tree.is_complete() is True
+
+        tree = BinaryTree(serialize='1,2,3,4,#,#,#')
+        assert tree.is_complete() is True
+
+        tree = BinaryTree(serialize='1,2,3,4,#,5,#')
+        assert tree.is_complete() is False
+
+        tree = BinaryTree(serialize='1,#,2,#,#,3,4')
+        assert tree.is_complete() is False
+
+    def test_leaf_count(self):
+        tree = BinaryTree()
+        assert tree.leaf_nums == 0
+
+        tree = BinaryTree(serialize='1')
+        assert tree.leaf_nums == 1
+
+        tree = BinaryTree(serialize='1,2,#')
+        assert tree.leaf_nums == 1
+
+        tree = BinaryTree(serialize='1,2,3')
+        assert tree.leaf_nums == 2
+
+        tree = BinaryTree(serialize='1,2,3,4,#,#,#')
+        assert tree.leaf_nums == 2
+
+        tree = BinaryTree(serialize='1,2,3,#,4,#,#')
+        assert tree.leaf_nums == 2
+
+        tree = BinaryTree(serialize='1,2,3,#,#,4,#')
+        assert tree.leaf_nums == 2
+
+        tree = BinaryTree(serialize='1,2,3,#,#,#,4')
+        assert tree.leaf_nums == 2
+
+        tree = BinaryTree(serialize='1,2,3,4,#,#,5')
+        assert tree.leaf_nums == 2
+
+        tree = BinaryTree(serialize='1,2,3,4,5,6,7')
+        assert tree.leaf_nums == 4
+
+        tree = BinaryTree(serialize='1,2,3,4,5,6,#')
+        assert tree.leaf_nums == 3

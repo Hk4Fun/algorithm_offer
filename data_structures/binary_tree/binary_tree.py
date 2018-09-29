@@ -54,6 +54,10 @@ class BinaryTree:
         return self._size
 
     @property
+    def leaf_nums(self):
+        return self._leaf_count()
+
+    @property
     def root(self):
         return self._root
 
@@ -154,3 +158,57 @@ class BinaryTree:
                 if order == 'pre':
                     stack.append((cur, True))
         return res
+
+    def is_bst(self):
+        return self._is_bst(self.root, -float('inf'), float('inf'))
+
+    def _is_bst(self, node, min_val, max_val):
+        if node is None: return True
+        return (
+                min_val < node.val < max_val and
+                self._is_bst(node.left, min_val, node.val) and
+                self._is_bst(node.right, node.val, max_val)
+        )
+
+    def is_full(self):
+        return self.size == 2 ** self.levels - 1
+
+    def is_complete(self):
+        if self.root is None: return True
+        queue = [self.root]
+        appear_none = False
+        while queue:
+            node = queue.pop(0)
+            if node is None:
+                if not appear_none:  # 首次出现空结点
+                    appear_none = True
+            else:
+                if not appear_none:  # 还未出现空结点
+                    queue.append(node.left)
+                    queue.append(node.right)
+                else:  # 之前出现过空结点
+                    return False
+        return True
+
+    def _leaf_count(self):
+        # 从结点数上看：n0 + n1 + n2 = S
+        # 从树枝数上看：0*n0 + 1*n1 + 2*n2 = S-1
+        # 所以：n0 = n2 + 1......@1
+        # 即：二叉树的叶子结点数总是比度为2的结点数多1
+        # 对于满二叉树来讲，没有度为1的结点
+        # 所以：n0 + n2 = S......@2
+        # 由@1和@2，得：n0 = (S+1)/2
+        # 又因为：S = 2 ** levels - 1
+        # 所以，对于满二叉树来讲：n0 = 2 ** (levels - 1)
+        if self.root is None: return 0
+        stack = [self.root]
+        nums = 0
+        while stack:
+            node = stack.pop()
+            if node.left is None and node.right is None:
+                nums += 1
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+        return nums
