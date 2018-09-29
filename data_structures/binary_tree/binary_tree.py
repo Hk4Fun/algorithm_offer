@@ -205,7 +205,7 @@ class BinaryTree:
         # 又因为：S = 2 ** levels - 1
         # 所以，对于满二叉树来讲：n0 = 2 ** (levels - 1)
         if self.root is None: return 0
-        stack = [self.root]
+        stack = [self.root]  # 非递归前序遍历
         nums = 0
         while stack:
             node = stack.pop()
@@ -216,6 +216,18 @@ class BinaryTree:
             if node.left:
                 stack.append(node.left)
         return nums
+
+    def is_strict(self):
+        # 非叶子结点都是度为2的结点为严格二叉树
+        # 也就是说没有度为1的结点
+        # 由 _leaf_count 注释可知，当 n1=0 时，n0=(S+1)/2
+        # 所以只需证明当 n0=(S+1)/2 时，n1=0即可
+        # 因为：n0 = n2 + 1 且 n0 + n1 + n2 = S
+        # 所以：2*n0 + n1 = S + 1，将 n0=(S+1)/2 带入
+        # 得：n1 = 0
+        # 所以只需判断 n0 是否等于 (S+1)/2 即可
+        if self.is_full(): return True  # 满二叉树为严格二叉树
+        return self.leaf_nums == (self.size + 1) / 2  # 这里不能'//'
 
     def is_balanced(self):
         return self._is_balanced(self.root) >= 0

@@ -321,3 +321,34 @@ class TestBinaryTree:
 
         tree = BinaryTree(serialize='1,2,3,4,#,#,#')
         assert tree.max_distance() == 3
+
+    def test_is_strict(self):
+        tree = BinaryTree()
+        assert tree.is_strict() is True
+
+        tree = BinaryTree(serialize='1')
+        assert tree.is_strict() is True
+
+        tree = BinaryTree(serialize='1,2,#')
+        assert tree.is_strict() is False
+
+        tree = BinaryTree(serialize='1,#,2')
+        assert tree.is_strict() is False
+
+        tree = BinaryTree(serialize='1,2,3')
+        assert tree.is_strict() is True
+
+        tree = BinaryTree(serialize='1,2,3,4,5,6,#')
+        assert tree.is_strict() is False
+
+        tree = BinaryTree(serialize='1,2,3,4,5,6,7')
+        assert tree.is_strict() is True
+
+        tree = BinaryTree(serialize='1,2,3,#,#,6,7')
+        assert tree.is_strict() is True
+
+        tree = BinaryTree(serialize='1,2,3,#,#,#,7')
+        assert tree.is_strict() is False
+
+        tree = BinaryTree(serialize='1,#,3,#,#,6,7')
+        assert tree.is_strict() is False
