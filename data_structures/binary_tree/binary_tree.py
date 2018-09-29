@@ -1,7 +1,7 @@
 __author__ = 'Hk4Fun'
 __date__ = '2018/9/28 17:10'
 
-from exceptions import DeserializeError
+from exceptions import DeserializeError, EmptyError
 
 
 class TreeNode:
@@ -63,7 +63,11 @@ class BinaryTree:
 
     @property
     def levels(self):
-        return len(self.level_order())
+        return self._depths(self.root)
+
+    def _depths(self, node):
+        if node is None: return 0
+        return max(self._depths(node.left), self._depths(node.right)) + 1
 
     def is_empty(self):
         return self.size == 0
@@ -212,3 +216,19 @@ class BinaryTree:
             if node.left:
                 stack.append(node.left)
         return nums
+
+    def is_balanced(self):
+        return self._is_balanced(self.root) >= 0
+
+    def _is_balanced(self, node):
+        if node is None: return 0
+        left = self._is_balanced(node.left)
+        if left < 0: return -1
+        right = self._is_balanced(node.right)
+        if right < 0: return -1
+        return -1 if abs(left - right) > 1 else max(left, right) + 1
+
+    def max_distance(self):
+        if self.root is None:
+            raise EmptyError('empty tree has no distance')
+        return self._depths(self.root.left) + self._depths(self.root.right)

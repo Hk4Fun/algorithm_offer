@@ -3,7 +3,7 @@ __date__ = '2018/9/29 0:16'
 
 import pytest
 from binary_tree import BinaryTree, TreeNode
-from exceptions import DeserializeError
+from exceptions import EmptyError
 
 
 class TestBinaryTree:
@@ -270,3 +270,54 @@ class TestBinaryTree:
 
         tree = BinaryTree(serialize='1,2,3,4,5,6,#')
         assert tree.leaf_nums == 3
+
+    def test_is_balanced(self):
+        tree = BinaryTree()
+        assert tree.is_balanced() is True
+
+        tree = BinaryTree(serialize='1')
+        assert tree.is_balanced() is True
+
+        tree = BinaryTree(serialize='1,2,#')
+        assert tree.is_balanced() is True
+
+        tree = BinaryTree(serialize='1,2,#,3,#,#,#')
+        assert tree.is_balanced() is False
+
+        tree = BinaryTree(serialize='1,2,#,3,#,#,#')
+        assert tree.is_balanced() is False
+
+        tree = BinaryTree(serialize='1,2,3,4,#,#,5')
+        assert tree.is_balanced() is True
+
+        tree = BinaryTree(serialize='1,2,3,#,#,#,5')
+        assert tree.is_balanced() is True
+
+    def test_max_distance(self):
+        tree = BinaryTree()
+        with pytest.raises(EmptyError):
+            tree.max_distance()
+
+        tree = BinaryTree(serialize='1')
+        assert tree.max_distance() == 0
+
+        tree = BinaryTree(serialize='1,2,#')
+        assert tree.max_distance() == 1
+
+        tree = BinaryTree(serialize='1,#,2')
+        assert tree.max_distance() == 1
+
+        tree = BinaryTree(serialize='1,2,#,3,#,#,#')
+        assert tree.max_distance() == 2
+
+        tree = BinaryTree(serialize='1,#,2,#,#,#,3')
+        assert tree.max_distance() == 2
+
+        tree = BinaryTree(serialize='1,2,3,4,#,#,5')
+        assert tree.max_distance() == 4
+
+        tree = BinaryTree(serialize='1,2,3,4,#,#,5')
+        assert tree.max_distance() == 4
+
+        tree = BinaryTree(serialize='1,2,3,4,#,#,#')
+        assert tree.max_distance() == 3
