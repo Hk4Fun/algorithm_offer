@@ -59,16 +59,16 @@ class MaxHeap:
         self._siftdown(0)
         return ret
 
-    def _heapify(self):
+    def _heapify(self): # takes O(n) time
         for i in range(self.size // 2 - 1, -1, -1):
             self._siftdown(i)
 
-    def _siftup(self, k):
+    def _siftup(self, k): # takes O(logn) time
         while k > 0 and self._data[self._parent(k)] < self._data[k]:
             self._swap(self._parent(k), k)
             k = self._parent(k)
 
-    def _siftdown(self, k):
+    def _siftdown(self, k): # takes O(logn) time
         while self._left_child(k) < self.size:
             j = self._left_child(k)
             if (self._right_child(k) < self.size and
