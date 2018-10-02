@@ -1,6 +1,10 @@
 __author__ = 'Hk4Fun'
 __date__ = '2018/10/1 17:01'
 
+'''
+使用数组实现，比较浪费空间
+'''
+
 from exceptions import EmptyError
 
 

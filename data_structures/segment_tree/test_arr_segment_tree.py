@@ -2,7 +2,7 @@ __author__ = 'Hk4Fun'
 __date__ = '2018/10/1 18:17'
 
 import pytest
-from segment_tree import SegmentTree
+from arr_segment_tree import SegmentTree
 from exceptions import EmptyError
 
 
