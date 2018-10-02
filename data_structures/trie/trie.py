@@ -48,7 +48,7 @@ class Trie:
             self._size += 1
 
     def is_prefix(self, prefix):
-        """查看在Trie中是否存在以prefix为前缀的单词"""
+        """判断在Trie中是否存在以prefix为前缀的单词"""
         cur = self._root
         for c in prefix:
             if c not in cur:
@@ -57,7 +57,7 @@ class Trie:
         return True
 
     def prefix_words(self, prefix):
-        """返回Trie中以prefix为前缀的单词"""
+        """返回Trie中以prefix为前缀的所有单词"""
         cur = self._root
         words = []
         for c in prefix:
@@ -66,6 +66,27 @@ class Trie:
             cur = cur[c]
         self._dfs(cur, '', words)
         return [prefix + word for word in words]
+
+    def remove_prefix_words(self, prefix):
+        """在Trie中删除以prefix为前缀的所有单词"""
+        if not self.is_prefix(prefix): return
+        cur = self._root
+        for c in prefix[:-1]:
+            cur = cur[c]
+        cur.pop(prefix[-1])
+
+    def remove_word(self, word):
+        """在Trie中删除单词word"""
+        if word not in self: return
+        self._remove_word(self._root, word)
+
+    def _remove_word(self, node, word, idx=0):
+        if idx == len(word):
+            node.pop('end')
+            return
+        self._remove_word(node[word[idx]], word, idx + 1)
+        if node[word[idx]] == {}:
+            node.pop(word[idx])
 
     def _build_trie(self, words):
         if words:

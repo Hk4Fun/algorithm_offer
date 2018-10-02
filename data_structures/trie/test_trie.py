@@ -49,7 +49,6 @@ class TestTrie:
         assert trie.is_prefix('da') is False
         assert trie.is_prefix('pana') is False
 
-
         trie.add('do')
         assert trie.prefix_words('pa') == ['pan', 'panda']
         assert trie.prefix_words('d') == ['do', 'dog', 'deer']
@@ -57,6 +56,39 @@ class TestTrie:
         assert trie.prefix_words('cat') == ['cat']
         assert trie.prefix_words('pap') == []
 
-
         trie = Trie(['cat', 'dog', 'do', 'deer', 'pan', 'panda'])
         print('\n', trie)
+
+    def test_remove_word(self):
+        trie = Trie(['cat', 'dog', 'do', 'deer', 'pan', 'panda'])
+        trie.remove_word('cat')
+        assert set(trie.words) == {'dog', 'do', 'deer', 'pan', 'panda'}
+        trie.remove_word('cat')
+        assert set(trie.words) == {'dog', 'do', 'deer', 'pan', 'panda'}
+        trie.remove_word('ca')
+        assert set(trie.words) == {'dog', 'do', 'deer', 'pan', 'panda'}
+        trie.remove_word('dog')
+        assert set(trie.words) == {'do', 'deer', 'pan', 'panda'}
+        trie.remove_word('do')
+        assert set(trie.words) == {'deer', 'pan', 'panda'}
+        trie.remove_word('pan')
+        assert set(trie.words) == {'deer', 'panda'}
+        trie.remove_word('deer')
+        assert set(trie.words) == {'panda'}
+        trie.remove_word('panda')
+        assert set(trie.words) == set()
+
+    def test_remove_prefix_words(self):
+        trie = Trie(['cat', 'dog', 'do', 'deer', 'pan', 'panda'])
+        trie.remove_prefix_words('do')
+        assert set(trie.words) == {'cat', 'deer', 'pan', 'panda'}
+        trie.remove_prefix_words('aaa')
+        assert set(trie.words) == {'cat', 'deer', 'pan', 'panda'}
+        trie.remove_prefix_words('cat')
+        assert set(trie.words) == {'deer', 'pan', 'panda'}
+        trie.remove_prefix_words('pand')
+        assert set(trie.words) == {'deer', 'pan'}
+        trie.remove_prefix_words('p')
+        assert set(trie.words) == {'deer'}
+        trie.remove_prefix_words('de')
+        assert set(trie.words) == set()
