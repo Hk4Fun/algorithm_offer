@@ -26,6 +26,8 @@ pythonic，使用字符串内置方法startswith
 
 
 class TrieNode:
+    __slots__ = ['children', 'val']
+
     def __init__(self):
         self.children = {}
         self.val = 0
