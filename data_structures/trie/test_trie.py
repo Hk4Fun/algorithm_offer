@@ -65,7 +65,9 @@ class TestTrie:
         assert set(trie.words) == {'dog', 'do', 'deer', 'pan', 'panda'}
         trie.remove_word('cat')
         assert set(trie.words) == {'dog', 'do', 'deer', 'pan', 'panda'}
-        trie.remove_word('ca')
+        trie.remove_word('dogg')
+        assert set(trie.words) == {'dog', 'do', 'deer', 'pan', 'panda'}
+        trie.remove_word('de')
         assert set(trie.words) == {'dog', 'do', 'deer', 'pan', 'panda'}
         trie.remove_word('dog')
         assert set(trie.words) == {'do', 'deer', 'pan', 'panda'}
@@ -83,6 +85,8 @@ class TestTrie:
         trie.remove_prefix_words('do')
         assert set(trie.words) == {'cat', 'deer', 'pan', 'panda'}
         trie.remove_prefix_words('aaa')
+        assert set(trie.words) == {'cat', 'deer', 'pan', 'panda'}
+        trie.remove_prefix_words('cata')
         assert set(trie.words) == {'cat', 'deer', 'pan', 'panda'}
         trie.remove_prefix_words('cat')
         assert set(trie.words) == {'deer', 'pan', 'panda'}
