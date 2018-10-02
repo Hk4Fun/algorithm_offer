@@ -33,7 +33,7 @@ The length of words[i] will be in the range [1, 30].
 在的话就把该单词加入valid_words，同时更新longest_word，注意valid_words初始化时需包含一个空串
 以此作为只有一个字母单词的前缀
 
-思路2：时间O(N)，空间O(N)，N表示所有单词长度的和
+思路2：时间O(N)，空间O(M)，N表示所有单词长度的和, M为最终字典树的结点个数
 Trie + DFS
 先用trie建立字典树，然后bfs遍历找到最长单词
 '''
@@ -41,6 +41,8 @@ from collections import defaultdict, deque
 
 
 class TrieNode:
+    __slots__ = ['children', 'is_word', 'word']
+
     def __init__(self):
         self.children = defaultdict(TrieNode)
         self.is_word = False
