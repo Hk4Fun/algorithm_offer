@@ -69,22 +69,34 @@ class Trie:
 
     def remove_prefix_words(self, prefix):
         """在Trie中删除以prefix为前缀的所有单词"""
-        cur = self._root
-        for c in prefix[:-1]:
-            if c not in cur: return
-            cur = cur[c]
-        if prefix[-1] in cur:
-            cur.pop(prefix[-1])
+        if prefix == '':  # 所有单词都以''为前缀
+            self._root = {}
+            self._size = 0
+        else:
+            self._remove_prefix(self._root, prefix)
+
+    def _remove_prefix(self, node, prefix, idx=0):
+        if idx == len(prefix) - 1:
+            if prefix[idx] in node:
+                words = []
+                self._dfs(node[prefix[idx]], '', words)
+                node.pop(prefix[idx])
+                self._size -= len(words)
+            return
+        if prefix[idx] not in node: return
+        self._remove_prefix(node[prefix[idx]], prefix, idx + 1)
+        if node[prefix[idx]] == {}:
+            node.pop(prefix[idx])
 
     def remove_word(self, word):
         """在Trie中删除单词word"""
-        # if word not in self: return
         self._remove_word(self._root, word)
 
     def _remove_word(self, node, word, idx=0):
         if idx == len(word):
             if 'end' in node:
                 node.pop('end')
+                self._size -= 1
             return
         if word[idx] not in node: return
         self._remove_word(node[word[idx]], word, idx + 1)

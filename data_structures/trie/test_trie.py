@@ -61,6 +61,8 @@ class TestTrie:
 
     def test_remove_word(self):
         trie = Trie(['cat', 'dog', 'do', 'deer', 'pan', 'panda'])
+        trie.remove_word('')
+        assert set(trie.words) == {'cat', 'dog', 'do', 'deer', 'pan', 'panda'}
         trie.remove_word('cat')
         assert set(trie.words) == {'dog', 'do', 'deer', 'pan', 'panda'}
         trie.remove_word('cat')
@@ -79,6 +81,11 @@ class TestTrie:
         assert set(trie.words) == {'panda'}
         trie.remove_word('panda')
         assert set(trie.words) == set()
+        assert trie.size == 0
+        trie.remove_word('')
+        assert set(trie.words) == set()
+        assert trie._root == {}
+
 
     def test_remove_prefix_words(self):
         trie = Trie(['cat', 'dog', 'do', 'deer', 'pan', 'panda'])
@@ -96,3 +103,11 @@ class TestTrie:
         assert set(trie.words) == {'deer'}
         trie.remove_prefix_words('de')
         assert set(trie.words) == set()
+        assert trie.size == 0
+        assert trie._root == {}
+
+        trie = Trie(['cat', 'dog', 'do', 'deer', 'pan', 'panda'])
+        trie.remove_prefix_words('')
+        assert set(trie.words) == set()
+        assert trie.size == 0
+        assert trie._root == {}
