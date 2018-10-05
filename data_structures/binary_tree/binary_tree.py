@@ -34,16 +34,16 @@ class BinaryTree:
         levels = len(treeList)
         start = [(2 ** i - 1) for i in range(levels, 0, -1)]
         middle = [start[-1]] + start[:-1]
-        s = ''
+        s = []
         for i in range(levels):
-            s += ' ' * start[i]
+            s.append(' ' * start[i])
             for v in treeList[i]:
                 if v is None:
-                    s += ' ' * (middle[i] + 1)
+                    s.append(' ' * (middle[i] + 1))
                 else:
-                    s += str(v) + ' ' * middle[i]
-            s += '\n'
-        return s
+                    s.append(str(v) + ' ' * middle[i])
+            s.append('\n')
+        return ''.join(s)
 
     def __eq__(self, other):
         if not isinstance(other, BinaryTree): return False

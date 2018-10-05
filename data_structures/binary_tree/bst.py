@@ -2,9 +2,14 @@ __author__ = 'Hk4Fun'
 __date__ = '2018/9/28 16:20'
 
 from binary_tree import BinaryTree, TreeNode
+from exceptions import InitError
 
 
 class BST(BinaryTree):
+    def __init__(self, root=None, serialize=None):
+        super().__init__(root, serialize)
+        if self._root and not self.is_bst():
+            raise InitError("must start with a bst")
 
     def __contains__(self, val):
         cur = self.root
@@ -63,10 +68,10 @@ class BST(BinaryTree):
     # 删除掉以node为根的二分搜索树中的最小节点
     # 返回删除节点后新的二分搜索树的根
     def _remove_min(self, node) -> TreeNode:
-        if node.left:
+        if node.left:  # 一直往左找
             node.left = self._remove_min(node.left)
             return node
-        else:
+        else:  # base case，来到最左端，返回右结点，相当于删掉当前结点（最左结点）
             self._size -= 1
             return node.right
 
