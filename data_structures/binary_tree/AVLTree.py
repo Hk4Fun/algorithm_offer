@@ -35,7 +35,7 @@ class AVLTree(BST):
             node.right = self._add(node.right, val)
 
         node.height = max(self._get_height(node.left), self._get_height(node.right)) + 1
-        return self._keep_balance(node)
+        return self._reBalance(node)
 
     def _remove_min(self, node):
         if node.left:  # 一直往左找
@@ -46,7 +46,7 @@ class AVLTree(BST):
             retNode = node.right
         if retNode is None: return
         retNode.height = max(self._get_height(retNode.left), self._get_height(retNode.right)) + 1
-        return self._keep_balance(retNode)
+        return self._reBalance(retNode)
 
     def _remove_max(self, node):
         if node.right:
@@ -58,7 +58,7 @@ class AVLTree(BST):
         if retNode is None: return
         retNode.height = max(self._get_height(retNode.left), self._get_height(retNode.right)) + 1
 
-        return self._keep_balance(retNode)
+        return self._reBalance(retNode)
 
     def _remove(self, node, val):
         if node is None:
@@ -82,9 +82,9 @@ class AVLTree(BST):
                 retNode.left = node.left  # 后继结点的左子树为当前结点的左子树
         if retNode is None: return
         retNode.height = max(self._get_height(retNode.left), self._get_height(retNode.right)) + 1
-        return self._keep_balance(retNode)
+        return self._reBalance(retNode)
 
-    def _keep_balance(self, node):
+    def _reBalance(self, node):
         balance_factor = self._get_balance_factor(node)
         if balance_factor > 1 and self._get_balance_factor(node.left) >= 0:  # LL
             return self._right_rotate(node)
