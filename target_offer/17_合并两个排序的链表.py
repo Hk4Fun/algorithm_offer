@@ -32,18 +32,17 @@ class Solution:
             return pHead2
 
     def Merge2(self, pHead1, pHead2):
-        mergeHead = mergeTail = ListNode(0)  # 这个头结点只是用来创建新的链表，真正的合并链表头结点是它的下一个
-        while pHead1 and pHead2:  # 只要有一个链表合并结束就结束整个合并
-            if pHead1.val >= pHead2.val:
-                mergeTail.next = pHead2  # 将较小的结点合并到新链表中
-                pHead2 = pHead2.next  # 已合并的链表指针往后移动
-            else:
-                mergeTail.next = pHead1
+        dummy = tail = ListNode(0)
+        while pHead1 and pHead2:
+            if pHead1.val <= pHead2.val:
+                tail.next = pHead1
                 pHead1 = pHead1.next
-            mergeTail = mergeTail.next
-        # 将剩下的不为空的链表直接链接到新链表后面
-        mergeTail.next = pHead1 or pHead2 # 利用短路原则
-        return mergeHead.next  # 返回真正的头结点
+            else:
+                tail.next = pHead2
+                pHead2 = pHead2.next
+            tail = tail.next
+        tail.next = pHead1 or pHead2  # 记得将剩余的链表链接到尾结点后面
+        return dummy.next  # 伪结点的下一个结点才是真正的头结点
 
 
 # ================================测试代码================================

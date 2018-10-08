@@ -14,8 +14,7 @@ n=2时，f(n)=2
 
 class Solution:
     def jumpFloor(self, n):
-        tempArray = [1, 2]
-        if n >= 3:
-            for i in range(3, n + 1):
-                tempArray[(i + 1) % 2] = tempArray[0] + tempArray[1]
-        return tempArray[(n + 1) % 2]
+        a, b = 1, 1
+        for _ in range(n):
+            a, b = b, a + b
+        return a

@@ -19,26 +19,20 @@ class TreeNode:
 
 class Solution:
     def HasSubtree(self, pRoot1, pRoot2):
-        def DoesTree1haveTree2(pRoot1, pRoot2):
+        def check(root1, root2):
             # 用于递归判断树的每个节点是否相同
             # 需要注意的地方是: 前两个if语句不可以颠倒顺序
             # 如果颠倒顺序, 会先判断pRoot1是否为None,
             # 其实这个时候pRoot2的结点已经遍历完成确定相等了,
             # 但是返回了False, 判断错误
-            if not pRoot2:  # 来到B的叶结点，递归遍历结束，结构一致
-                return True
-            if not pRoot1:
-                return False
-            if pRoot1.val != pRoot2.val:
-                return False
-            return DoesTree1haveTree2(pRoot1.left, pRoot2.left) \
-                   and DoesTree1haveTree2(pRoot1.right, pRoot2.right)
+            if root2 is None: return True
+            if root1 is None: return False
+            if root1.val != root2.val: return False
+            return check(root1.left, root2.left) and check(root1.right, root2.right)
 
-        if pRoot1 and pRoot2:
-            return True if DoesTree1haveTree2(pRoot1, pRoot2) \
-                else (self.HasSubtree(pRoot1.left, pRoot2)
-                      or self.HasSubtree(pRoot1.right, pRoot2))
-        return False
+        if not pRoot1 or not pRoot2: return False
+        if check(pRoot1, pRoot2): return True
+        return self.HasSubtree(pRoot1.left, pRoot2) or self.HasSubtree(pRoot1.right, pRoot2)
 
 
 # ================================测试代码================================

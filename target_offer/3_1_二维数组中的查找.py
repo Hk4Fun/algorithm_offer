@@ -24,7 +24,7 @@ __date__ = '2018/1/1 12:22'
 
 class Solution:
     def Find1(self, array, target):
-        if not target or not array:  # 鲁棒性
+        if not target or not array:
             return False
         for i in range(len(array)):
             low, high = 0, len(array[0]) - 1
@@ -39,7 +39,7 @@ class Solution:
         return False
 
     def Find2(self, array, target):
-        if not target or not array:  # 鲁棒性
+        if not target or not array:
             return False
         rows, cols = len(array), len(array[0])
         row, col = 0, cols - 1

@@ -32,18 +32,16 @@ class Solution:
         if not ListHead or not ToBeDeleted:  # 头结点和要删除结点都为空返回None
             return
 
-        if ToBeDeleted.next != None:  # 要删除的结点不是尾结点
+        if ToBeDeleted.next is not None:  # 要删除的结点不是尾结点
             Next = ToBeDeleted.next
             ToBeDeleted.val = Next.val
             ToBeDeleted.next = Next.next
             Next.delete()
         elif ListHead == ToBeDeleted:  # 要删除的结点是头结点
             ListHead.delete()
-            ToBeDeleted.delete()
-
         else:  # 要删除的结点是尾结点
             Node = ListHead
-            while Node.next != ToBeDeleted:
+            while Node.next is not ToBeDeleted:
                 Node = Node.next
             Node.next = None
             ToBeDeleted.delete()

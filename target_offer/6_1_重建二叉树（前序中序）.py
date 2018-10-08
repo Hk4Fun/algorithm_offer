@@ -20,16 +20,28 @@ class TreeNode(object):
 
 class Solution:
     # 返回构造的TreeNode根节点
-    def reConstructBinaryTree(self, pre_order, in_order):
-        if not pre_order and not in_order:
-            return None
-        if set(pre_order) != set(in_order):  # 鲁棒性，错误序列
-            return None
-        index = in_order.index(pre_order[0])  # 先序第一个为根节点,在中序中找到根节点位置
+    def reConstructBinaryTree1(self, pre_order, in_order):
+        if not pre_order and not in_order: return None
+        idx = in_order.index(pre_order[0])  # 先序第一个为根节点,在中序中找到根节点位置
         root = TreeNode(pre_order[0])  # 创建根节点
-        root.left = self.reConstructBinaryTree(pre_order[1:index + 1], in_order[:index])  # 构建左子树
-        root.right = self.reConstructBinaryTree(pre_order[index + 1:], in_order[index + 1:])  # 构建右子树
+        root.left = self.reConstructBinaryTree1(pre_order[1:idx + 1], in_order[:idx])  # 构建左子树
+        root.right = self.reConstructBinaryTree1(pre_order[idx + 1:], in_order[idx + 1:])  # 构建右子树
         return root
+
+    def reConstructBinaryTree2(self, pre_order, in_order):
+        # 上一解法利用切片，比较消耗空间，可以只传递左右边界的下标
+        def build(preLeft, preRight, inLeft, inRight):
+            if preLeft > preRight or inLeft > inRight: return None
+            idx = inLeft
+            while idx <= inRight:
+                if in_order[idx] == pre_order[preLeft]: break
+                idx += 1
+            root = TreeNode(pre_order[preLeft])
+            root.left = build(preLeft + 1, preLeft + idx - inLeft, inLeft, idx - 1)
+            root.right = build(preLeft + idx - inLeft + 1, preRight, idx + 1, inRight)
+            return root
+
+        return build(0, len(pre_order) - 1, 0, len(in_order) - 1)
 
 
 # ================================测试代码================================
@@ -87,7 +99,6 @@ class MyTest(Test):
 
         testArgs.append([[1], [1], [1]])  # 树中只有一个结点
         testArgs.append([[], [], None])  # 传入空树
-        testArgs.append([[1, 2, 4, 5, 3, 6, 7], [4, 2, 8, 1, 6, 3, 7], None])  # 传入的两个序列不匹配
 
         return testArgs
 
@@ -112,4 +123,3 @@ class MyTest(Test):
 if __name__ == '__main__':
     solution = Solution()
     MyTest(solution=solution).start_test()
-

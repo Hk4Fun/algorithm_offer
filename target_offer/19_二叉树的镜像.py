@@ -20,24 +20,22 @@ class TreeNode:
 
 class Solution:
     def Mirror1(self, root):
-        if not root or (not root.left and not root.right):
-            return root
+        if root is None: return root
         root.left, root.right = root.right, root.left
         self.Mirror1(root.left)
         self.Mirror1(root.right)
         return root
 
     def Mirror2(self, root):
-        if not root:
-            return
-        nodeQue = [root]
-        while nodeQue:
-            pRoot = nodeQue.pop(0)
-            pRoot.left, pRoot.right = pRoot.right, pRoot.left
-            if pRoot.left:
-                nodeQue.append(pRoot.left)
-            if pRoot.right:
-                nodeQue.append(pRoot.right)
+        if root is None: return
+        queue = [root]
+        while queue:
+            node = queue.pop(0)
+            node.left, node.right = node.right, node.left
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
         return root
 
 

@@ -20,16 +20,27 @@ class TreeNode(object):
 
 class Solution:
     # 返回构造的TreeNode根节点
-    def reConstructBinaryTree(self, post_order, in_order):
-        if not post_order and not in_order:
-            return None
-        if set(post_order) != set(in_order):  # 鲁棒性，错误序列
-            return None
+    def reConstructBinaryTree1(self, post_order, in_order):
+        if not post_order and not in_order: return None
         index = in_order.index(post_order[-1])  # 后序的最后一个根节点，在中序中找到该根节点的位置，
         root = TreeNode(post_order[-1])  # 创建根节点
-        root.left = self.reConstructBinaryTree(post_order[:index], in_order[:index])  # 构建左子树
-        root.right = self.reConstructBinaryTree(post_order[index:-1], in_order[index + 1:])  # 构建右子树
+        root.left = self.reConstructBinaryTree1(post_order[:index], in_order[:index])  # 构建左子树
+        root.right = self.reConstructBinaryTree1(post_order[index:-1], in_order[index + 1:])  # 构建右子树
         return root
+
+    def reConstructBinaryTree2(self, post_order, in_order):
+        def build(postLeft, postRight, inLeft, inRight):
+            if postLeft > postRight or inLeft > inRight: return None
+            idx = inLeft
+            while idx <= inRight:
+                if in_order[idx] == post_order[postRight]: break
+                idx += 1
+            root = TreeNode(post_order[postRight])
+            root.left = build(postLeft, postLeft + idx - inLeft - 1, inLeft, idx - 1)
+            root.right = build(postLeft + idx - inLeft, postRight - 1, idx + 1, inRight)
+            return root
+
+        return build(0, len(post_order) - 1, 0, len(in_order) - 1)
 
 
 # ================================测试代码================================
@@ -87,7 +98,6 @@ class MyTest(Test):
 
         testArgs.append([[1], [1], [1]])  # 树中只有一个结点
         testArgs.append([[], [], None])  # 传入空树
-        testArgs.append([[1, 2, 4, 5, 3, 6, 7], [4, 2, 8, 1, 6, 3, 7], None])  # 传入的两个序列不匹配
 
         return testArgs
 

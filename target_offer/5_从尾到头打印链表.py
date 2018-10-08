@@ -26,13 +26,12 @@ class Solution:
         return l
 
     def ListReverse2(self, listNode):
-        l = []
-
         def recursive(listNode):
             if listNode:
                 recursive(listNode.next)
                 l.append(listNode.val)
 
+        l = []
         recursive(listNode)
         return l
 

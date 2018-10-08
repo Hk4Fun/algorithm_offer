@@ -8,7 +8,9 @@ __date__ = '2018/1/7 1:28'
 '''主要思路：
 定义两个指针，同时从头结点出发，一个指针一次走一步，另一个一次走两步。
 当走得快的指针走到链表末尾时，走得慢的指针正好在链表的中间。
-注意：一次走两步的指针不能一下子走完，因为如果来到倒数第二个结点时就只能走一步了
+注意：快指针每次想往后走时要向后看两步，看是否能一次性走两步，
+只能走一步或者来到尾结点不能往后走则放弃遍历，循环结束
+这样如果结点数为偶数时，中间结点总是偏左的那个
 '''
 
 
@@ -19,20 +21,10 @@ class ListNode:
 
 
 class Solution:
-    def FindMiddleNode1(self, head):
-        if not head: return
-        pNode1 = pNode2 = head  # 两个指针同时从头结点出发
-        while pNode1.next:  # 走得快的指针走到链表末尾时结束遍历
-            pNode1 = pNode1.next  # 第一个指针一次走两步，但如果来到倒数第二个结点时就只能走一步了
-            if pNode1.next:
-                pNode1 = pNode1.next
-            pNode2 = pNode2.next  # 第二个指针一次只走一步
-        return pNode2  # 返回走得慢的指针（第二个指针）
-
-    def FindMiddleNode2(self, head):
+    def FindMiddleNode(self, head):
         if not head: return
         slow = fast = head
-        while fast.next and fast.next.next:
+        while fast.next and fast.next.next:  # 往后看两步
             slow = slow.next
             fast = fast.next.next
         return slow
@@ -58,7 +50,7 @@ class MyTest(Test):
 
         testArgs = []
 
-        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8]), [4,5]])  # 链表个数为偶数
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8]), [4, 5]])  # 链表个数为偶数
         testArgs.append([linkNodes([1, 2, 3, 4, 5]), [3]])  # 链表个数为奇数
         testArgs.append([linkNodes([1]), [1]])  # 只有一个结点的链表
         testArgs.append([linkNodes([]), [None]])  # 空链表

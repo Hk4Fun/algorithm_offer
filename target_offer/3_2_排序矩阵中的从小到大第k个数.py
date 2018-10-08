@@ -25,6 +25,7 @@ k次扫描，每次扫描都把每一行的最小元素进行比较，找出这�
 定义最小堆的数据单元结构为(值，纵坐标，横坐标)。注意每入堆一个元素就要把该元素标记为已访问，
 避免同一元素重复入堆。标记数组消耗空间O(m*n），而每次堆排在最坏情况下消耗log(max(m,n))，共进行k次
 '''
+import heapq
 
 
 class Solution:
@@ -39,10 +40,10 @@ class Solution:
                     matrix[row][col], matrix[row + 1][col] = matrix[row + 1][col], matrix[row][col]
                     row += 1  # 下移
             # 把inf移到右下角
-            while row == rows - 1 and col < cols - 1:
+            while row == rows - 1 and col < cols - 1:  # 来到下边界，一直往右移
                 matrix[row][col], matrix[row][col + 1] = matrix[row][col + 1], matrix[row][col]
                 col += 1
-            while col == cols - 1 and row < rows - 1:
+            while col == cols - 1 and row < rows - 1:  # 来到右边界，一直往下移
                 matrix[row][col], matrix[row + 1][col] = matrix[row + 1][col], matrix[row][col]
                 row += 1
 
@@ -51,12 +52,10 @@ class Solution:
         rows, cols = len(matrix), len(matrix[0])
         if rows * cols < k or k < 1:
             return
-        min = 0
-        for i in range(k):
-            min = matrix[0][0]
+        for i in range(k - 1):
             matrix[0][0] = float('inf')
             adjust(matrix, rows, cols)
-        return min
+        return matrix[0][0]
 
     def kthSmallest2(self, matrix, k):
         if not matrix or not k:
@@ -88,7 +87,6 @@ class Solution:
         return min
 
     def kthSmallest3(self, matrix, k):
-        import heapq
         if not matrix or not k:
             return
         rows, cols = len(matrix), len(matrix[0])

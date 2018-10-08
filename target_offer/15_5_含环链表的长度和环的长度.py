@@ -35,12 +35,10 @@ class Solution:
         else:  # 正常退出循环说明不含环
             return False
         # 第二次遍历计算环长
-        fast = fast.next.next  # 先让fast和slow错开
-        slow = slow.next
+        fast = fast.next  # 先让fast和slow错开
         CirLen = 1
         while fast is not slow:
-            fast = fast.next.next
-            slow = slow.next
+            fast = fast.next
             CirLen += 1
         # 寻找入口点
         Head2EntryLen = 0

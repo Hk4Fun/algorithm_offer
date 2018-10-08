@@ -21,45 +21,30 @@ __date__ = '2018/1/1 16:28'
 class Solution:
     # s为源字符串
     def replaceSpace1(self, s):
-        if type(s) != str:
-            return
+        if s is None: return
         return s.replace(' ', '%20')
 
     def replaceSpace2(self, s):
-        if type(s) != str:
-            return
+        if s is None: return
         newStr = ''
-        for char in s:
-            if char == ' ':
-                newStr += '%20'
-            else:
-                newStr += char
+        for ch in s:
+            newStr += '%20' if ch == ' ' else ch
         return newStr
 
     def replaceSpace3(self, s):
-        if type(s) != str:
-            return
-        originalLength = 0
-        numberOfBlank = 0
-        for char in s:
-            originalLength += 1
-            if char == ' ':
-                numberOfBlank += 1
-        newLength = originalLength + numberOfBlank * 2
-        newStr = [None] * newLength  # 不能为字符串，因为后面要进行赋值原地修改
-        indexOfOriginal, indexOfNew = originalLength - 1, newLength - 1  # 这里需要减一，因为python中字符串不用‘\0’结尾
-        while indexOfOriginal >= 0 and indexOfNew > indexOfOriginal:
-            if s[indexOfOriginal] == ' ':
-                newStr[indexOfNew - 2:indexOfNew + 1] = ['%', '2', '0']
-                indexOfNew -= 3
+        if s is None: return
+        spaceCount = sum(1 for ch in s if ch == ' ')
+        newIdx = len(s) + spaceCount * 2 - 1
+        oldIdx = len(s) - 1
+        newStr = list(s) + [''] * (spaceCount * 2)
+        while oldIdx >= 0 and oldIdx < newIdx:
+            if newStr[oldIdx] == ' ':
+                newStr[newIdx - 2: newIdx + 1] = '%20'
+                newIdx -= 3
             else:
-                newStr[indexOfNew] = s[indexOfOriginal]
-                indexOfNew -= 1
-            indexOfOriginal -= 1
-        while indexOfOriginal >= 0:  # 将剩下的复制到新串
-            newStr[indexOfNew] = s[indexOfOriginal]
-            indexOfOriginal -= 1
-            indexOfNew -= 1
+                newStr[newIdx] = newStr[oldIdx]
+                newIdx -= 1
+            oldIdx -= 1
         return ''.join(newStr)
 
 
@@ -84,7 +69,6 @@ class MyTest(Test):
         testArgs.append(['   ', "%20%20%20"])  # 传入的字符串全是空格
 
         return testArgs
-
 
 
 if __name__ == '__main__':
