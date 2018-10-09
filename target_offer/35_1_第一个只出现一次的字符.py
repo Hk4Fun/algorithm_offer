@@ -11,20 +11,17 @@ __date__ = '2018/2/11 0:48'
 思路2：pythonic，利用count()
 '''
 
+from collections import OrderedDict
+
 
 class Solution:
     def FirstNotRepeatingChar1(self, s):
-        if not s:
-            return -1
-        hashTable = {}
-        for char in s:
-            if char not in hashTable.keys():
-                hashTable[char] = 1
-            else:
-                hashTable[char] += 1
-        for i, v in hashTable.items():
+        hashTable = OrderedDict()
+        for ch in s:
+            hashTable[ch] = hashTable.setdefault(ch, 0) + 1
+        for ch, v in hashTable.items():
             if v == 1:
-                return s.index(i)
+                return s.index(ch)
         return -1
 
     def FirstNotRepeatingChar2(self, s):

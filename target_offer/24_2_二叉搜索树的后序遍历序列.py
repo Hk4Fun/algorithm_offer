@@ -54,14 +54,13 @@ class Solution:
         return left and right
 
     def VerifySquenceOfBST2(self, post_sequence):
-        # 简化版
+        # 简化版，这里不用 i+=1 的原因在于seq[-1]是哨兵，i一定会在小于区的右边界的右边元素停下
         def verify(seq):
             if not seq or len(seq) == 1: return True
-            root = seq[-1]
             for i in range(len(seq)):
-                if seq[i] > root: break
-            for j in range(i, len(seq)):
-                if seq[j] < root: return False
+                if seq[i] > seq[-1]: break
+            for j in range(i, len(seq) - 1):
+                if seq[j] < seq[-1]: return False
             return verify(seq[:i]) and verify(seq[i:-1])
 
         if not post_sequence: return False

@@ -44,9 +44,8 @@ class Solution:
         if not pRootOfTree: return
         dummy = last = TreeNode(0)
         convert(pRootOfTree)
-        head = dummy.right # 伪结点的右边是真正的头结点
-        head.left = None # 去掉伪结点
-        return head
+        dummy.right.left = None  # 去掉伪结点
+        return dummy.right  # 伪结点的右边是真正的头结点
 
     def Convert2(self, pRootOfTree):
         def ConvertNode(pRootOfTree):

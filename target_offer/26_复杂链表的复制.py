@@ -107,7 +107,7 @@ class Solution:
                 clone = cur.next if cur else None
 
         # 拆分链表, 将原始链表的结点组成新的链表, 复制结点组成复制后的链表
-        def reconnect(pHead):
+        def split(pHead):
             cur = pHead
             cloneHead = clone = pHead.next
             while cur:
@@ -120,7 +120,7 @@ class Solution:
         if not pHead: return
         clone(pHead)
         connect(pHead)
-        return reconnect(pHead)
+        return split(pHead)
 
 
 # ================================测试代码================================

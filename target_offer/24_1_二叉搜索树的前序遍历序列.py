@@ -54,12 +54,11 @@ class Solution:
         # 简化版
         def verify(seq):
             if not seq or len(seq) == 1: return True
-            root = seq[0]
             for i in range(1, len(seq)): # i会成为函数局部变量
-                if seq[i] > root: break
+                if seq[i] > seq[0]: break
             i += 1 # 进入右子树区域
             for j in range(i, len(seq)):
-                if seq[j] < root: return False
+                if seq[j] < seq[0]: return False
             return verify(seq[1:i]) and verify(seq[i:])
 
         if not pre_sequence: return False

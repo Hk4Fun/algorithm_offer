@@ -38,47 +38,39 @@ class Solution:
 
     # 归并排序
     def InversePairs2(self, data):
-        def InversePairsCore(data, copy, start, end):
-            if start == end:
-                return 0
-            mid = (end - start) >> 1
+        def merge(data, copy, l, r):
+            if l == r: return 0
+            m = (l + r) // 2
             # 注意这里的copy和data位置交换了，这样就能保证递归回来时，上一层拿到的data是下一层已经排好序的copy
-            left = InversePairsCore(copy, data, start, start + mid)
-            right = InversePairsCore(copy, data, start + mid + 1, end)
-
-            # i初始化为前半段最后一个数字的下标
-            i = start + mid
-            # j初始化为后半段最后一个数字的下标
-            j = end
-
-            indexCopy = end
-            count = 0
-            while i >= start and j >= start + mid + 1:
+            left = merge(copy, data, l, m) # 左区域的逆序对个数
+            right = merge(copy, data, m + 1, r) # 右区域的逆序对个数
+            i, j = m, r  # i初始化为前半段最后一个数字的下标，j初始化为后半段最后一个数字的下标
+            count, copyIdx = 0, r
+            while i >= l and j >= m + 1:
                 # 复制的时候统计两个子数组之间的逆序对数
                 if data[i] > data[j]:
-                    copy[indexCopy] = data[i]
-                    indexCopy -= 1
+                    copy[copyIdx] = data[i]
+                    count += j - m  # 逆序对的数目等于j之前的元素个数(包括j指向的元素)
                     i -= 1
-                    count += j - start - mid  # 逆序对的数目等于j之前的元素个数(包括j指向的元素)
+                    copyIdx -= 1
                 else:
-                    copy[indexCopy] = data[j]
-                    indexCopy -= 1
+                    copy[copyIdx] = data[j]
                     j -= 1
+                    copyIdx -= 1
             # 将剩下的移到辅助数组里
-            while i >= start:
-                copy[indexCopy] = data[i]
-                indexCopy -= 1
+            while i >= l:
+                copy[copyIdx] = data[i]
                 i -= 1
-            while j >= start + mid + 1:
-                copy[indexCopy] = data[j]
-                indexCopy -= 1
+                copyIdx -= 1
+            while j >= m + 1:
+                copy[copyIdx] = data[j]
                 j -= 1
-            return left + right + count
+                copyIdx -= 1
+            return left + right + count # 总逆序对个数 = 左区域 + 右区域 + 合并
 
-        if not data:
-            return 0
+        if not data: return 0
         copy = data[:]
-        return InversePairsCore(data, copy, 0, len(data) - 1)
+        return merge(data, copy, 0, len(data) - 1)
 
     # 排序后利用下标的特点
     def InversePairs3(self, data):
@@ -86,7 +78,7 @@ class Solution:
         copy = sorted(data[:])
         for num in copy:
             count += data.index(num)
-            data.remove(num)  # 记得从原数组中删除已经找过的数
+            data.remove(num)  # 记得从原数组中删除已经找过的数（如果要求不能改变原数组就需要复制一份了）
         return count
 
 

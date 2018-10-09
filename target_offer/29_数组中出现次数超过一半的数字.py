@@ -24,44 +24,30 @@ __date__ = '2018/2/9 14:28'
 
 class Solution:
     def MoreThanHalfNum1(self, numbers):
-        # 检查查找到的中位数出现次数是否超过总数的一半
-        def CheckMoreThanHalf(numbers, length, result):
-            return True if sum(numbers[i] == result for i in range(length)) > length >> 1 else False
+        def partition(l, r):
+            last = l - 1  # 小于区的右边界
+            for i in range(l, r):  # i 在前面检查
+                if numbers[i] < numbers[r]:  # 发现小于标杆numbers[r]的数就把它换入小于区
+                    last += 1  # 先扩大小于区的右边界
+                    # 换过来的一定是大于等于标杆的，所以i可以一直前进
+                    numbers[last], numbers[i] = numbers[i], numbers[last]
+            last += 1  # 大于等于区的左边界
+            numbers[last], numbers[r] = numbers[r], numbers[last]  # 记得把标杆换过来
+            return last
 
-        # 划分算法，以numbers[end]作为标杆，使得小于它的在它左边，大于它的在它右边
-        def Partition(numbers, length, start, end):
-            if not numbers or length <= 0 or start < 0 or end >= length:
-                return
-            last_small = start - 1  # 小于区域的右边界
-            for index in range(start, end):  # 遍历start~end-1范围内的元素
-                if numbers[index] < numbers[end]:  # 找到比标杆还小的数
-                    last_small += 1  # 扩大小于区域的右边界
-                    if last_small != index:  # 不必自己和自己交换
-                        # 把那个比标杆还小的数和刚刚扩大的小于区域右边界处交换
-                        numbers[index], numbers[last_small] = numbers[last_small], numbers[index]
-            last_small += 1  # 右移一格指向大于等于区域的左边界，即标杆实际上的正确位置
-            numbers[end], numbers[last_small] = numbers[last_small], numbers[end]  # 现在可以把标杆交换过来了
-            return last_small  # 返回标杆
-
-        length = len(numbers)
-        if not numbers:
-            return 0
-
-        middle = length >> 1  # 要找的数是中位数，即数组中第n/2小的数
-        start = 0
-        end = length - 1
-        index = Partition(numbers, length, start, end)
-        while index != middle:  # 直到找到中位数才停止划分
-            if index > middle:  # 分界线索引大于中位数索引，说明中位数在分界线左边
-                end = index - 1
-                index = Partition(numbers, length, start, end)
-            else:  # 分界线索引小于中位数索引，说明中位数在分界线右边
-                start = index + 1
-                index = Partition(numbers, length, start, end)
-        result = numbers[middle]
-        if not CheckMoreThanHalf(numbers, length, result):
-            result = 0
-        return result
+        if not numbers: return 0
+        m = len(numbers) // 2
+        l, r = 0, len(numbers) - 1
+        while l <= r:
+            idx = partition(l, r) # 分界点idx
+            if idx < m:
+                l = idx + 1
+            elif idx > m:
+                r = idx - 1
+            else:
+                break
+        isHalf = sum(num == numbers[idx] for num in numbers) > len(numbers) >> 1
+        return numbers[idx] if isHalf else 0
 
     def MoreThanHalfNum2(self, numbers):
         if not numbers: return 0
@@ -76,7 +62,7 @@ class Solution:
             else:
                 hp -= 1  # 遇到不相同元素，相当于敌人，掉血，HP-1
         # 防止该士兵坐收渔翁之利
-        isHalf = sum(1 for num in numbers if num == master) > len(numbers) >> 1
+        isHalf = sum(num == master for num in numbers) > len(numbers) >> 1
         return master if isHalf else 0
 
     def MoreThanHalfNum3(self, numbers):

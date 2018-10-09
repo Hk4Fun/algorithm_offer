@@ -23,31 +23,28 @@ __date__ = '2018/2/9 16:41'
 
 
 class Solution:
-    def KLeastNumbers1(self, numbers, k):
-        def partition(numbers, start, end):
-            last_small = start - 1  # 小于区域的右边界
-            for i in range(start, end):  # 遍历start~end-1范围内的元素
-                if numbers[i] < numbers[end]:  # 找到比标杆还小的数
-                    last_small += 1  # 扩大小于区域的右边界
-                    if last_small != i:  # 不必自己和自己交换
-                        # 把那个比标杆还小的数和刚刚扩大的小于区域右边界处交换
-                        numbers[last_small], numbers[i] = numbers[i], numbers[last_small]
-            last_small += 1  # 右移一格指向大于等于区域的左边界，即标杆实际上的正确位置
-            numbers[last_small], numbers[end] = numbers[end], numbers[last_small]  # 现在可以把标杆交换过来了
-            return last_small  # 返回分界线
+    def KLeastNumbers1(self, tinput, k):
+        def partition(l, r):
+            last = l - 1 # 分界线
+            for i in range(l, r):
+                if tinput[i] < tinput[r]:
+                    last += 1
+                    tinput[i], tinput[last] = tinput[last], tinput[i]
+            last += 1
+            tinput[r], tinput[last] = tinput[last], tinput[r]
+            return last
 
-        if not numbers or k < 1 or k > len(numbers):
-            return []
-        start, end = 0, len(numbers) - 1
+        if not tinput or k <= 0 or len(tinput) < k: return []
+        l, r = 0, len(tinput) - 1
         # 以下类似二分， 只不过分界线不再是mid，而是通过partition求得
-        while start <= end:
-            index = partition(numbers, start, end)
-            if index > k - 1:  # 最小的k个数，则第k小的数下标为k-1
-                end = index - 1
-            elif index < k - 1:
-                start = index + 1
+        while l <= r:
+            idx = partition(l, r)
+            if idx < k - 1:
+                l = idx + 1
+            elif idx > k - 1:
+                r = idx - 1
             else:
-                return numbers[:k]
+                return sorted(tinput[:k])
 
     def KLeastNumbers2(self, numbers, k):
         import heapq

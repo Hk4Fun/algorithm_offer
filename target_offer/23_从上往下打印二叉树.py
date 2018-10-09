@@ -20,8 +20,8 @@ class TreeNode:
 
 
 class Solution:
-    # 返回从上到下每个节点值列表，例：[1,2,3]
-    def PrintFromTopToBottom(self, root):
+    # 返回从上到下每个节点值列表
+    def PrintFromTopToBottom1(self, root):
         if not root: return []
         result = []
         queue = [root]
@@ -33,6 +33,21 @@ class Solution:
             if cur.right:
                 queue.append(cur.right)
         return result
+
+    def PrintFromTopToBottom2(self, root):
+        # 上个解法中queue.pop(0)是个O(n)操作，这里使用next_level来用空间换时间
+        if root is None: return []
+        res, level = [], [root]
+        while level:
+            next_level = []
+            for node in level:
+                res.append(node.val)
+                if node.left:
+                    next_level.append(node.left)
+                if node.right:
+                    next_level.append(node.right)
+            level = next_level
+        return res
 
 
 # ================================测试代码================================
