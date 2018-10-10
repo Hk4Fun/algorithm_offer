@@ -34,15 +34,13 @@ class Solution:
     def MaxDiff2(self, numbers):
         if not numbers or len(numbers) < 2:
             return 0
-        min = numbers[0]
-        maxDiff = numbers[1] - min
+        minVal = numbers[0]
+        maxDiff = numbers[1] - minVal
         for i in range(1, len(numbers)):
-            curDiff = numbers[i] - min
+            curDiff = numbers[i] - minVal
             # 一边更新最大差值一边更新最小值
-            if curDiff > maxDiff:
-                maxDiff = curDiff
-            if numbers[i] < min:
-                min = numbers[i]
+            maxDiff = max(curDiff, maxDiff)
+            minVal = min(numbers[i], minVal)
         return maxDiff
 
 

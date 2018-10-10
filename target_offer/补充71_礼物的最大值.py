@@ -33,7 +33,7 @@ class Solution:
         dp = [0] * cols
         for i in range(len(values)):
             for j in range(cols):
-                dp[j] = max(dp[j] if i > 0 else 0, dp[j - 1] if j > 0 else 0) + values[i][j]
+                dp[j] = max(dp[j], dp[j - 1] if j > 0 else 0) + values[i][j]
         return dp[cols - 1]
 
 

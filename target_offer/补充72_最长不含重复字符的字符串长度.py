@@ -51,21 +51,19 @@ class Solution:
         return longest
 
     def LSWD2(self, string):
-        if not string:
-            return 0
+        if not string: return 0
         hashTable = [-1] * 26
         curLength = 0
         maxLength = 0
         for i, v in enumerate(string):
             index = ord(v) - ord('a')
             preIndex = hashTable[index]
-            if preIndex < 0 or i - preIndex > curLength:
+            if preIndex == -1 or i - preIndex > curLength:
                 curLength += 1
             else:
                 curLength = i - preIndex
             hashTable[index] = i  # 总是更新字符最新出现的位置
-            if curLength > maxLength:
-                maxLength = curLength
+            maxLength = max(curLength, maxLength)
         return maxLength
 
 
@@ -75,7 +73,7 @@ from Test import Test
 
 class MyTest(Test):
     def my_test_code(self):
-        self.debug = False  # debug模式下每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.debug = True  # debug模式下每个测试用例只测试一遍，默认情况下关闭debug模式
         testArgs = []
         # 只需在此处填写自己的测试代码
         # testArgs中每一项是一次测试，每一项由两部分构成
