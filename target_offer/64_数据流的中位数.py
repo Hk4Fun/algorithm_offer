@@ -8,7 +8,7 @@ __date__ = '2018/2/26 0:35'
 '''主要思路：
 构建大根堆和小根堆，则插入O(logn)，取中位数O(1)
 如果用一个数组存储所有到来数据，然后在取中位数时排序返回，则插入O(1)，取中位数O(nlogn)
-由此可见，动态构建大根堆和小根堆相当于把排序时间平分到每次插入操作中，这样在获取中位数时可以O(1)
+由此可见，动态构建大根堆和小根堆相当于把排序时间平摊到每次插入操作中，这样在获取中位数时可以O(1)
 有两个条件要满足：
 1、保证数据平均分配到两个堆中，即两个堆中数据的数目之差不能超过1；
 2、保证大根堆里所有数据都要小于小根堆中的数据
@@ -20,14 +20,67 @@ __date__ = '2018/2/26 0:35'
        保证总数个数为奇数时中位数在大堆堆顶
        之后取数时若大堆元素个数等于小堆元素个数就取大堆堆顶和小堆堆顶的平均值；
        若大堆元素个数和小堆元素个数不等时就取大堆堆顶
-思路2：当数据总数为奇数时，新加入的元素，应当进入大根堆，
+思路2：当数据总数（包括当前数）为奇数时，新加入的元素，应当进入大根堆，
        注意不是直接进入大根堆，而是经小根堆筛选后取小根堆中最大元素进入大根堆；
-       当数据总数为偶数时，新加入的元素，应当进入小根堆，
+       当数据总数（包括当前数）为偶数时，新加入的元素，应当进入小根堆，
        注意不是直接进入小根堆，而是经大根堆筛选后取大根堆中最大元素进入小根堆
        取数时若总数个数为奇数则直接取大堆堆顶，偶数时取两堆堆顶平均值
 这里构建堆用heapq，其构建的都是小根堆（优先队列），所以为了构建大根堆需要在存数取数时加上负号
 '''
 import heapq
+
+
+class Heap:
+    def __init__(self):
+        self._data = []
+
+    @property
+    def size(self):
+        return len(self._data)
+
+    @property
+    def max(self):
+        if self.size > 0:
+            return self._data[0]
+
+    def push(self, val):
+        self._data.append(val)
+        self._siftup(self.size - 1)
+
+    def pushpop(self, val):  # 比单纯的push然后pop要快
+        if self.size > 0 and val < self.max:
+            self._data[0], val = val, self._data[0]
+            self._siftdown(0)
+        return val
+
+    def _siftup(self, k):  # takes O(logn) time
+        while k > 0 and self._data[self._parent(k)] < self._data[k]:
+            self._swap(self._parent(k), k)
+            k = self._parent(k)
+
+    def _siftdown(self, k):  # takes O(logn) time
+        while self._left_child(k) < self.size:
+            j = self._left_child(k)
+            if (self._right_child(k) < self.size and
+                    self._data[self._right_child(k)] > self._data[self._left_child(k)]):
+                # j 为左右孩子中较大者
+                j += 1
+            if self._data[k] >= self._data[j]:  # k 比两个孩子都大就结束下沉
+                break
+            self._swap(k, j)
+            k = j
+
+    def _parent(self, idx):
+        return (idx - 1) // 2
+
+    def _left_child(self, idx):
+        return 2 * idx + 1
+
+    def _right_child(self, idx):
+        return 2 * idx + 2
+
+    def _swap(self, i, j):
+        self._data[i], self._data[j] = self._data[j], self._data[i]
 
 
 class Solution:
@@ -68,7 +121,7 @@ class Solution:
                 heapq.heappush(minHeap, -heapq.heappushpop(maxHeap, -num))
 
         def GetMedian():
-            return -maxHeap[0] if self.count % 2 else (-maxHeap[0] + minHeap[0]) / 2
+            return -maxHeap[0] if self.count & 1 else (-maxHeap[0] + minHeap[0]) / 2
 
         if data:
             self.count = 0  # 计数器
@@ -79,6 +132,28 @@ class Solution:
                 Insert(num)
                 result.append(GetMedian())
             return result
+
+    def StreamMedian3(self, data):
+        """使用自定义MaxHeap"""
+
+        def Insert(num):
+            self.count += 1
+            if self.count & 1:
+                maxHeap.push(-minHeap.pushpop(-num))
+            else:
+                minHeap.push(-maxHeap.pushpop(num))
+
+        def GetMedian():
+            return maxHeap.max if self.count & 1 else (maxHeap.max + -minHeap.max) / 2
+
+        if data:
+            self.count = 0  # 计数器
+            maxHeap, minHeap = Heap(), Heap()
+            res = []
+            for num in data:
+                Insert(num)
+                res.append(GetMedian())
+            return res
 
 
 # ================================测试代码================================

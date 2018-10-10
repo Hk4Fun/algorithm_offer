@@ -21,22 +21,19 @@ class TreeNode:
 class Solution:
     # 返回二维列表
     def levelOrder1(self, pRoot):
-        if not pRoot:
-            return []
-        result = []
-        queue = [pRoot]
-        while queue:
-            result.append([])  # 用来保存当前层次结点的值
-            # len(queue)保证了每次只会遍历当前层次的结点，
-            # 后加入的结点（即下一层结点）下一循环才会被遍历
-            for _ in range(len(queue)):
-                cur = queue.pop(0)
-                result[-1].append(cur.val)
-                if cur.left:
-                    queue.append(cur.left)
-                if cur.right:
-                    queue.append(cur.right)
-        return result
+        if pRoot is None: return []
+        level, res = [pRoot], []
+        while level:
+            next_level = []
+            res.append([])
+            for node in level:
+                res[-1].append(node.val)
+                if node.left:
+                    next_level.append(node.left)
+                if node.right:
+                    next_level.append(node.right)
+            level = next_level
+        return res
 
     def levelOrder2(self, pRoot):
         def preOrder(root, depth):

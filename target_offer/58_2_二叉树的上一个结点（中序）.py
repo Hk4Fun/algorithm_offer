@@ -39,22 +39,22 @@ class Solution:
                 return pNode.parent
             pNode = pNode.parent
 
-    # def GetNext2(self, pNode):
-    #     def midTraversal(root, treeNodes):
-    #         if not root: return
-    #         midTraversal(root.left, treeNodes)
-    #         treeNodes.append(root)
-    #         midTraversal(root.right, treeNodes)
-    #
-    #     if not pNode:
-    #         return
-    #     cur = pNode
-    #     while cur.parent:  # 先找到根结点
-    #         cur = cur.parent
-    #     treeNodes = []
-    #     midTraversal(cur, treeNodes)
-    #     index = treeNodes.index(pNode)
-    #     return treeNodes[index - 1] if index != 0 data_structures None
+    def GetNext2(self, pNode):
+        def midTraversal(root, treeNodes):
+            if not root: return
+            midTraversal(root.left, treeNodes)
+            treeNodes.append(root)
+            midTraversal(root.right, treeNodes)
+
+        if not pNode:
+            return
+        cur = pNode
+        while cur.parent:  # 先找到根结点
+            cur = cur.parent
+        treeNodes = []
+        midTraversal(cur, treeNodes)
+        index = treeNodes.index(pNode)
+        return treeNodes[index - 1] if index != 0 else None
 
 
 # ================================测试代码================================

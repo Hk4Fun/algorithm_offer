@@ -34,8 +34,7 @@ class Solution:
             if cur.next and cur.next.val == cur.val:  # 遇到相等的结点
                 val = cur.val
                 while cur and cur.val == val:  # 连续删除重复结点
-                    pre.next = cur.next
-                    cur = cur.next
+                    cur = pre.next = cur.next
             else:
                 pre, cur = pre.next, cur.next
         return dummy.next  # 伪结点的下一个结点就是链表头结点

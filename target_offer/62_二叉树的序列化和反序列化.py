@@ -15,54 +15,41 @@ __date__ = '2018/2/25 20:03'
 
 
 class TreeNode:
-    def __init__(self, x):
+    def __init__(self, x, left=None, right=None):
         self.val = x
-        self.left = None
-        self.right = None
+        self.left = left
+        self.right = right
 
 
 class Solution:
     # 先序列化再反序列化，最终返回反序列化后的树的根结点
     def Serialize1(self, root):
         def serialize(root):
-            if not root:
-                return '#'
-            serializeStr = ''
-            queue = [root]
-            while queue:
-                cur = queue.pop(0)
-                if cur:
-                    serializeStr += str(cur.val) + ','
-                else:
-                    serializeStr += '#,'  # 遇到None使用#替代
-                    continue
-                if cur.left:
-                    queue.append(cur.left)
-                else:
-                    queue.append(None)
-                if cur.right:
-                    queue.append(cur.right)
-                else:
-                    queue.append(None)
-            return serializeStr[:-1]
+            level, res = [root], []
+            while level:
+                next_level = []
+                for node in level:
+                    res.append(str(node.val) if node else '#')
+                    if node: next_level += node.left, node.right
+                level = next_level
+            return ','.join(res)
 
         def deserialize(s):
             s = s.split(',')
-            if s[0] == '#':
-                return
-            TreeRoot = TreeNode(int(s[0]))
-            queue = [TreeRoot]
+            if s[0] == '#': return
+            treeroot = TreeNode(int(s[0]))
+            queue = [treeroot]
             for i in range(1, len(s), 2):  # s的长度一定为奇数
-                SubTreeRoot = queue.pop(0)
+                root = queue.pop(0)
                 if s[i] != '#':  # 连接左孩子
                     left = TreeNode(int(s[i]))
+                    root.left = left
                     queue.append(left)
-                    SubTreeRoot.left = left
                 if s[i + 1] != '#':  # 连接右孩子
                     right = TreeNode(int(s[i + 1]))
+                    root.right = right
                     queue.append(right)
-                    SubTreeRoot.right = right
-            return TreeRoot
+            return treeroot
 
         return deserialize(serialize(root))
 
@@ -113,7 +100,7 @@ class MyTest(Test):
             rootNode.left = leftNode
             rootNode.right = rightNode
 
-        self.debug = False
+        self.debug = True
         testArgs = []
 
         #      8
@@ -181,6 +168,19 @@ class MyTest(Test):
         ConnectTreeNodes(node61, node71, None)
         ConnectTreeNodes(node62, None, node72)
         testArgs.append([node1, [[5], [5], [5], [5], [5], [5, 5], [5, 5]]])
+
+        #          1
+        #      2       3
+        #   4             5
+        #     6         7
+        node6 = TreeNode(6)
+        node4 = TreeNode(4, right=node6)
+        node7 = TreeNode(7)
+        node5 = TreeNode(5, left=node7)
+        node2 = TreeNode(2, left=node4)
+        node3 = TreeNode(3, right=node5)
+        node1 = TreeNode(1, node2, node3)
+        testArgs.append([node1, [[1], [2, 3], [4, 5], [6, 7]]])
 
         testArgs.append([TreeNode(1), [[1]]])
         testArgs.append([None, []])

@@ -41,16 +41,15 @@ class Solution:
         return self.IsBalanced1(pRoot.left) and self.IsBalanced1(pRoot.right)
 
     def IsBalanced2(self, pRoot):
-        def balanceHeight(root):
-            if not root:
-                return 0
-            left = balanceHeight(root.left)
-            right = balanceHeight(root.right)
-            if left < 0 or right < 0 or abs(left - right) > 1:
-                return -1
+        def isBalanced(root):
+            if root is None: return 0
+            left = isBalanced(root.left)
+            if left == -1: return -1  # 提前返回，不用遍历右子树了
+            right = isBalanced(root.right)
+            if right == -1 or abs(left - right) > 1: return -1
             return max(left, right) + 1
 
-        return balanceHeight(pRoot) >= 0
+        return isBalanced(pRoot) >= 0
 
 
 # ================================测试代码================================

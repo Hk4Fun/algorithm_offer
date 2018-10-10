@@ -16,13 +16,12 @@ __date__ = '2018/2/26 19:41'
 思路2（时间复杂度O（nk），空间复杂度O（1））：
 思路1的简化。注意到，当窗口往右移1格时，如果新加入的数大于等于原来窗口的最大值，
 那么新窗口的最大值当然就是这个新加入的数；否则看那个被淘汰的数是不是原窗口的最大值，
-是的话说明最大值只能在新窗口中，并且也不是新窗口的最后一个数（只有一个窗口时例外）；
-如果以上条件都不满足，说明新加入的数没有原窗口最大值大，且原窗口的最大值也没被淘汰，
-则最大值不变。
+是的话说明最大值只能在新窗口中；如果以上条件都不满足，说明新加入的数没有原窗口最大值大，
+且原窗口的最大值也没被淘汰，则最大值不变。
 
 思路3（时间复杂度O（n），空间复杂度O（n））：
 用一个双端队列，其中保存当前可能为最大值的数的下标，每当窗口滑动一次
-1.新增加的值从队尾开始比较，把前面所有比他小的值从队尾取出，直到遇到比它大的数就停止：
+1.新增加的值从队尾开始比较，把前面所有小于等于它的值从队尾取出，直到遇到比它大的数就停止：
   因为这些数已经不再可能成为后面滑动窗口的最大值了，有种‘长江后浪推前浪’的感觉，
   新来的数会淘汰掉前面比它小的数，而如果前面的数比它大则自己没有资格淘汰前面的数，
   更别说更前面的数。但该数还是有‘潜质’成为最大数的，因为可能由于前面的数被滑动窗口
@@ -37,6 +36,8 @@ __date__ = '2018/2/26 19:41'
 由于求每次窗口最大值，所以可以用最大堆实现。但存在堆中的每个数据为（值，下标），
 堆按照每个元组的第一个元素来排序
 '''
+from heapq import heappush, heappop
+from collections import deque
 
 
 class Solution:
@@ -49,50 +50,48 @@ class Solution:
         if not num or not size or size > len(num) or size < 1:
             return []
         cur_max = max(num[:size])
-        result = [cur_max]
-        for i in range(len(num) - size):
-            if num[i + size] >= cur_max:
-                cur_max = num[i + size]
-            elif num[i] == cur_max:
-                cur_max = max(num[i + 1:i + size + 1])
-            result.append(cur_max)
-        return result
+        res = [cur_max]
+        for i in range(size, len(num)):
+            if num[i] >= cur_max:
+                cur_max = num[i]
+            elif num[i - size] == cur_max:
+                cur_max = max(num[i - size + 1:i + 1])
+            res.append(cur_max)
+        return res
 
     def maxInWindows3(self, num, size):
         if not num or not size or size > len(num) or size < 1:
             return []
-        deque = []
-        result = []
+        queue = deque()
+        res = []
         for i in range(len(num)):
             # 新增加的值从队尾开始比较，把前面所有比它小的值从队尾取出，直到遇到比它大的数就停止
-            while deque and num[i] >= num[deque[-1]]:
-                deque.pop()
+            while queue and num[i] >= num[queue[-1]]:
+                queue.pop()
             # 判断当前最大值是否过期，过期则从队首取出
             # 由于一次只移动一个位置，所以只能淘汰掉一个数，一个if就可以，不需要while
-            if deque and i - deque[0] >= size:
-                deque.pop(0)
+            if queue and i - queue[0] >= size:
+                queue.popleft()
             # 进入队列的是数的下标
-            deque.append(i)
+            queue.append(i)
             # 当处理数据下标（从0开始）等于size-1时开始写入窗口最大值，
             # 因为此时刚好来到第一个窗口的尾部，产生第一个最大值，之后窗口开始移动
             if i >= size - 1:
                 # 每次通过以上两步操作使得队列第一个位置为当前窗口的最大值
-                result.append(num[deque[0]])
-        return result
+                res.append(num[queue[0]])
+        return res
 
     def maxInWindows4(self, num, size):
-        import heapq
         if not num or not size or size > len(num) or size < 1:
             return []
-        result = []
-        maxHeap = []
+        res, maxHeap = [], []
         for i, v in enumerate(num):
-            heapq.heappush(maxHeap, (-v, i))
+            heappush(maxHeap, (-v, i))
             if maxHeap and i - maxHeap[0][1] >= size:
-                heapq.heappop(maxHeap)
+                heappop(maxHeap)
             if i >= size - 1:
-                result.append(-maxHeap[0][0])
-        return result
+                res.append(-maxHeap[0][0])
+        return res
 
 
 # ================================测试代码================================

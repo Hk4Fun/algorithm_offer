@@ -8,9 +8,8 @@ __date__ = '2018/2/25 0:33'
 '''主要思路：
 思路1：两个栈实现。奇数层打印时先保存左孩子再保存右孩子到另一个栈里，
        这样在打印偶数层时就会先打印右孩子再打印左孩子
-       同理，偶数层在打印时反过来先右后左保存子结点。为什么必须两个栈？
-       因为在弹栈的同时要压子结点入栈，所以必须要用另一个栈来保存，
-       否则顺序错乱。
+       同理，偶数层在打印时反过来先右后左保存子结点到奇数层。
+       
 思路2：一个队列实现。类似60题，用一个队列来保存即可，只不过在打印时奇数层
        append(cur.val)而偶数层insert(0, cur.val)。为什么可以只用一个队列来完成？
        因为队列取数和存数在两头，而栈都在同一头，所以队列可以保证存数时不影响取数。
@@ -28,52 +27,46 @@ class TreeNode:
 
 class Solution:
     def ZigZagOrder1(self, pRoot):
-        if not pRoot:
-            return []
-        current = 0  # 0表示当前正在打印奇数层， 1表示当前正在打印偶数层
-        next = 1  # 1表示保存在偶数层，0表示保存在奇数层
-        stack = [[], []]  # 奇偶栈
-        result = [[]]
-        stack[current].append(pRoot)
-        while stack[0] or stack[1]:
-            node = stack[current].pop()
-            result[-1].append(node.val)
-            if current == 0:  # 如果当前正在打印奇数层
-                if node.left:
-                    stack[next].append(node.left)  # 保存子结点于偶数层
-                if node.right:
-                    stack[next].append(node.right)
-            else:  # 如果当前正在打印偶数层
-                if node.right:
-                    stack[next].append(node.right)  # 保存子结点于奇数层
-                if node.left:
-                    stack[next].append(node.left)
-            if not stack[current]: # 当前层次中所有结点遍历完
-                result.append([])
-                current = 1 - current # 进入下一层
-                next = 1 - next
-        return result[:-1]
+        if not pRoot: return []
+        cur, res = 0, []  # 0表示当前正在打印奇数层， 1表示当前正在打印偶数层
+        stack = [[pRoot], []]  # 奇偶栈
+        while any(stack):
+            res.append([])
+            while stack[cur]:
+                node = stack[cur].pop()
+                res[-1].append(node.val)
+                if cur == 0:  # 如果当前正在打印奇数层
+                    if node.left:
+                        stack[~cur].append(node.left)  # 保存子结点于偶数层
+                    if node.right:
+                        stack[~cur].append(node.right)
+                else:  # 如果当前正在打印偶数层
+                    if node.right:
+                        stack[~cur].append(node.right)  # 保存子结点于奇数层
+                    if node.left:
+                        stack[~cur].append(node.left)
+            cur = ~cur  # 反转奇偶层
+        return res
 
     def ZigZagOrder2(self, pRoot):
-        if not pRoot:
-            return []
-        next = 0 # 0 表示奇数层，1表示偶数层
-        result = []
-        queue = [pRoot]
-        while queue:
-            result.append([])
-            for _ in range(len(queue)):
-                cur = queue.pop(0)
-                if next == 0: # 奇数层把出队的结点放到列表后面
-                    result[-1].append(cur.val)
-                else:# 偶数层把出队的结点插到列表前面
-                    result[-1].insert(0, cur.val)
-                if cur.left:
-                    queue.append(cur.left)
-                if cur.right:
-                    queue.append(cur.right)
-            next = 1 - next
-        return result
+        if not pRoot: return []
+        cur, res = 0, []  # 0 表示奇数层，1表示偶数层
+        level = [pRoot]
+        while level:
+            res.append([])
+            next_level = []
+            for node in level:
+                if cur == 0:  # 奇数层把出队的结点放到列表后面
+                    res[-1].append(node.val)
+                else:  # 偶数层把出队的结点插到列表前面
+                    res[-1].insert(0, node.val)
+                if node.left:
+                    next_level.append(node.left)
+                if node.right:
+                    next_level.append(node.right)
+            cur = ~cur
+            level = next_level
+        return res
 
 
 # ================================测试代码================================
@@ -90,6 +83,7 @@ class MyTest(Test):
             rootNode.right = rightNode
 
         testArgs = []
+        self.debug = False
 
         #              8
         #      4              12

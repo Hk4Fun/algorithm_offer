@@ -47,22 +47,16 @@ class Solution:
                 num2 >>= 1
         parentNum = num1
         # 层序遍历，根据编号找到父结点返回
-        if parentNum == 1:
-            return root
         queue = [root]
-        parentNum -= 1
         while queue:
             cur = queue.pop(0)
+            parentNum -= 1
+            if parentNum == 0:
+                return cur
             if cur.left:
                 queue.append(cur.left)
-                parentNum -= 1
-                if parentNum == 0:
-                    return cur.left
             if cur.right:
                 queue.append(cur.right)
-                parentNum -= 1
-                if parentNum == 0:
-                    return cur.right
 
 
 # ================================测试代码================================

@@ -25,10 +25,9 @@ class Solution:
     def duplicate1(self, numbers):
         if not numbers: return -1
         res = []
-        length = len(numbers)
         for i in numbers:
-            if i < 0 or i > length - 1: return -1
-        for i in range(length):
+            if i < 0 or i > len(numbers) - 1: return -1
+        for i in range(len(numbers)):
             # 当再次遍历到那个重复数字时该重复数字是在正确位置上的，所以不会进入while循环
             while numbers[i] != i:  # 这里用while而不是if是因为交换过来的数字还没被检查过
                 if numbers[i] == numbers[numbers[i]]:

@@ -41,22 +41,22 @@ class Solution:
                 return pNode.parent.right
             pNode = pNode.parent
 
-    # def GetNext2(self, pNode):
-    #     def preTraversal(root, treeNodes):
-    #         if not root: return
-    #         treeNodes.append(root)
-    #         preTraversal(root.left, treeNodes)
-    #         preTraversal(root.right, treeNodes)
-    #
-    #     if not pNode:
-    #         return
-    #     cur = pNode
-    #     while cur.parent:
-    #         cur = cur.parent
-    #     treeNodes = []
-    #     preTraversal(cur, treeNodes)
-    #     index = treeNodes.index(pNode)
-    #     return treeNodes[index + 1] if index != len(treeNodes) - 1 data_structures None
+    def GetNext2(self, pNode):
+        def preTraversal(root, treeNodes):
+            if not root: return
+            treeNodes.append(root)
+            preTraversal(root.left, treeNodes)
+            preTraversal(root.right, treeNodes)
+
+        if not pNode:
+            return
+        cur = pNode
+        while cur.parent:
+            cur = cur.parent
+        treeNodes = []
+        preTraversal(cur, treeNodes)
+        index = treeNodes.index(pNode)
+        return treeNodes[index + 1] if index != len(treeNodes) - 1 else None
 
 
 # ================================测试代码================================

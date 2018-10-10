@@ -2,7 +2,7 @@ __author__ = 'Hk4Fun'
 __date__ = '2018/1/7 17:20'
 
 '''题目描述：
-给一个链表，判断该链表是否含环，若含环则返回环的入口点的索引(从0开始)，否则返回False
+给一个链表，判断该链表是否含环，若含环则返回环的入口点的索引(从0开始)，否则返回None
 '''
 '''主要思路：
 紧接着上一题的思路，首先明白一点：二者相遇的时候slow一定还没走完环的一周
@@ -28,24 +28,17 @@ class ListNode:
 
 class Solution:
     def CircleEntry(self, head):
-        if not head: return
-        fast = slow = head
+        slow = fast = head
         # 先判断是否含环
-        while fast.next and fast.next.next:
-            fast = fast.next.next
-            slow = slow.next
-            if slow is fast: break
-        else: # 正常退出循环说明不含环
-            return False
-        # 寻找入口点
-        index = 0
-        pHead = head  # 指向头结点
-        pMeet = fast  # 指向相遇点
-        while pHead is not pMeet:  # 二者还没相遇之前一直走下去
-            pHead = pHead.next
-            pMeet = pMeet.next
-            index += 1
-        return index  # 若要求返回入口点则 return pHead 或 return pMeet
+        while fast and fast.next:
+            fast, slow = fast.next.next, slow.next
+            if slow is fast:  # 二者相遇，说明链表含环
+                # 开始寻找入口点
+                fast, idx = head, 0  # fast 指向头结点
+                while fast is not slow:  # 二者还没相遇之前一直走下去
+                    fast, slow = fast.next, slow.next  # 这里fast和slow的速度一样
+                    idx += 1
+                return idx
 
 
 # ================================测试代码================================
@@ -72,9 +65,10 @@ class MyTest(Test):
             return head.next
 
         testArgs = []
+        self.debug = True
 
-        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8], False, 0), False])  # 单向链表，多个结点
-        testArgs.append([linkNodes([1], False, 0), False])  # 单向链表，单个结点
+        testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8], False, 0), None])  # 单向链表，多个结点
+        testArgs.append([linkNodes([1], False, 0), None])  # 单向链表，单个结点
         testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8], True, 0), 0])  # 循环链表，多个结点， 尾结点与头结点连接
         testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8], True, 3), 3])  # 循环链表，多个结点， 尾结点与中间某个结点连接
         testArgs.append([linkNodes([1, 2, 3, 4, 5, 6, 7, 8], True, 7), 7])  # 循环链表，多个结点， 尾结点与尾结点连接
