@@ -31,11 +31,8 @@ class Solution:
     def reConstructBinaryTree2(self, pre_order, in_order):
         # 上一解法利用切片，比较消耗空间，可以只传递左右边界的下标
         def build(preLeft, preRight, inLeft, inRight):
-            if preLeft > preRight or inLeft > inRight: return None
-            idx = inLeft
-            while idx <= inRight:
-                if in_order[idx] == pre_order[preLeft]: break
-                idx += 1
+            if preLeft > preRight or inLeft > inRight: return
+            idx = in_order.index(pre_order[preLeft])
             root = TreeNode(pre_order[preLeft])
             root.left = build(preLeft + 1, preLeft + idx - inLeft, inLeft, idx - 1)
             root.right = build(preLeft + idx - inLeft + 1, preRight, idx + 1, inRight)

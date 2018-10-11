@@ -36,8 +36,7 @@ class Solution:
             return last
 
         if not numbers: return 0
-        m = len(numbers) // 2
-        l, r = 0, len(numbers) - 1
+        l, r, m = 0, len(numbers) - 1, len(numbers) // 2
         while l <= r:
             idx = partition(l, r) # 分界点idx
             if idx < m:
@@ -46,7 +45,7 @@ class Solution:
                 r = idx - 1
             else:
                 break
-        isHalf = sum(num == numbers[idx] for num in numbers) > len(numbers) >> 1
+        isHalf = sum(num == numbers[idx] for num in numbers) > m
         return numbers[idx] if isHalf else 0
 
     def MoreThanHalfNum2(self, numbers):

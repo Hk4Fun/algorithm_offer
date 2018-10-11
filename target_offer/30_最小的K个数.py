@@ -25,7 +25,7 @@ __date__ = '2018/2/9 16:41'
 class Solution:
     def KLeastNumbers1(self, tinput, k):
         def partition(l, r):
-            last = l - 1 # 分界线
+            last = l - 1  # 分界线
             for i in range(l, r):
                 if tinput[i] < tinput[r]:
                     last += 1
@@ -46,7 +46,29 @@ class Solution:
             else:
                 return sorted(tinput[:k])
 
-    def KLeastNumbers2(self, numbers, k):
+    def KLeastNumbers2(self, tinput, k):
+        def partition(l, r):  # 基于快排的partition
+            pivot = tinput[l] # 首元素为枢轴标杆
+            while l < r:
+                while l < r and tinput[r] >= pivot: r -= 1
+                tinput[l] = tinput[r]
+                while l < r and tinput[l] <= pivot: l += 1
+                tinput[r] = tinput[l]
+            tinput[l] = pivot
+            return l
+
+        if not tinput or k <= 0 or len(tinput) < k: return []
+        l, r = 0, len(tinput) - 1
+        while l <= r:
+            idx = partition(l, r)
+            if idx < k - 1:
+                l = idx + 1
+            elif idx > k - 1:
+                r = idx - 1
+            else:
+                return sorted(tinput[:k])
+
+    def KLeastNumbers3(self, numbers, k):
         import heapq
         if not numbers or len(numbers) < k or k <= 0:
             return []
@@ -60,7 +82,7 @@ class Solution:
                     output[0] = number  # 替换掉最大值，相当于删除堆顶，新数入堆
         return output  # 容器中的k个数始终是最小的k个数
 
-    def KLeastNumbers3(self, numbers, k):
+    def KLeastNumbers4(self, numbers, k):
         length = len(numbers)
         if not numbers or length < k or k <= 0:
             return []

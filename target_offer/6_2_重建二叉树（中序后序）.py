@@ -30,11 +30,8 @@ class Solution:
 
     def reConstructBinaryTree2(self, post_order, in_order):
         def build(postLeft, postRight, inLeft, inRight):
-            if postLeft > postRight or inLeft > inRight: return None
-            idx = inLeft
-            while idx <= inRight:
-                if in_order[idx] == post_order[postRight]: break
-                idx += 1
+            if postLeft > postRight or inLeft > inRight: return
+            idx = in_order.index(post_order[postRight])
             root = TreeNode(post_order[postRight])
             root.left = build(postLeft, postLeft + idx - inLeft - 1, inLeft, idx - 1)
             root.right = build(postLeft + idx - inLeft, postRight - 1, idx + 1, inRight)

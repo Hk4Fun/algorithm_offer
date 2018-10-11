@@ -13,6 +13,5 @@ __date__ = '2018/1/4 2:46'
 
 class Solution:
     def jumpFloorII(self, n):
-        if n <= 1:
-            return 1
+        if n < 1: return 0
         return 2 ** (n - 1)

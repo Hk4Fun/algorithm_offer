@@ -22,14 +22,13 @@ class Solution:
     def IsPopOrder(self, pushV, popV):
         if not pushV or not popV or len(pushV) != len(popV):
             return False
-        stack = []
-        i = 0
+        stack, i = [], 0
         for num in pushV:
             stack.append(num)
             while stack and stack[-1] == popV[i]:
                 i += 1
                 stack.pop()
-        return i == len(popV)
+        return stack == []
 
 
 # ================================测试代码================================
