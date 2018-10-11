@@ -37,19 +37,19 @@ class Solution:
         def deserialize(s):
             s = s.split(',')
             if s[0] == '#': return
-            treeroot = TreeNode(int(s[0]))
-            queue = [treeroot]
+            root = TreeNode(int(s[0]))
+            queue = [root]
             for i in range(1, len(s), 2):  # s的长度一定为奇数
-                root = queue.pop(0)
+                node = queue.pop(0)
                 if s[i] != '#':  # 连接左孩子
                     left = TreeNode(int(s[i]))
-                    root.left = left
+                    node.left = left
                     queue.append(left)
                 if s[i + 1] != '#':  # 连接右孩子
                     right = TreeNode(int(s[i + 1]))
-                    root.right = right
+                    node.right = right
                     queue.append(right)
-            return treeroot
+            return root
 
         return deserialize(serialize(root))
 

@@ -70,7 +70,7 @@ class Solution:
                 queue.pop()
             # 判断当前最大值是否过期，过期则从队首取出
             # 由于一次只移动一个位置，所以只能淘汰掉一个数，一个if就可以，不需要while
-            if queue and i - queue[0] >= size:
+            if queue and i - queue[0] == size:
                 queue.popleft()
             # 进入队列的是数的下标
             queue.append(i)

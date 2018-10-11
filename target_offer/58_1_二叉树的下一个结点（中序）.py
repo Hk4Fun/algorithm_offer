@@ -26,19 +26,17 @@ class TreeNode:
 
 
 class Solution:
-    def GetNext1(self, pNode):
-        if not pNode:
-            return
-        if pNode.right:  # 若有右子树就找到右子树的最左结点
-            pNode = pNode.right
-            while pNode.left:
-                pNode = pNode.left
-            return pNode
-        while pNode.parent:  # 没有右子树则向上找到第一个当前结点是其父结点左孩子的结点的父结点
-            if pNode.parent.left is pNode:
-                return pNode.parent
-            pNode = pNode.parent
-        # 退到了根节点仍没找到则返回None
+    def GetNext1(self, node):
+        if node is None: return
+        if node.right:  # 若有右子树就找到右子树的最左结点
+            cur = node.right
+            while cur.left:
+                cur = cur.left
+            return cur
+        # 没有右子树则向上找到第一个当前结点是其父结点左孩子的结点
+        while node.next and node.next.left is not node:
+            node = node.next
+        return node.next  # 注意返回的是该结点的父结点，若node退到了根结点则返回的是None
 
     def GetNext2(self, pNode):
         def midTraversal(root, treeNodes):

@@ -60,7 +60,7 @@ class Solution:
         return count
 
     def GetNumberOfK3(self, data, k):
-        def firstK(data, k):
+        def firstK():
             l, r = 0, len(data) - 1
             while l <= r:
                 m = l + ((r - l) >> 1)
@@ -75,7 +75,7 @@ class Solution:
                         r = m - 1
             return -1
 
-        def lastK(data, k):
+        def lastK():
             l, r = 0, len(data) - 1
             while l <= r:
                 m = l + ((r - l) >> 1)
@@ -91,7 +91,7 @@ class Solution:
             return -1
 
         if not data: return 0
-        first, last = firstK(data, k), lastK(data, k)
+        first, last = firstK(), lastK()
         return last - first + 1 if first != -1 else 0
 
     def GetNumberOfK4(self, data, k):

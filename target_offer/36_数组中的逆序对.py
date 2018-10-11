@@ -42,35 +42,29 @@ class Solution:
             if l == r: return 0
             m = (l + r) // 2
             # 注意这里的copy和data位置交换了，这样就能保证递归回来时，上一层拿到的data是下一层已经排好序的copy
-            left = merge(copy, data, l, m) # 左区域的逆序对个数
-            right = merge(copy, data, m + 1, r) # 右区域的逆序对个数
-            i, j = m, r  # i初始化为前半段最后一个数字的下标，j初始化为后半段最后一个数字的下标
-            count, copyIdx = 0, r
-            while i >= l and j >= m + 1:
+            left = merge(copy, data, l, m)  # 左区域的逆序对个数
+            right = merge(copy, data, m + 1, r)  # 右区域的逆序对个数
+            leftIdx, rightIdx = m, r  # leftIdx初始化为前半段最后一个数字的下标，rightIdx初始化为后半段最后一个数字的下标
+            count, copyIdx = 0, r  # 从后往前复制， 因此copyIdx初始化为右边界
+            while leftIdx >= l and rightIdx >= m + 1:
                 # 复制的时候统计两个子数组之间的逆序对数
-                if data[i] > data[j]:
-                    copy[copyIdx] = data[i]
-                    count += j - m  # 逆序对的数目等于j之前的元素个数(包括j指向的元素)
-                    i -= 1
-                    copyIdx -= 1
+                if data[leftIdx] > data[rightIdx]:
+                    copy[copyIdx] = data[leftIdx]
+                    count += rightIdx - m  # 逆序对的数目等于rightIdx之前的元素个数(包括rightIdx指向的元素)
+                    leftIdx -= 1
                 else:
-                    copy[copyIdx] = data[j]
-                    j -= 1
-                    copyIdx -= 1
-            # 将剩下的移到辅助数组里
-            while i >= l:
-                copy[copyIdx] = data[i]
-                i -= 1
+                    copy[copyIdx] = data[rightIdx]
+                    rightIdx -= 1
                 copyIdx -= 1
-            while j >= m + 1:
-                copy[copyIdx] = data[j]
-                j -= 1
-                copyIdx -= 1
-            return left + right + count # 总逆序对个数 = 左区域 + 右区域 + 合并
+            # 将剩下的复制到辅助数组里，不用循环而使用切片时需要自己计算下标的左右边界
+            if leftIdx >= l:
+                copy[copyIdx - leftIdx + l:copyIdx + 1] = data[l:leftIdx + 1]
+            if rightIdx >= m + 1:
+                copy[copyIdx + 1 + m - rightIdx:copyIdx + 1] = data[m + 1:rightIdx + 1]
+            return left + right + count  # 总逆序对个数 = 左区域 + 右区域 + 合并
 
         if not data: return 0
-        copy = data[:]
-        return merge(data, copy, 0, len(data) - 1)
+        return merge(data, data[:], 0, len(data) - 1)
 
     # 排序后利用下标的特点
     def InversePairs3(self, data):

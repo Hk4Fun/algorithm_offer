@@ -16,10 +16,10 @@ from collections import OrderedDict
 
 class Solution:
     def FirstNotRepeatingChar1(self, s):
-        hashTable = OrderedDict()
+        table = OrderedDict()
         for ch in s:
-            hashTable[ch] = hashTable.setdefault(ch, 0) + 1
-        for ch, v in hashTable.items():
+            table[ch] = table.setdefault(ch, 0) + 1
+        for ch, v in table.items():
             if v == 1:
                 return s.index(ch)
         return -1

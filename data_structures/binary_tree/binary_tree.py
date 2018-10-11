@@ -47,7 +47,7 @@ class BinaryTree:
 
     def __eq__(self, other):
         if not isinstance(other, BinaryTree): return False
-        return self.pre_order() == other.pre_order() and self.in_order() == other.in_order()
+        return self._equal(self._root, other._root)
 
     @property
     def size(self):
@@ -127,6 +127,11 @@ class BinaryTree:
                 queue.append(right)
                 node.right = right
         return root
+
+    def _equal(self, root1, root2):
+        if root1 and root2 and root1.val == root2.val:
+            return self._equal(root1.left, root2.left) and self._equal(root1.right, root2.right)
+        return not root1 and not root2
 
     def _level_order_with_None(self):
         level, res = [self.root], []
