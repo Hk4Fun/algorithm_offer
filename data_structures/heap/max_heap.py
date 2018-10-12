@@ -59,26 +59,27 @@ class MaxHeap:
         self._siftdown(0)
         return ret
 
-    def _heapify(self): # takes O(n) time
+    def _heapify(self):  # takes O(n) time
         for i in range(self.size // 2 - 1, -1, -1):
             self._siftdown(i)
 
-    def _siftup(self, k): # takes O(logn) time
+    def _siftup(self, k):  # takes O(logn) time
         while k > 0 and self._data[self._parent(k)] < self._data[k]:
             self._swap(self._parent(k), k)
             k = self._parent(k)
 
-    def _siftdown(self, k): # takes O(logn) time
+    def _siftdown(self, k):  # takes O(logn) time
         while self._left_child(k) < self.size:
-            j = self._left_child(k)
-            if (self._right_child(k) < self.size and
-                    self._data[self._right_child(k)] > self._data[self._left_child(k)]):
-                # j 为左右孩子中较大者
-                j += 1
-            if self._data[k] >= self._data[j]:  # k 比两个孩子都大就结束下沉
-                break
-            self._swap(k, j)
-            k = j
+            l, r = self._left_child(k), self._right_child(k)
+            largest = k  # 默认父结点最大
+            # 找到三者中的最大者
+            if l < self.size and self._data[l] > self._data[largest]:
+                largest = l
+            if r < self.size and self._data[r] > self._data[largest]:
+                largest = r
+            if largest == k: break  # 最大就是自己，则结束下沉
+            self._swap(k, largest)  # 否则和最大子结点交换
+            k = largest  # 继续下沉
 
     def _parent(self, idx):
         if idx == 0:

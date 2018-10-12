@@ -42,7 +42,7 @@ class Solution:
             j = i - 1
             # j向前遍历，直到找到比v小的数为止（可以提前终止内层循环），这里没有等号保证了插入排序的稳定性
             while j >= 0 and arr[j] > v:
-                arr[j + 1] = arr[j]  # v要最终是要插到j+1的位置的，所以先把该数往后覆盖
+                arr[j + 1] = arr[j]  # v最终是要插到j+1的位置的，所以先把该数往后覆盖
                 j -= 1
             arr[j + 1] = v  # v插到j+1的位置
         return arr
@@ -80,7 +80,7 @@ class Solution:
         return arr
 
     def shell(self, arr):
-        gap = len(arr) // 3
+        gap = len(arr) // 2
         while gap:
             # 内循环就是插入排序，只不过增量为gap
             for i, v in enumerate(arr):
@@ -89,7 +89,7 @@ class Solution:
                     arr[j + gap] = arr[j]
                     j -= gap
                 arr[j + gap] = v
-            gap //= 3
+            gap //= 2
         return arr
 
     def merge_u2d_1(self, arr):  # u2d：up-to-down，自顶向下
@@ -105,7 +105,8 @@ class Solution:
         return merge(self.merge_u2d_1(arr[::2]), self.merge_u2d_1(arr[1::2]))  # 分片巧妙地把数组一分为二
 
     def merge_u2d_2(self, arr):
-        def merge(arr, copy, low, mid, high):
+        def merge(arr, copy, low, high):
+            mid = (low + high) // 2
             i, j = low, mid + 1
             for k in range(low, high + 1):
                 if i > mid:
@@ -123,21 +124,30 @@ class Solution:
 
         def sort(arr, copy, low, high):
             if low < high:
-                mid = low + ((high - low) >> 1)
+                mid = (low + high) // 2
                 sort(copy, arr, low, mid)  # 注意这里copy和arr的位置调换了一下，可以省去复制arr的时间
                 sort(copy, arr, mid + 1, high)
                 # 可以优化一下， 如果 arr[mid] > arr[mid + 1] 才merge，避免多余的merge
                 # 对于近乎有序的数组非常有效, 但是对于一般情况, 有一定的性能损失
                 # 但是由于这里copy和arr对调了，需要merge对调回来，因此merge不可避免
-                merge(arr, copy, low, mid, high)
+                merge(arr, copy, low, high)
 
         copy = arr[:]  # 只需复制一次
-        sort(arr, copy, 0, len(arr) - 1)
-        return copy
+        sort(copy, arr, 0, len(arr) - 1)  # 注意这里copy和arr的顺序是反的，这样最终排序结果放在arr中
+        return arr
 
     def merge_d2u(self, arr):  # d2u：down-to-up，自底向上
         def merge(arr, low, mid, high):
-            copy[low: high + 1] = arr[low: high + 1]  # 把arr放进copy中
+            # 自底向上的 mid 不能自己算，即 mid = (l + r) // 2 不一定符合要求
+            # 因为有些区间可能会不满足一个sz的大小，
+            # 这些区间与其他区间合并时如果让 mid = (l + r) // 2
+            # 会使得有序区间的分界线出错，比如：
+            # 长度为3个sz时，一开始 sz0 和 sz1 合并成 sz01，而sz2单独合并
+            # 然后 sz01 和 sz2 合并，如果让 mid = (l + r) // 2
+            # 则认为 mid 的左右两边是有序的，而事实上 mid 的右边包含了两部分
+            # 一部分来自sz01，一部分来自sz2，因此并不是全有序的
+            # 正确的分界线应该是 mid = l + sz - 1 (注意sz=2*sz了)
+            copy = arr[:]  # 把arr放进copy中
             i, j = low, mid + 1
             for k in range(low, high + 1):  # 再从copy中merge到arr
                 # 注意这里是把copy放到arr中
@@ -154,7 +164,6 @@ class Solution:
                     arr[k] = copy[j]
                     j += 1
 
-        copy = arr[:]
         sz = 1
         while sz < len(arr):
             for low in range(0, len(arr) - sz, sz * 2):  # len(arr)-sz 保证了 mid=low+sz-1 不会越界
@@ -169,56 +178,70 @@ class Solution:
         return l + [arr[0]] + r
 
     def quick(self, arr):  # 实现原地排序
-        def partition(arr, l, r):
+        def partition(l, r):
             # 这里把枢轴单独提取出来可以避免后序的交换操作，可以直接覆盖
             pivot = arr[l]  # 选择首位作为枢轴
             while l < r:
                 while l < r and arr[r] >= pivot: r -= 1
                 arr[l] = arr[r]
-                while l < r and arr[l] <= pivot: l += 1
+                while l < r and arr[l] < pivot: l += 1
                 arr[r] = arr[l]
             arr[l] = pivot
             return l
 
-        def quick_sort(arr, l, r):
+        def quick_sort(l, r):
             if l < r:
-                # 类似前序遍历
-                index = partition(arr, l, r)
-                quick_sort(arr, l, index - 1)
-                quick_sort(arr, index + 1, r)
+                index = partition(l, r)
+                quick_sort(l, index - 1)
+                quick_sort(index + 1, r)
 
-        # shuffle(arr) # 使用shuffle随机打乱数组规律，但这样可能会影响了排序的效率
-        quick_sort(arr, 0, len(arr) - 1)
+        quick_sort(0, len(arr) - 1)
         return arr
 
     def quick_3way(self, arr):  # 三向切分，荷兰国旗问题，对于含有较多重复字符的排序效率高
-        def quick(arr, l, r):
-            if l < r:
-                pivot = arr[l]  # 选择首位作为枢轴，先记录下来，因为后面会被交换
-                lt, gt = l, r  # lt指向第一个等于枢轴的数， gt指向待确定区的最后一个元素，即大于区的前面那个数
-                i = l + 1  # i指向待定区的第一个元素
-                while i <= gt:
-                    if arr[i] < pivot:  # 小于枢轴，则交换后lt和i都往后移一位
-                        arr[i], arr[lt] = arr[lt], arr[i]
-                        lt += 1
-                        i += 1
-                    elif arr[i] > pivot:  # 大于枢轴，则交换后只把gt往前移一位，i不动，因为换过来的数是待定区的数
-                        arr[i], arr[gt] = arr[gt], arr[i]
-                        gt -= 1
-                    else:
-                        i += 1  # 等于枢轴则i后移一位即可不用交换
-                # 现在 arr[l:lt-1] < arr[lt:gt] = pivot < arr[gt+1:r]
-                quick(arr, l, lt - 1)
-                quick(arr, gt + 1, r)
+        def partition(l, r):
+            """
+            pivot = arr[l]
+            遍历阶段：
+            < : [l:lt-1]   = : [lt:i-1]    ? : [i:gt]    > : [gt+1:r]
+            遍历结束：
+            < : [l:lt-1]   = : [lt:gt]     > : [gt+1:r]
+            """
+            pivot = arr[l]  # 选择首位作为枢轴，先记录下来，因为后面会被交换
+            lt, gt = l, r  # lt指向第一个等于枢轴的数， gt指向待确定区的最后一个元素
+            i = l + 1  # i指向待定区的第一个元素
+            while i <= gt:
+                if arr[i] < pivot:  # 小于枢轴，则交换后lt和i都往后移一位
+                    arr[i], arr[lt] = arr[lt], arr[i]
+                    lt += 1
+                    i += 1
+                elif arr[i] > pivot:  # 大于枢轴，则交换后只把gt往前移一位，i不动，因为换过来的数是待定区的数
+                    arr[i], arr[gt] = arr[gt], arr[i]
+                    gt -= 1
+                else:
+                    i += 1  # 等于枢轴则i后移一位即可不用交换
+            return lt, gt  # 返回两个分界点
 
-        # shuffle(arr) # 使用shuffle随机打乱数组规律，但这样反而影响了排序的效率？
-        quick(arr, 0, len(arr) - 1)
+        def quick(l, r):
+            if l < r:
+                lt, gt = partition(l, r)
+                quick(l, lt - 1)
+                quick(gt + 1, r)
+
+        quick(0, len(arr) - 1)
         return arr
 
     def quick_2way(self, arr):  # 将等于区和大于区合并，其实与quick()一样
-        def partition(arr, l, r):
-            # arr[l]作为枢轴, 返回分界点p，使得arr[l..p-1] < arr[p]; arr[p+1...r] > arr[p]
-            j = l  # arr[l+1...j] < arr[l]; arr[j+1...i) >= v; arr[i] 为当前正在考察的元素
+        def partition(l, r):
+            """
+            遍历阶段:
+            pivot = arr[l]
+            < : [l+1...j]   >= : [j+1...i-1]    ? : [i:r]
+            遍历结束：
+            pivot = arr[j]
+            < : [l...j-1]   >= : [j+1...r]
+            """
+            j = l
             for i in range(l + 1, r + 1):
                 if arr[i] < arr[l]:
                     j += 1
@@ -226,15 +249,14 @@ class Solution:
             arr[j], arr[l] = arr[l], arr[j]
             return j  # 返回分界点
 
-        def quick(arr, l, r):
+        def quick(l, r):
             if l < r:
                 # 类似前序遍历
-                index = partition(arr, l, r)
-                quick(arr, l, index - 1)
-                quick(arr, index + 1, r)
+                index = partition(l, r)
+                quick(l, index - 1)
+                quick(index + 1, r)
 
-        # shuffle(arr) # 使用shuffle随机打乱数组规律，但这样反而影响了排序的效率？
-        quick(arr, 0, len(arr) - 1)
+        quick(0, len(arr) - 1)
         return arr
 
     def heap_simple(self, arr):  # 使用标准库的数据结构heapq
@@ -277,7 +299,7 @@ from Test import Test
 
 class MyTest(Test):
     def my_test_code(self):
-        self.debug = False  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
+        self.debug = True  # debug为True时每个测试用例只测试一遍，默认情况下关闭debug模式
         self.TEST_NUM = 10  # 单个测试用例的测试次数, 只有在debug为False的情况下生效
         testArgs = []
 
@@ -288,7 +310,7 @@ class MyTest(Test):
             return sorted(arr)
 
         import random
-        arrLen = 10
+        arrLen = 500
         arrNum = 10
         numLimit = 10
         for i in range(arrNum):
