@@ -5,11 +5,19 @@ from collections import defaultdict
 import random
 import time
 
+test_func = []
+
 
 def _swap(arr, i, j):
     arr[i], arr[j] = arr[j], arr[i]
 
 
+def add_to_test(func):
+    test_func.append(func)
+    return func
+
+
+@add_to_test
 def bubble(arr):
     for i in range(len(arr) - 1):
         for j in range(len(arr) - i - 1):
@@ -17,6 +25,7 @@ def bubble(arr):
                 _swap(arr, j, j + 1)
 
 
+@add_to_test
 def selection(arr):
     for i in range(len(arr)):
         minIdx = i
@@ -26,6 +35,7 @@ def selection(arr):
         _swap(arr, i, minIdx)
 
 
+@add_to_test
 def insertion(arr):
     for i, v in enumerate(arr):
         j = i - 1
@@ -35,6 +45,7 @@ def insertion(arr):
         arr[j + 1] = v
 
 
+@add_to_test
 def shell(arr):
     gap = len(arr) // 2
     while gap:
@@ -47,6 +58,7 @@ def shell(arr):
         gap //= 2
 
 
+@add_to_test
 def merge_u2d(arr):
     def merge(arr, aux, l, r):
         m = (l + r) // 2
@@ -76,6 +88,7 @@ def merge_u2d(arr):
     sort(aux, arr, 0, len(arr) - 1)
 
 
+@add_to_test
 def merge_d2u(arr):
     def merge(l, m, r):
         aux = arr[:]
@@ -101,6 +114,7 @@ def merge_d2u(arr):
         sz *= 2
 
 
+@add_to_test
 def quick(arr):
     def partition(l, r):
         pivot = arr[l]
@@ -121,6 +135,7 @@ def quick(arr):
     sort(0, len(arr) - 1)
 
 
+@add_to_test
 def quick_3way(arr):
     def partition(l, r):
         pivot = arr[l]
@@ -147,6 +162,7 @@ def quick_3way(arr):
     sort(0, len(arr) - 1)
 
 
+@add_to_test
 def heap_max(arr):
     def sink(i, end):
         while True:
@@ -178,26 +194,18 @@ def test_sort(func):
         print(func.__name__, '!!!AssertionError!!!')
         print('result: {}'.format(arr))
         print('expected: {}'.format(res))
-
     test_time[func.__name__].append(end - start)
 
 
 if __name__ == '__main__':
-    ARR_LEN = 500  # 数组长度
+    ARR_LEN = 200  # 数组长度
     NUM_LIMIT = 100  # 数字范围：[0, NUM_LIMIT]
     TEST_NUM = 100  # 测试次数
     test_time = defaultdict(list)
     for _ in range(TEST_NUM):
         raw_arr = [random.randint(0, NUM_LIMIT) for _ in range(ARR_LEN)]
         res = sorted(raw_arr)  # sorted 不是原地排序，而是返回有序数组
-        test_sort(bubble)
-        test_sort(selection)
-        test_sort(insertion)
-        test_sort(shell)
-        test_sort(merge_u2d)
-        test_sort(merge_d2u)
-        test_sort(quick)
-        test_sort(quick_3way)
-        test_sort(heap_max)
+        for func in locals()['test_func']:
+            test_sort(func)
     for item in sorted(test_time.items(), key=lambda item: sum(item[1])):
         print('{}: {:.2f} ms'.format(item[0], sum(item[1]) * 1000 / len(item[1])))
