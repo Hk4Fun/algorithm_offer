@@ -32,7 +32,7 @@ Explanation: You will always arrive at index 3 no matter what. Its maximum
 如果该位置i不能到达last，就继续往左看不更新last，
 因为该位置不能到达last并不意味着左边的i不能达到last
 而只要一个位置能够到达last，我们就更新last，这也是贪婪之处
-最后只需判断last是否为0即可，意味着只要我们从0号位置触发就一定能到达最右边
+最后只需判断last是否为0即可，意味着只要我们从0号位置出发就一定能到达最右边
 '''
 
 
