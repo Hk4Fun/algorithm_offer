@@ -13,9 +13,8 @@ return [0, 1].
 '''
 '''主要思路：
 思路1：时间O（n），空间0（n）
-用字典建立哈希表：
-从左至右扫描数组，对于每个数字n，字典键为target-n，值为对应的数组下标，
-如果n在字典中已经存在，说明之前出现过该数的配对数n'，否则target-n'不会等于它，下标直接获得
+从左至右扫描数组建立哈希表，对于每个数字v，字典键为v，值为对应的数组下标，
+如果 target-v 在字典中已经存在，说明之前出现过该数的配对数，获得下标返回即可
 
 思路2：时间O（nlogn），空间0（n）
 复制原数组并排序然后首尾双指针，找到后在原数组中找到该数字的下标（前提：数组无重复数字）
@@ -29,12 +28,12 @@ class Solution:
         :type target: int
         :rtype: List[int]
         """
-        dic = {}
+        table = {}
         for i, v in enumerate(nums):
-            if target - v in dic:
-                return [dic[target - v], i]
+            if target - v in table:
+                return [table[target - v], i]
             else:
-                dic[v] = i
+                table[v] = i
 
 
 # ================================测试代码================================
