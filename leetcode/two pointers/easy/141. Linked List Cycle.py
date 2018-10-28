@@ -25,6 +25,7 @@ class Solution(object):
     """
 
     def hasCycle1(self, head):
+        if head is None: return False
         fast = slow = head
         while fast and fast.next:
             fast = fast.next.next

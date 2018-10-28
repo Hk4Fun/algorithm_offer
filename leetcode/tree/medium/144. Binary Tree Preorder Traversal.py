@@ -5,10 +5,10 @@ __date__ = '2018/4/28 23:19'
 '''
 '''主要思路：
 思路1：时间O（n），空间O（n）
-data_structures/traverse.py pre_in_order_iteration2
+data_structures/traverse_concise.py pre_in_order_iteration2
 
 思路2：时间O（n），空间O（1）
-data_structures/traverse.py morris
+data_structures/traverse_concise.py morris
 '''
 
 
