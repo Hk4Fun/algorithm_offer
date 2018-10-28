@@ -55,28 +55,23 @@ class Solution:
     :rtype: bool
     """
 
-    def isSameTree_serialize(self, p, q):
+    def isSameTree1(self, p, q):
         def serialize(root):
-            res = []
-            queue = [root]
-            while queue:
-                cur = queue.pop(0)
-                if not cur:
-                    res.append(None)
-                else:
-                    res.append(cur.val)
-                    queue.append(cur.left)
-                    queue.append(cur.right)
+            res, level = [], [root]
+            while level:
+                next_level = []
+                for cur in level:
+                    res.append(cur.val if cur else None)
+                    if cur: next_level += cur.left, cur.right
+                level = next_level
             return res
 
         return serialize(p) == serialize(q)
 
-    def isSameTree_recursive(self, p, q):
-        if p and q:
-            return p.val == q.val \
-                   and self.isSameTree_recursive(p.left, q.left) \
-                   and self.isSameTree_recursive(p.right, q.right)
-        return p is q  # only p == q == None
+    def isSameTree2(self, p, q):
+        if p and q and p.val == q.val:
+            return self.isSameTree2(p.left, q.left) and self.isSameTree2(p.right, q.right)
+        return p is q  # 当且仅当 p == q == None，相当于 return not p and not q
 
 
 # ================================测试代码================================

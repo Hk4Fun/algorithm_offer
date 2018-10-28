@@ -1,16 +1,21 @@
 __author__ = 'Hk4Fun'
 __date__ = '2018/3/24 21:50'
 '''题目描述：
-Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
-For example, given the array [-2,1,-3,4,-1,2,1,-5,4],
-the contiguous subarray [4,-1,2,1] has the largest sum = 6.
+Given an integer array nums, find the contiguous subarray (containing at least one number) 
+which has the largest sum and return its sum.
+
+Example:
+Input: [-2,1,-3,4,-1,2,1,-5,4],
+Output: 6
+Explanation: [4,-1,2,1] has the largest sum = 6.
 '''
 '''主要思路：
+target_offer/31_连续子数组的最大和.py
 动态规划：
 设f(i)为以第i个数结尾的连续子数组的最大和，则状态转移方程为：
 f(i) = max(f(i-1)+array[i], array[i])
 最后结果为max(f(i))
-优化：f(i)只与f(i-1)有关，即只与前一状态有关，所以空间上可以由O(n)将为O(1)
+优化：f(i)只与f(i-1)有关，即只与前一状态有关，所以空间上可以由O(n)降为O(1)
 '''
 
 
@@ -25,7 +30,6 @@ class Solution:
             curSum = max(num, curSum + num)
             maxSum = max(maxSum, curSum)
         return maxSum
-
 
 
 # ================================测试代码================================

@@ -32,22 +32,19 @@ class Solution:
     :rtype: int
     """
 
-    def maxDepth_recursive(self, root):
-        return 1 + max(self.maxDepth_recursive(root.left), self.maxDepth_recursive(root.right)) if root else 0
+    def maxDepth1(self, root):
+        return 1 + max(self.maxDepth1(root.left), self.maxDepth1(root.right)) if root else 0
 
-    def maxDepth_bfs(self, root):
-        if not root: return 0
-        cur_level = [root]
-        count = 0
-        while cur_level:
-            count += 1
+    def maxDepth2(self, root):
+        if root is None: return 0
+        level, count = [root], 0
+        while level:
             next_level = []
-            for cur in cur_level:
-                if cur.left:
-                    next_level.append(cur.left)
-                if cur.right:
-                    next_level.append(cur.right)
-            cur_level = next_level
+            count += 1
+            for cur in level:
+                if cur.left: next_level.append(cur.left)
+                if cur.right: next_level.append(cur.right)
+            level = next_level
         return count
 
 

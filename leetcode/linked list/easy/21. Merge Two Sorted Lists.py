@@ -28,27 +28,27 @@ class Solution:
     :rtype: ListNode
     """
 
-    def mergeTwoLists_iteratively(self, l1, l2):
-        head = cur = ListNode(0)
+    def mergeTwoLists1(self, l1, l2):
+        dummy = tail = ListNode(0)  # 使用虚拟头结点简化迭代逻辑
         while l1 and l2:
-            if l1.val > l2.val:
-                cur.next = l2
-                l2 = l2.next
-            else:
-                cur.next = l1
+            if l1.val <= l2.val:
+                tail.next = l1
                 l1 = l1.next
-            cur = cur.next
-        cur.next = l1 or l2
-        return head.next
+            else:
+                tail.next = l2
+                l2 = l2.next
+            tail = tail.next
+        tail.next = l1 or l2
+        return dummy.next
 
-    def mergeTwoLists_recursively(self, l1, l2):
-        if not l1 or not l2:
-            return l1 or l2
-        if l1.val < l2.val:
-            l1.next = self.mergeTwoLists_recursively(l1.next, l2)
+    def mergeTwoLists2(self, l1, l2):
+        if not l1 or not l2:  # 只要有一个为空
+            return l1 or l2  # 就返回不为空的那个（都为空返回None）
+        if l1.val <= l2.val:
+            l1.next = self.mergeTwoLists2(l1.next, l2)
             return l1
         else:
-            l2.next = self.mergeTwoLists_recursively(l1, l2.next)
+            l2.next = self.mergeTwoLists2(l1, l2.next)
             return l2
 
 

@@ -20,10 +20,8 @@ class ListNode:
 
 class Solution:
     def Merge1(self, pHead1, pHead2):
-        if not pHead1:
-            return pHead2  # 此时如果pHead2也为None也正好直接返回
-        elif not pHead2:
-            return pHead1
+        if not pHead1 or not pHead2:
+            return pHead1 or pHead2
         if pHead1.val <= pHead2.val:
             pHead1.next = self.Merge1(pHead1.next, pHead2)
             return pHead1

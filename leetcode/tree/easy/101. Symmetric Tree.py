@@ -41,33 +41,30 @@ class Solution:
 
     def isSymmetric_serialize(self, root):
         def serialize(root, flag):
-            res = []
-            queue = [root]
-            while queue:
-                cur = queue.pop(0)
-                if not cur:
-                    res.append(None)
-                else:
-                    res.append(cur.val)
-                    if flag == 'l':
-                        queue.append(cur.right)
-                        queue.append(cur.left)
-                    else:
-                        queue.append(cur.left)
-                        queue.append(cur.right)
+            res, level = [], [root]
+            while level:
+                next_level = []
+                for cur in level:
+                    res.append(cur.val if cur else None)
+                    if cur:
+                        if flag == 'l':
+                            next_level += cur.left, cur.right
+                        elif flag == 'r':
+                            next_level += cur.right, cur.left
+                level = next_level
             return res
 
         if not root: return True
         return serialize(root.left, 'l') == serialize(root.right, 'r')
 
     def isSymmetric_recursive(self, root):
-        def isSym(l, r):
-            if l and r:
-                return l.val == r.val and isSym(l.left, r.right) and isSym(l.right, r.left)
-            return l is r
+        def sym(left, right):
+            if left and right and left.val == right.val:
+                return sym(left.left, right.right) and sym(left.right, right.left)
+            return left is right
 
         if not root: return True
-        return isSym(root.left, root.right)
+        return sym(root.left, root.right)
 
 
 # ================================测试代码================================
