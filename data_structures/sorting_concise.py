@@ -205,7 +205,7 @@ if __name__ == '__main__':
     for _ in range(TEST_NUM):
         raw_arr = [random.randint(0, NUM_LIMIT) for _ in range(ARR_LEN)]
         res = sorted(raw_arr)  # sorted 不是原地排序，而是返回有序数组
-        for func in locals()['test_func']:
+        for func in test_func:
             test_sort(func)
     for item in sorted(test_time.items(), key=lambda item: sum(item[1])):
         print('{}: {:.2f} ms'.format(item[0], sum(item[1]) * 1000 / len(item[1])))
