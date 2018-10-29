@@ -83,9 +83,8 @@ def merge_u2d(arr):
             sort(aux, arr, l, m)
             sort(aux, arr, m + 1, r)
             merge(arr, aux, l, r)
-
-    aux = arr[:]
-    sort(aux, arr, 0, len(arr) - 1)
+            
+    sort(arr[:], arr, 0, len(arr) - 1)
 
 
 @add_to_test
