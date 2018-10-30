@@ -18,7 +18,9 @@ Note: The length of path between two nodes is represented by the number of edges
 '''
 '''主要思路：
 时间O（n），空间O（n）
-后序遍历，先获取左右子树的深度，然后更新最大路径长度res=max(res, l + r)
+最长的路径不一定经过根节点，所以需要一个全局的res记录遍历过程中最长的路径
+因为每个结点都有可能成为最长路径的根节点
+采用后序遍历，先获取左右子树的深度，然后更新最大路径长度res=max(res, l + r)
 最后返回自己的深度：max(l, r) + 1
 '''
 

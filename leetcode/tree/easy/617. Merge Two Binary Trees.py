@@ -31,6 +31,13 @@ dfs,pre-order
 '''
 
 
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+
 class Solution:
     """
     :type t1: TreeNode

@@ -57,23 +57,21 @@ class Solution:
         return path(root, sum) + self.pathSum1(root.left, sum) + self.pathSum1(root.right, sum)
 
     def pathSum2(self, root, sum):
-        self.result = 0
-        self.target = sum
-        self.cache = {0: 1}
+        self.count = 0
+        self.cache = {0: 1} # 保证从根节点出发的和被统计
 
         def findPaths(root, cur_sum):
             if not root: return
             cur_sum += root.val
-            if cur_sum - self.target in self.cache: # cur_sum - self.target就是(root-->start)
-                self.result += self.cache[cur_sum - self.target]
-            self.cache.setdefault(cur_sum, 0)
-            self.cache[cur_sum] += 1
+            if cur_sum - sum in self.cache:  # cur_sum - self.target就是(root-->start)
+                self.count += self.cache[cur_sum - sum]
+            self.cache[cur_sum] = self.cache.setdefault(cur_sum, 0) + 1
             findPaths(root.left, cur_sum)
             findPaths(root.right, cur_sum)
-            self.cache[cur_sum] -= 1 # 记得减回去，因为其他节点不再以该结点为祖先
+            self.cache[cur_sum] -= 1  # 记得减回去，因为其他节点不再以该结点为祖先
 
         findPaths(root, 0)
-        return self.result
+        return self.count
 
 
 # ================================测试代码================================

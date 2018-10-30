@@ -29,7 +29,7 @@ class Solution(object):
     def isPalindrome_change(self, head):
         pre = None
         slow = fast = head
-        while fast and fast.next:  # # 边找中点边反转链表
+        while fast and fast.next:  # 边找中点边反转链表
             fast = fast.next.next
             slow.next, slow, pre = pre, slow.next, slow  # 一句话反转链表
         if fast:  # 奇数情况下slow往后移一格（偶数情况下正好）
@@ -41,7 +41,9 @@ class Solution(object):
     def isPalindrome_no_change(self, head):
         pre = None
         slow = fast = head
-        while fast and fast.next:
+        while fast and fast.next:  # 偶数结点时，slow停留在中间两个结点的后者
+            # 这里不使用 while fast.next and fast.next.next
+            # 是为了充分利用 pre 在返回时的统一性，从而简化代码的逻辑
             fast = fast.next.next
             slow.next, slow, pre = pre, slow.next, slow
         right_half = slow.next if fast else slow

@@ -34,9 +34,12 @@ The substring with start index = 2 is "ab", which is an anagram of "ab".
 '''主要思路：
 时间O（n），空间O（1）, n为s的长度
 不必统计每个子串，这样会TLE，采用滑动窗口
+注意到易位词只关心字母出现的频次是否相等而不关心字母排列顺序是否相等
+所以可以使用字典（哈希表）统计字母出现的频次：
+使用table_p统计p的字母频次，然后使用table_s统计s，
+窗口长度为p的长度，随着窗口不断右移，table_s不断被更新，
+每次比较table_p是否等于table_s，是则说明出现易位词
 '''
-
-from collections import defaultdict
 
 
 class Solution:
@@ -48,17 +51,13 @@ class Solution:
         """
         if len(s) < len(p): return []
         res = []
-        table_s, table_p = defaultdict(int), defaultdict(int)
+        table_s, table_p = {}, {}
         for i in range(len(p)):
-            table_s[s[i]] += 1
-            table_p[p[i]] += 1
+            table_s[s[i]] = table_s.setdefault(s[i], 0) + 1
+            table_p[p[i]] = table_p.setdefault(p[i], 0) + 1
         for i in range(len(s) - len(p)):
             if table_s == table_p: res.append(i)
-            # 窗口右边界右移
-            if s[i + len(p)] not in table_s:
-                table_s[s[i + len(p)]] = 1
-            else:
-                table_s[s[i + len(p)]] += 1
+            table_s[s[i + len(p)]] = table_s.setdefault(s[i + len(p)], 0) + 1  # 窗口右边界右移
             table_s[s[i]] -= 1  # 窗口左边界右移
             if table_s[s[i]] == 0:  # 减到0就从表中删除
                 del table_s[s[i]]

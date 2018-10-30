@@ -29,8 +29,8 @@ https://leetcode.com/problems/shortest-unsorted-continuous-subarray/solution/
 Approach #4 Using Stack [Accepted]
 
 思路3（时间O（n），空间O（1））：
-1、从左到右找到首次下降的下标beg
-2、从右到左找到首次上升的下标end
+1、从左到右找到首次下降的下标beg（比如6,5，则6是beg）
+2、从右到左找到首次上升的下标end（比如6,5，则5是end）
 3、在nums[beg: (end + 1)]之间找到max和min
 4、beg后退，来到首个比min小的数
 5、end后退，来到首个比max大的数

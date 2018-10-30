@@ -36,10 +36,9 @@ class Solution:
         :type y: int
         :rtype: int
         """
-        sum = x ^ y
-        count = 0
-        while sum:
-            sum &= sum - 1
+        xsum, count = x ^ y, 0
+        while xsum:
+            xsum &= xsum - 1
             count += 1
         return count
 

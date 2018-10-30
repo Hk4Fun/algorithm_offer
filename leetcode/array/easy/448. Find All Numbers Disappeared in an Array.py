@@ -15,21 +15,38 @@ Output:
 '''
 '''主要思路：
 时间O（n），空间O（1）
+思路1：
 把数组中的数当作下标（记得-1），然后把对应的数改成负数（如果已经是负数就不变）
 再次遍历数组，不为负数的下标就是未被访问过的下标，也就是那些缺失的数（记得+1）
+
+思路2：
+借助 target_offer/51_数组中重复的数字.py 中的思路1
+把所有数字放到与其下标相等的位置（这题数字都要-1，保证和下标对应），
+遇到相等的说明发生了重复，跳过即可
+这样最后再次遍历数组，那些下标与数字不对应的下标就是缺失的数字（下标+1）
 '''
 
 
 class Solution:
-    def findDisappearedNumbers(self, nums):
+    def findDisappearedNumbers1(self, nums):
         """
         :type nums: List[int]
         :rtype: List[int]
         """
         for num in nums:
-            index = abs(num) - 1
-            nums[index] = -abs(nums[index])  # 强行改为负数，为负数时不变
+            idx = abs(num) - 1
+            nums[idx] = -abs(nums[idx])  # 强行改为负数，为负数时不变
         return [i + 1 for i, v in enumerate(nums) if v > 0]  # 找到那些不为负数的下标
+
+    def findDisappearedNumbers2(self, nums):
+        i = 0
+        while i < len(nums):
+            idx = nums[i] - 1  # 数字要-1才能与下标对应
+            if nums[i] != nums[idx]:  # 只交换数字不移动下标，因为换过来的数字还未检查
+                nums[i], nums[idx] = nums[idx], nums[i]
+            else:  # 下标对应或发生重复时只移动下标
+                i += 1
+        return [i + 1 for i, v in enumerate(nums) if i + 1 != v]  # 找到那些下标与数字不对应的下标
 
 
 # ================================测试代码================================

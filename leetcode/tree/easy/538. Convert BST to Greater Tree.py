@@ -19,7 +19,8 @@ Output: The root of a Greater Tree like this:
 '''
 '''主要思路：
 时间O（n），空间O（n）
-inorder
+从右往左遍历BST，反向中序遍历：右，根，左
+使用全局sum记录累加和
 '''
 
 
@@ -37,16 +38,16 @@ class Solution:
     """
 
     def convertBST(self, root):
-        def bst(root):
-            if not root: return
-            bst(root.right)
+        def convert(root):
+            if root is None: return
+            convert(root.right)
             self.sum += root.val
             root.val = self.sum
-            bst(root.left)
+            convert(root.left)
+            return root
 
         self.sum = 0
-        bst(root)
-        return root
+        return convert(root)
 
 
 # ================================测试代码================================
