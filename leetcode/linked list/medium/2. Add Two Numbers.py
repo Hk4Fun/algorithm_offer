@@ -13,6 +13,7 @@ Explanation: 342 + 465 = 807.
 '''
 '''主要思路：
 时间O（n），空间O（n）
+使用一个变量carry记录进位
 '''
 
 
@@ -29,21 +30,21 @@ class Solution:
         :type l2: ListNode
         :rtype: ListNode
         """
-        dummy = cur = ListNode(0)
-        p1, p2 = l1, l2
+        dummy = tail = ListNode(0)
         carry = 0
-        while p1 or p2 or carry:
-            if p1:
-                carry += p1.val
-                p1 = p1.next
-            if p2:
-                carry += p2.val
-                p2 = p2.next
-            # 注意python的连续赋值是从左到右，这里相当于
+        while l1 or l2 or carry:
+            if l1:
+                carry += l1.val
+                l1 = l1.next
+            if l2:
+                carry += l2.val
+                l2 = l2.next
+            # 注意连续赋值是从左到右，这里相当于
             # tmp = ListNode(carry % 10)
-            # cur.next = tmp
-            # cur = tmp
-            cur.next = cur = ListNode(carry % 10)
+            # tail.next = tmp
+            # tail = tmp
+            # 不能 tail = tail.next = ListNode(carry % 10)
+            tail.next = tail = ListNode(carry % 10)
             carry //= 10
         return dummy.next
 

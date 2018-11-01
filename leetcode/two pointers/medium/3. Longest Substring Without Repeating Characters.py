@@ -34,13 +34,13 @@ class Solution:
 
     def lengthOfLongestSubstring1(self, s):
         maxLen = start = 0
-        used = {}  # 记录每个字母最近出现的位置
-        for end, v in enumerate(s):  # i一直往右遍历
-            if v in used and start <= used[v]:  # 之前出现过该字母并且最近出现的位置在start到i之间
-                start = used[v] + 1  # 将start移到上次出现位置的右边
+        last = {}  # 记录每个字母最近出现的位置
+        for i, v in enumerate(s):  # i一直往右遍历
+            if v in last and start <= last[v]:  # 之前出现过该字母并且最近出现的位置在start到i之间
+                start = last[v] + 1  # 将start移到上次出现位置的右边
             else:  # 如果start被右移了就没必要更新maxLen了，因为肯定比原来的小
-                maxLen = max(maxLen, end - start + 1)
-            used[v] = end  # 新增或更新每个字母最近出现的位置
+                maxLen = max(maxLen, i - start + 1)
+            last[v] = i  # 新增或更新每个字母最近出现的位置
         return maxLen
 
     def lengthOfLongestSubstring2(self, s):

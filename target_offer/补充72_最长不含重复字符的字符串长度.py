@@ -9,19 +9,15 @@ __date__ = '2018/3/5 14:57'
 思路1： 暴力枚举（时间O(n^3),空间O(1)）
         找出所有子字符串，然后判断每个子字符串中是否包含重复的字符（哈希表法判断）。
         
-思路2： 动态规划（时间O(n),空间O(1)）
-        定义以第i个字符结尾的不包含重复字符的子字符串的最大长度为f(i)，
-        则状态转移方程为：
-        如果第i个字符之前没出现过，则f(i)=f(i-1)+1
-        如果第i个字符之前出现过，分两种情况讨论：
-        先设第i个字符和它上次（最近一次）出现在字符串中的位置的距离为d
-        1、d<=f(i-1)。此时第i个字符上次出现在f(i-1)对应的最长子字符串中，因此f(i)=d
-           同时也意味着在第i个字符出现两次所夹的子字符串中再也没有其他重复的字符串
-        2、d>f(i-1)。此时第i个字符上次出现在f(i-1)对应的最长子字符串之前，
-           因此仍然有f(i)=f(i-1)+1
-        最终取max(f(i))
-        在这里f(i)只与前一个结果f(i-1)有关，所以连数组都可以不用，
-        直接用一个变量来记录即可 
+思路2： 时间O（n），空间O（1）（字母种类有限，所以空间为常数）
+        用两个指针始终记录不重复字符串的头start和尾tail，tail一直往右边扫描
+        每当遇到重复的字符（需要一个哈希表记录每个字符曾经出现过的最右的索引），
+        设该重复字符之前出现的位置为i，如果 start <= i < tail，
+        则只需把头指针移到 i + 1 的位置即可，否则（i < start）接着往右扫描
+        当然循环每一步都要更新当前字符出现的最新位置，并且更新最大长度
+        这里可以稍微优化一下：当出现重复字符并且 start <= i < tail 时，
+        我们令start = i + 1，则字符串长度一定减小了，可以不用更新字符串长度
+        换句话说，只有start不往右移时我们才去更新最大长度
 '''
 
 
@@ -50,21 +46,17 @@ class Solution:
                     break  # 发现重复子串，则end没必要往后移动了
         return longest
 
-    def LSWD2(self, string):
-        if not string: return 0
-        hashTable = [-1] * 26
-        curLength = 0
-        maxLength = 0
-        for i, v in enumerate(string):
-            index = ord(v) - ord('a')
-            preIndex = hashTable[index]
-            if preIndex == -1 or i - preIndex > curLength:
-                curLength += 1
-            else:
-                curLength = i - preIndex
-            hashTable[index] = i  # 总是更新字符最新出现的位置
-            maxLength = max(curLength, maxLength)
-        return maxLength
+    def LSWD2(self, s):
+        if not s: return 0
+        maxLen = start = 0
+        last = {}  # 记录每个字母最近出现的位置
+        for i, v in enumerate(s):  # i一直往右遍历
+            if v in last and start <= last[v]:  # 之前出现过该字母并且最近出现的位置在start到i之间
+                start = last[v] + 1  # 将start移到上次出现位置的右边
+            else:  # 如果start被右移了就没必要更新maxLen了，因为肯定比原来的小
+                maxLen = max(maxLen, i - start + 1)
+            last[v] = i  # 新增或更新每个字母最近出现的位置
+        return maxLen
 
 
 # ================================测试代码================================

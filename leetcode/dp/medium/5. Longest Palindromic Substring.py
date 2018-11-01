@@ -58,7 +58,7 @@ class Solution:
         return s[start:start + maxLen]
 
     def longestPalindrome_center(self, s):
-        def help(l, r):  # 由中心向两边扩展
+        def extend(l, r):  # 由中心向两边扩展
             while l >= 0 and r < len(s) and s[l] == s[r]:
                 l -= 1
                 r += 1
@@ -66,13 +66,13 @@ class Solution:
 
         res = ''
         for i in range(len(s)):
-            res = max(help(i, i), help(i, i + 1), res, key=len)
+            res = max(extend(i, i), extend(i, i + 1), res, key=len)
         return res
 
     def longestPalindrome_center_opt(self, s):
         # 上一思路的优化：如果r已经来到最右边，就没有必要接着遍历下一个中心了
         # 下一个回文子串再长也不会超过之前已经到达最右边界的回文子串
-        def help(l, r):
+        def extend(l, r):
             while l >= 0 and r < len(s) and s[l] == s[r]:
                 l -= 1
                 r += 1
@@ -80,8 +80,8 @@ class Solution:
 
         start, end = 0, 0
         for i in range(len(s)):
-            l1, r1 = help(i, i)
-            l2, r2 = help(i, i + 1)
+            l1, r1 = extend(i, i)
+            l2, r2 = extend(i, i + 1)
             len1, len2 = r1 - l1 + 1, r2 - l2 + 1
             maxLen = max(len1, len2)
             if maxLen > end - start:
