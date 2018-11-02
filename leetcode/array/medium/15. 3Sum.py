@@ -15,7 +15,7 @@ A solution set is:
 '''
 '''主要思路：
 时间O（n^2），空间O（1）
-排序，然后遍历每个数作为和的第一个数，这样就把问题转化为 
+先排序，然后遍历每个数作为和的第一个数，这样就把问题转化为 
 167.Two Sum II - Input array is sorted（双指针）
 需要注意的地方：避免出现重复的答案，这里有两个地方需要跳过：
 1、双指针的活动范围是作为第一个数的右边的数，左边不必再考虑，
@@ -46,8 +46,8 @@ class Solution:
                 else:  # 找到后接着找，而不是break
                     res += [nums[i], nums[l], nums[r]],
                     l += 1
-                    while nums[l] == nums[l - 1] and l < r: l += 1  # 跳过重复值
-                    # r不用-1，因为下一循环一定是nums[l] + nums[r] > -nums[i]：r -= 1
+                    while nums[l] == nums[l - 1] and l < r: l += 1  # 跳过重复值，否则会重复添加
+                    # r不用-1，因为下一循环一定是nums[l] + nums[r] + nums[i] > 0， 即s > 0, r -= 1
         return res
 
 
@@ -65,6 +65,7 @@ class MyTest(Test):
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
         testArgs.append([[-1, 0, 1, 2, -1, -4], [[-1, -1, 2], [-1, 0, 1]]])
+        testArgs.append([[0, 0, 0, 0], [[0, 0, 0]]])
         return testArgs
 
     def convert(self, result, *func_arg):

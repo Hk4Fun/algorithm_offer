@@ -22,7 +22,14 @@ class Solution:
 
     def letterCombinations1(self, digits):
         if not digits: return []
-        maps = {'2': 'abc', '3': 'def', '4': 'ghi', '5': 'jkl', '6': 'mno', '7': 'pqrs', '8': 'tuv', '9': 'wxyz'}
+        maps = {'2': 'abc',
+                '3': 'def',
+                '4': 'ghi',
+                '5': 'jkl',
+                '6': 'mno',
+                '7': 'pqrs',
+                '8': 'tuv',
+                '9': 'wxyz'}
 
         def bt(idx):
             if idx == len(digits) - 1:
