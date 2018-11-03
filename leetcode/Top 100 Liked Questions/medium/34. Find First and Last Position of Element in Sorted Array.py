@@ -21,6 +21,9 @@ target_offer/38_1_数字在排序数组中出现的次数.py
 时间O（logn），空间O（1）
 
 思路2：
+思路1的简化，将两个相似的函数（findfirst、findlast）合并为一个
+
+思路3：
 使用标准库bisect:
 bisect.bisect_left(nums, target)：获取target在nums中第一次出现的位置
 bisect.bisect(nums, target) - 1 ：获取target在nums中最后一次出现的位置
@@ -70,6 +73,22 @@ class Solution:
         return [findfirst(), findlast()]
 
     def searchRange2(self, nums, target):
+        def search(target):
+            # 注意这里不是 len(nums) - 1，这样可以保证lo来到刚好大于等于target的位置
+            # 比如 [2,2], target = 3 时，我们希望lo=2（刚好越界）
+            lo, hi = 0, len(nums)
+            while lo < hi:  # 不是 lo <= hi
+                mid = (lo + hi) // 2
+                if nums[mid] >= target:  # 不是 nums[mid] > target
+                    hi = mid  # 不是 hi = mid - 1
+                else:  # nums[mid] < target
+                    lo = mid + 1  # 保证lo来到刚好大于等于target的位置
+            return lo
+
+        lo = search(target)
+        return [lo, search(target + 1) - 1] if target in nums[lo:lo + 1] else [-1, -1]
+
+    def searchRange3(self, nums, target):
         # 注意这里的切片可以避免触发异常：切片不存在时返回空的list
         lo = bisect.bisect_left(nums, target)
         return [lo, bisect.bisect(nums, target) - 1] if target in nums[lo:lo + 1] else [-1, -1]
@@ -88,16 +107,10 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
+        testArgs.append([[2, 2], 2, [0, 1]])
+        testArgs.append([[1], 1, [0, 0]])
+        testArgs.append([[5, 7, 7, 8, 8, 10], 8, [3, 4]])
+        testArgs.append([[5, 7, 7, 8, 8, 10], 6, [-1, -1]])
 
         return testArgs
 

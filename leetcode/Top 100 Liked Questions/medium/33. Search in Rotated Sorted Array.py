@@ -25,14 +25,17 @@ Output: -1
 定义：旋转后数组被分为两个有序的子数组，如果target和nums[mid]在同一个子数组我们就说它在同边
 logn必须采用二分：
 
+s = (nums[mid] >= nums[0]) ^ (target >= nums[0])
+当 s == 1 时，异边；s == 0 时，同边
+
 如果target和nums[mid]同边，则正常二分：
 若nums[mid] > target，则：hi = mid - 1
 若nums[mid] < target，则：lo = mid + 1
 否则： return mid
 
 如果target和nums[mid]不同边，则：
-若nums[mid] > target，则：lo = mid + 1（因为mid左边的一定都比target大）
-若nums[mid] < target，则：hi = mid - 1（因为mid右边的一定都比target小）
+若nums[mid] > target，则：lo = mid + 1（mid在左边子数组，target在右边子数组，mid左边的一定都比target大）
+若nums[mid] < target，则：hi = mid - 1（mid在右边子数组，target在左边子数组，mid右边的一定都比target小）
 否则：return mid
 '''
 
