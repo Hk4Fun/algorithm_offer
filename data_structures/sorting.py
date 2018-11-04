@@ -137,39 +137,39 @@ class Solution:
         return arr
 
     def merge_d2u(self, arr):  # d2u：down-to-up，自底向上
-        def merge(arr, low, mid, high):
+        def merge(l, m, r):
             # 自底向上的 mid 不能自己算，即 mid = (l + r) // 2 不一定符合要求
             # 因为有些区间可能会不满足一个sz的大小，
             # 这些区间与其他区间合并时如果让 mid = (l + r) // 2
-            # 会使得有序区间的分界线出错，比如：
-            # 长度为3个sz时，一开始 sz0 和 sz1 合并成 sz01，而sz2单独合并
-            # 然后 sz01 和 sz2 合并，如果让 mid = (l + r) // 2
-            # 则认为 mid 的左右两边是有序的，而事实上 mid 的右边包含了两部分
-            # 一部分来自sz01，一部分来自sz2，因此并不是全有序的
-            # 正确的分界线应该是 mid = l + sz - 1 (注意sz=2*sz了)
-            copy = arr[:]  # 把arr放进copy中
-            i, j = low, mid + 1
-            for k in range(low, high + 1):  # 再从copy中merge到arr
-                # 注意这里是把copy放到arr中
-                if i > mid:
-                    arr[k] = copy[j]
+            # 会使得有序区间的分界线出错
+            i, j = l, m + 1
+            for k in range(l, r + 1):
+                if i > m:
+                    aux[k] = arr[j]
                     j += 1
-                elif j > high:
-                    arr[k] = copy[i]
+                elif j > r:
+                    aux[k] = arr[i]
                     i += 1
-                elif copy[i] <= copy[j]:
-                    arr[k] = copy[i]
+                elif arr[i] < arr[j]:
+                    aux[k] = arr[i]
                     i += 1
                 else:
-                    arr[k] = copy[j]
+                    aux[k] = arr[j]
                     j += 1
 
-        sz = 1
+        aux = arr[:]
+        sz, count = 1, 0  # count用来统计交换次数
         while sz < len(arr):
-            for low in range(0, len(arr) - sz, sz * 2):  # len(arr)-sz 保证了 mid=low+sz-1 不会越界
-                merge(arr, low, low + sz - 1, min(low + sz + sz - 1, len(arr) - 1))
-            sz += sz
-        return arr
+            for l in range(0, len(arr), 2 * sz):
+                m = min(l + sz - 1, len(arr) - 1)  # 避免越界
+                r = min(l + 2 * sz - 1, len(arr) - 1)  # 避免越界
+                merge(l, m, r)
+            aux, arr = arr, aux  # 没有递归帮我们交换，只能手动交换
+            sz *= 2
+            count += 1
+        # 交换奇数次时函数外的arr指向的是aux，需要把正确的arr复制到aux中
+        # （即复制到函数外的arr中进行原地修改，所以不能aux=arr[:]）
+        if count & 1: aux[:] = arr[:]
 
     def quick_simple(self, arr):  # pythonic，但空间复杂度增加了，并且不是原地排序
         if len(arr) <= 1: return arr

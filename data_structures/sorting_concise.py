@@ -83,34 +83,39 @@ def merge_u2d(arr):
             sort(aux, arr, l, m)
             sort(aux, arr, m + 1, r)
             merge(arr, aux, l, r)
-            
+
     sort(arr[:], arr, 0, len(arr) - 1)
 
 
 @add_to_test
 def merge_d2u(arr):
     def merge(l, m, r):
-        aux = arr[:]
         i, j = l, m + 1
         for k in range(l, r + 1):
             if i > m:
-                arr[k] = aux[j]
+                aux[k] = arr[j]
                 j += 1
             elif j > r:
-                arr[k] = aux[i]
+                aux[k] = arr[i]
                 i += 1
-            elif aux[i] < aux[j]:
-                arr[k] = aux[i]
+            elif arr[i] < arr[j]:
+                aux[k] = arr[i]
                 i += 1
             else:
-                arr[k] = aux[j]
+                aux[k] = arr[j]
                 j += 1
 
-    sz = 1
+    aux = arr[:]
+    sz, count = 1, 0
     while sz < len(arr):
-        for l in range(0, len(arr) - sz, 2 * sz):
-            merge(l, l + sz - 1, min(l + 2 * sz - 1, len(arr) - 1))
+        for l in range(0, len(arr), 2 * sz):
+            m = min(l + sz - 1, len(arr) - 1)
+            r = min(l + 2 * sz - 1, len(arr) - 1)
+            merge(l, m, r)
+        aux, arr = arr, aux
         sz *= 2
+        count += 1
+    if count & 1: aux[:] = arr[:]
 
 
 @add_to_test
@@ -182,7 +187,7 @@ def heap_max(arr):
         sink(0, end)
 
 
-def test_sort(func):
+def test_sort(func, res):
     arr = raw_arr[:]  # 由于所有排序算法原地排序，因此做一份拷贝
     start = time.time()
     func(arr)
@@ -205,6 +210,6 @@ if __name__ == '__main__':
         raw_arr = [random.randint(0, NUM_LIMIT) for _ in range(ARR_LEN)]
         res = sorted(raw_arr)  # sorted 不是原地排序，而是返回有序数组
         for func in test_func:
-            test_sort(func)
+            test_sort(func, sorted(raw_arr))  # sorted 不是原地排序，而是返回有序数组
     for item in sorted(test_time.items(), key=lambda item: sum(item[1])):
         print('{}: {:.2f} ms'.format(item[0], sum(item[1]) * 1000 / len(item[1])))
