@@ -16,8 +16,19 @@ Given n = 3, there are a total of 5 unique BST's.
 '''主要思路：
 思路1（时间O（n^2），空间O（n））：
 https://leetcode.com/problems/unique-binary-search-trees/discuss/31666/DP-Solution-in-6-lines-with-explanation.-F(i-n)-dp(i-1)-*-dp(n-i)
-其实就是Catalan Number
-这道题相当于给一个序列，问可以有多少棵二叉树的中序序列为该序列
+动态规划，每个结点都有可能为根
+G(n)：结点数为n的BST种数
+F(i, n): 以下标为i的数为根节点，结点数为n的BST种数
+所以G(n) = F(0, n) + F(1, n) + ... + F(n-1, n)
+而 F(i, n) = G(i) + G(n-i-1) (即左子树为BST的种数+右子树为BST的种数)
+这里有个微妙的地方就是，右子树的值都大于根节点的值，但这里定义的n只关心结点数，
+因为我们分割左右子树的时候按照排好序的序列来分割就行了
+最终，G(n) = G(0)*G(n-1) + G(1)*G(n-2) + G(2)*G(n-3) + ... + G(n-1)*G(0) 
+其中，G(0) = G(1) = 1 (空树和只有一个结点的树都只有一种情况)
+每个G(i)依赖于前面的G(0)~G(i-1)，因此需要数组dp来保存之前的值
+
+其通项公式就是Catalan Number
+这道题相当于给一个序列，问可以有多少种二叉树的中序序列为该序列
 
 思路2：直接套公式。。。
 https://www.geeksforgeeks.org/program-nth-catalan-number/

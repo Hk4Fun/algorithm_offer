@@ -41,7 +41,8 @@ class Solution:
                           dfs(i + 1, j, pathlen + 1) or \
                           dfs(i, j - 1, pathlen + 1) or \
                           dfs(i, j + 1, pathlen + 1)
-                if not haspath: visited[i][j] = False  # 记得回溯
+                # 直接visited[i][j] = False也可以，因为or有短路原则，其他路径不会接着探索
+                if not haspath: visited[i][j] = False
             return haspath
 
         rows, cols = len(board), len(board[0])

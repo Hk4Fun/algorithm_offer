@@ -28,7 +28,8 @@ Explanation: The input is: [5,1,4,null,null,3,6]. The root node's value
 '''
 '''主要思路：
 时间O（n），空间O（n）
-in order
+中序遍历，判断是否为严格递增序列
+也可以一边遍历一边判断，这可以只遍历一次，但需要保存前一个数
 '''
 
 
@@ -40,20 +41,34 @@ class TreeNode:
 
 
 class Solution:
-    def isValidBST(self, root):
-        """
-        :type root: TreeNode
-        :rtype: bool
-        """
+    """
+    :type root: TreeNode
+    :rtype: bool
+    """
 
-        def dfs(root):
-            if not root: return True
-            if not dfs(root.left) or self.pre >= root.val: return False
+    def isValidBST1(self, root):
+        def in_order(root):
+            if root is None: return
+            in_order(root.left)
+            res.append(root.val)
+            in_order(root.right)
+
+        res = []
+        in_order(root)
+        for i in range(len(res) - 1):
+            if res[i] >= res[i + 1]:
+                return False
+        return True
+
+    def isValidBST2(self, root):
+        def in_order(root):
+            if root is None: return True
+            if not in_order(root.left) or self.pre >= root.val: return False
             self.pre = root.val
-            return dfs(root.right)
+            return in_order(root.right)
 
         self.pre = -float('inf')
-        return dfs(root)
+        return in_order(root)
 
 
 # ================================测试代码================================
