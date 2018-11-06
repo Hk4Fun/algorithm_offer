@@ -2,14 +2,26 @@ __author__ = 'Hk4Fun'
 __date__ = '2018/4/4 0:29'
 '''题目描述：
 Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, 
-determine if s can be segmented into a space-separated sequence of one or more dictionary words. 
+determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note:
+
+The same word in the dictionary may be reused multiple times in the segmentation.
 You may assume the dictionary does not contain duplicate words.
+Example 1:
+Input: s = "leetcode", wordDict = ["leet", "code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
 
-For example, given
-s = "leetcode",
-dict = ["leet", "code"].
+Example 2:
+Input: s = "applepenapple", wordDict = ["apple", "pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+             Note that you are allowed to reuse a dictionary word.
 
-Return true because "leetcode" can be segmented as "leet code".
+Example 3:
+Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+Output: false
 '''
 '''主要思路：
 时间O（mn），空间O（n）(m为dict，n为s长度)

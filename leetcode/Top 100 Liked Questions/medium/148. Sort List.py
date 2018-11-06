@@ -40,6 +40,15 @@ class Solution:
     """
 
     def sortList1(self, head):
+        def split(head):
+            pre, slow, fast = None, head, head
+            while fast and fast.next:
+                pre = slow
+                slow = slow.next
+                fast = fast.next.next
+            pre.next = None
+            return head, slow
+
         def merge(h1, h2):
             dummy = tail = ListNode(0)
             while h1 and h2:
@@ -53,64 +62,59 @@ class Solution:
             tail.next = h1 or h2
             return dummy.next
 
-        if head is None or head.next is None:
-            return head
-        pre, slow, fast = None, head, head
-        while fast and fast.next:
-            pre = slow
-            slow = slow.next
-            fast = fast.next.next
-        pre.next = None
-        return merge(*map(self.sortList, (head, slow)))
+        if head is None or head.next is None: return head
+        return merge(*map(self.sortList, split(head)))
 
     def sortList2(self, head):
-        def getsize(head):
-            # 获取链表长度
-            size = 0
+        def length(head):
+            """获取链表长度"""
+            count = 0
             while head:
                 head = head.next
-                size += 1
-            return size
+                count += 1
+            return count
 
         def split(head, size):
-            # 从head开始往后切下size大小的链表，并返回分割后的下一段的头结点
+            """从head开始往后切下size大小的链表，并返回分割后的下一段的头结点"""
             i = 1
             while i < size and head:
                 head = head.next
                 i += 1
             if head is None: return
-            tmp = head.next
+            next = head.next
             head.next = None
-            return tmp
+            return next
 
-        def merge(h1, h2, head):
-            # 把h1和h2合并到head后面并返回合并后的尾结点
+        def merge(h1, h2, tail):
+            """把h1和h2合并到tail后面并返回合并后的尾结点"""
             while h1 and h2:
                 if h1.val < h2.val:
-                    head.next = h1
+                    tail.next = h1
                     h1 = h1.next
                 else:
-                    head.next = h2
+                    tail.next = h2
                     h2 = h2.next
-                head = head.next
-            head.next = h1 or h2
-            while head.next:
-                head = head.next
-            return head
+                tail = tail.next
+            tail.next = h1 or h2
+            while tail.next:
+                tail = tail.next
+            return tail
 
         if head is None: return
-        size = getsize(head)
-        bs = 1 # 合并块的大小
+        size = length(head)
+        sz = 1  # 合并块的大小
         dummy = ListNode(0)
         dummy.next = head
-        while bs < size:
+        while sz < size:
             tail, cur = dummy, dummy.next  # cur表示当前正在分割的头结点，tail表示已经合并的尾结点
+            # 注意每一轮cur的初始化必须是dummy.next而不是head
+            # 因为每一轮merge过后head可能不再是头结点，但dummy一直不变，所以dummy.next永远指向头结点
             while cur:
                 l = cur  # 左链表头结点
-                r = split(l, bs)  # 以bs大小分割出左链表并拿到右链表的头结点
-                cur = split(r, bs)  # 再以bs为大小分割出右链表并拿到下次开始分割的头结点
+                r = split(l, sz)  # 以sz大小分割出左链表并拿到右链表的头结点
+                cur = split(r, sz)  # 再以sz为大小分割出右链表并拿到下次开始分割的头结点
                 tail = merge(l, r, tail)  # 合并左链表和右链表到已经合并好的链表的尾结点，并拿到合并后的尾结点给下次合并使用
-            bs *= 2 # 合并块的大小扩大2倍
+            sz *= 2  # 合并块的大小扩大2倍
         return dummy.next
 
 

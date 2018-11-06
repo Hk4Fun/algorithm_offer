@@ -44,8 +44,10 @@ class Solution:
             res.append([])
             for cur in level:
                 res[-1].append(cur.val)
-                if cur.left: next_level.append(cur.left)
-                if cur.right: next_level.append(cur.right)
+                if cur.left:
+                    next_level.append(cur.left)
+                if cur.right:
+                    next_level.append(cur.right)
             level = next_level
         return res
 

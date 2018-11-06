@@ -33,7 +33,7 @@ class Solution(object):
                 while slow is not head:
                     slow, head = slow.next, head.next
                 return slow
-        return None  # 退出循环说明遇到了None，说明链表不含环
+        # 退出循环默认返回None，说明链表不含环
 
 
 # ================================测试代码================================

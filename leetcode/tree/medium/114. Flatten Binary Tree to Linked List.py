@@ -33,6 +33,7 @@ The flattened tree should look like:
 思路2：思路1之所以要先保存当前结点的右孩子是因为前序遍历的特点，cur->left->right
       那么可以反过来，用一种类似后序遍历的遍历方式：right->left->cur
       这样就可以不用先保存当前结点的右孩子了
+      这是一个自底向上的构建过程
       
 思路3：仿照morris遍历的思路
       
@@ -53,27 +54,27 @@ class Solution:
     """
 
     def flatten1(self, root):
-        def flat(root):
+        def build(root):
             if not root: return
             self.pre.left, self.pre.right = None, root
             self.pre = root
             right = root.right  # 进入左子树前先保存右孩子
-            flat(root.left)
-            flat(right)
+            build(root.left)
+            build(right)
 
-        self.pre = TreeNode(0)
-        flat(root)
+        self.pre = TreeNode(0) # 注意这里的pre不能为None，因为这里自顶向下构建
+        build(root)
 
     def flatten2(self, root):
-        def dfs(root):
+        def build(root):
             if not root: return
-            dfs(root.right)
-            dfs(root.left)
+            build(root.right)
+            build(root.left)
             root.right, root.left = self.prev, None
             self.prev = root
 
-        self.prev = None  # 思路1的pre初始化不能为None
-        dfs(root)
+        self.prev = None  # 注意这里的pre必须为None，因为这里自底向上构建
+        build(root)
 
     def flatten3(self, root):
         cur = root
