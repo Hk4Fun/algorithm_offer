@@ -41,20 +41,20 @@ class Solution:
         :type prerequisites: List[List[int]]
         :rtype: bool
         """
-        indegree = [0] * numCourses # 结点入度
-        backward = defaultdict(set) # 出边表
+        indegree = [0] * numCourses  # 结点入度
+        outside = defaultdict(set)  # 出边表
         for i, j in prerequisites:
             indegree[i] += 1
-            backward[j].add(i)
+            outside[j].add(i)
         # 入度为0的结点作为拓扑排序的起始结点
         stack = [node for node, ind in enumerate(indegree) if ind == 0]
         while stack:
             node = stack.pop()
-            for neigh in backward[node]: # 将该结点的所有出边结点的入度减一
+            for neigh in outside[node]:  # 将该结点的所有出边结点的入度减一
                 indegree[neigh] -= 1
-                if indegree[neigh] == 0: # 新生成的入度为0的结点加入拓扑排序
+                if indegree[neigh] == 0:  # 将入度为0的结点加入拓扑排序
                     stack.append(neigh)
-        return sum(indegree) == 0
+        return sum(indegree) == 0  # 最终所有结点的入度应该为0
 
 
 # ================================测试代码================================
@@ -70,16 +70,7 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
+        testArgs.append([2, [[1, 0]], True])
 
         return testArgs
 

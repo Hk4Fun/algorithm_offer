@@ -22,7 +22,8 @@ class Solution:
         """
         maxPro = small = big = nums[0]
         for num in nums[1:]:
-            small, big = min(num, small*num, big*num), max(num, small*num, big*num)
+            # 为了节省一个临时变量，这两个必须在一行
+            small, big = min(num, small * num, big * num), max(num, small * num, big * num)
             maxPro = max(maxPro, big)
         return maxPro
 

@@ -27,7 +27,7 @@ Output: 3
 '''主要思路：
 思路1：union_find (quick-union)
 
-思路2：dfs
+思路2：dfs（连在一起的全部消掉（置为0），类似消消乐）
 
 '''
 
@@ -39,11 +39,6 @@ class Solution:
     """
 
     def numIslands1(self, grid):
-        if not grid: return 0
-        rows, cols = len(grid), len(grid[0])
-        self.count = rows * cols
-        self.id = list(range(rows * cols))
-
         def find(p):
             while self.id[p] != p:
                 p = self.id[p]
@@ -54,6 +49,11 @@ class Solution:
             if pid == qid: return
             self.id[pid] = qid
             self.count -= 1
+
+        if not grid: return 0
+        rows, cols = len(grid), len(grid[0])
+        self.count = rows * cols
+        self.id = list(range(rows * cols))
 
         for i in range(rows):
             for j in range(cols):
@@ -73,14 +73,16 @@ class Solution:
 
     def numIslands2(self, grid):
         def dfs(i, j):
-            if 0 <= i < len(grid) and 0 <= j < len(grid[0]) and grid[i][j] == '1':
-                grid[i][j] = '0'  # 消掉该岛屿
-                # 消掉周围相连的岛屿，注意这里必须用list来启动直接返回生成器的map，py2下可以不用list
-                list(map(dfs, (i - 1, i + 1, i, i), (j, j, j - 1, j + 1)))
+            if 0 <= i < rows and 0 <= j < cols and grid[i][j] == '1':
+                grid[i][j] = '0' # 消掉该岛屿
+                # 消掉周围相连的岛屿，注意这里必须用list来启动map（否则只返回一个生成器），py2下可以不用list
+                list(map(dfs, (i, i, i - 1, i + 1), (j - 1, j + 1, j, j)))
                 return 1
             return 0
 
-        return sum(dfs(i, j) for i in range(len(grid)) for j in range(len(grid[0])))
+        if not grid: return 0
+        rows, cols = len(grid), len(grid[0])
+        return sum(dfs(i, j) for i in range(rows) for j in range(cols))
 
 
 # ================================测试代码================================

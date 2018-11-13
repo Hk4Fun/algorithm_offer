@@ -66,12 +66,10 @@ class Solution:
         pair = {')': '(', ']': '[', '}': '{'}
         stack = []
         for ch in s:
-            if stack and ch in pair:
-                if stack[-1] != pair[ch]:
-                    return False
-                stack.pop()
-            else:
+            if ch in pair:
                 stack.append(ch)
+            elif not stack or pair[ch] != stack.pop():
+                return False
         return not stack
 
     def isValid3(self, s):  # pythonic

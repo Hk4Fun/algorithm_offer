@@ -75,6 +75,7 @@ class Trie:
             cur = cur[c]
         return True
 
+
 if __name__ == '__main__':
     trie = Trie()
     trie.insert("apple")
