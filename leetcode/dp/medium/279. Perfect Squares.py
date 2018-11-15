@@ -24,8 +24,6 @@ Lagrange 四平方定理告诉我们：
 所以该题可以用排除法完成：
 判断一个数最少可以由一个平方数还是两个平方数组成很简单，剩下的如果满足n=(4^a)(8b+7)，
 则一定只能由4个平方数组成，不满足的就由3个平方数组成
-
-
 '''
 
 
@@ -42,14 +40,9 @@ class Solution:
             minV = float('inf')
             j = 1
             while j * j < i:
-                tmp = dp[j * j] + dp[i - j * j]
-                if tmp < minV:
-                    minV = tmp
+                minV = min(dp[j * j] + dp[i - j * j], minV)
                 j += 1
-            if j * j == i:
-                dp.append(1)
-            else:
-                dp.append(minV)
+            dp.append(1 if j * j == i else minV)
         return dp[-1]
 
     def numSquares_bfs(self, n):  # Accepted 220ms
@@ -76,14 +69,14 @@ class Solution:
         def is_square(n):
             return int(n ** 0.5) * int(n ** 0.5) == n
 
-        if n <= 1: return n  # If n is a perfect square, return 1.
-        if is_square(n): return 1
+        if n <= 1: return n
+        if is_square(n): return 1  # If n is a perfect square, return 1.
         for i in range(1, int((n ** 0.5) + 1)):  # Check whether 2 is the result.
             if is_square(n - i * i):
                 return 2
         # The result is 4 if and only if n can be written in the form of 4^k*(8*m + 7).
         # Please refer to Legendre's three-square theorem.
-        while (n & 3) == 0: n >>= 2  # n%4 == 0 , n//4
+        while (n & 3) == 0: n >>= 2  # while n%4 == 0: n//4
         if n & 7 == 7: return 4  # n%8 == 7
         return 3
 

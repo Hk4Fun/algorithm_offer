@@ -31,13 +31,13 @@ class Solution:
         :rtype: List[int]
         """
         if not nums: return []
-        res = [1]
-        for i in range(1, len(nums)):
-            res.append(nums[i - 1] * res[i - 1])
+        res = [1] * len(nums)
+        for i in range(1, len(nums)):  # 求出所有C[i]
+            res[i] = nums[i - 1] * res[i - 1]
         tmp = 1  # 关键之处，D[i]只与D[i+1]有关，因此可以节约空间为O(1)
         for i in range(len(nums) - 2, -1, -1):
-            tmp *= nums[i + 1]
-            res[i] *= tmp
+            tmp *= nums[i + 1]  # D[i]
+            res[i] *= tmp  # C[i]*D[i]
         return res
 
 

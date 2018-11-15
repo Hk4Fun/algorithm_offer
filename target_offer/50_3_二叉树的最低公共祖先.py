@@ -33,6 +33,7 @@ __date__ = '2018/2/19 18:44'
 '''
 from collections import deque
 
+
 class TreeNode:
     def __init__(self, x):
         self.val = x
