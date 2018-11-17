@@ -46,12 +46,15 @@ class Solution:
     """
 
     def findDuplicate1(self, nums):
-        for i in range(len(nums)):
-            idx = nums[i] - 1
-            while idx != i:  # 这里用while而不是if是因为交换过来的数字还没被检查过
-                if nums[idx] == nums[i]: return nums[i]
+        i = 0
+        while i < len(nums):
+            idx = nums[i]
+            if i == idx:
+                i += 1
+            elif nums[i] == nums[idx]:
+                return nums[i]
+            else:  # 只是交换，i不移动，因为交换过来的数还未检测
                 nums[i], nums[idx] = nums[idx], nums[i]
-                idx = nums[i] - 1
 
     def findDuplicate2(self, nums):
         seen = set()
@@ -62,14 +65,14 @@ class Solution:
     def findDuplicate3(self, nums):
         fast = slow = 0
         while True:
-            fast = nums[nums[fast]]
-            slow = nums[slow]
-            if fast == slow: break
-        fast = 0
-        while True:
-            fast = nums[fast]
-            slow = nums[slow]
-            if fast == slow: return slow
+            fast = nums[nums[fast]]  # 走两步
+            slow = nums[slow]  # 走一步
+            if fast == slow:  # 来到相遇点
+                fast = 0  # 一个从头出发，一个从相遇点出发
+                while True:
+                    fast, slow = nums[fast], nums[slow]  # 走一步
+                    if fast == slow:  # 再次相遇
+                        return slow  # 即为环入口点
 
 
 # ================================测试代码================================
@@ -85,16 +88,8 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
+        testArgs.append([[1, 3, 4, 2, 2], 2])
+        testArgs.append([[3, 1, 3, 4, 2], 3])
 
         return testArgs
 

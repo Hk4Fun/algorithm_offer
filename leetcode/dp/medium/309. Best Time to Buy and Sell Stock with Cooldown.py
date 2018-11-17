@@ -16,14 +16,14 @@ transactions = [buy, sell, cooldown, buy, sell]
 '''主要思路：
 https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/discuss/75928/Share-my-DP-solution-(By-State-Machine-Thinking)
 时间O（n），空间O（1）
-画出状态转移图：http://ox186n2j0.bkt.clouddn.com/%E8%BD%AC%E7%A7%BB%E5%9B%BE.png， 则有状态转移方程：
+画出状态转移图：https://ws1.sinaimg.cn/large/006giLD5ly1fxbbcijc8ij30cj088aah.jpg， 则有状态转移方程：
 s0[i] = max(s0[i - 1], s2[i - 1]); // 停留在s0或者来自s2的rest
 s1[i] = max(s1[i - 1], s0[i - 1] - prices[i]); // 停留在s1，或者来自s0的buy
 s2[i] = s1[i - 1] + prices[i]; // 来自s1的sell
 初始化：
 s0[0] = 0; // 一开始就休息，则利润为0
 s1[0] = -prices[0]; // 一开始就买了第一支股票，利润为负
-s2[0] = 0; // 一开始不可能就买股票，所以该值无意义，0或者-float('inf')都行
+s2[0] = 0; // 一开始不可能就卖股票，所以该值无意义，0或者-float('inf')都行
 最终利润最大值只能是s0[n]或者s2[n]，不可能来自s1[n]，
 因为不可能在最后以买进股票结束而获取最大利润，这种情况下完全可以直接休息而不买任何股票来获取最大利润
 可以空间优化，O(n)-->O(1)
@@ -38,10 +38,10 @@ class Solution:
         """
         if not prices: return 0
         s0, s1, s2 = 0, -prices[0], 0
-        for i in range(1, len(prices)):
+        for price in prices[1:]:
             last_s2 = s2
-            s2 = s1 + prices[i]
-            s1 = max(s1, s0 - prices[i])
+            s2 = s1 + price
+            s1 = max(s1, s0 - price)
             s0 = max(s0, last_s2)
         return max(s0, s2)
 

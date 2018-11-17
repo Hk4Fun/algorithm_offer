@@ -13,7 +13,8 @@ Your algorithm should run in O(n2) complexity.
 Follow up: Could you improve it to O(n log n) time complexity?
 '''
 '''主要思路：
-思路1（时间O（n^2），空间O（n））：经典dp解法
+思路1（时间O（n^2），空间O（n））：
+经典dp解法，但TLE了
 
 思路2（时间O（nlogn），空间O（n））：带二分查找的dp
 dp[i]代表长度为（i+1）的递增子序列中最小末尾子序列的末尾数字，比如nums = [4,5,6,3]，则
@@ -28,8 +29,8 @@ len = 3  :  [4, 5, 6]            => dp[2] = 6
 
 下面说明为什么这样做是正确的：
 当dp[i-1] < num <= dp[i]时，对于dp[i-1] < num，
-则长度为i且以dp[i-1]为结尾的递增子序列必定可以在末尾添加num而加入到长度为i+1的递增子序列集合中，
-此时又因为num <= dp[i]，所以长度为i+1的递增子序列集合中最小末尾子序列的末尾数字将被更新为num。
+则长度为i且以dp[i-1]为结尾的递增子序列必定可以在末尾添加num而加入到长度为i的递增子序列集合中，
+此时又因为num <= dp[i]，所以长度为i的递增子序列集合中最小末尾子序列的末尾数字将被更新为num。
 所以当num大于dp中最后一个数时，意味着num大于dp所有的数，所以num将产生len(dp)+1的新的长度的递增子序列：
 只需在长度为len(dp)的最小末尾子序列后添加num。因此最终dp的长度就是整个数组能形成的最长递增子序列长度。
 '''
@@ -51,22 +52,24 @@ class Solution:
 
     def lengthOfLIS_binarySearch(self, nums):
         def binarySearch(nums, target):
+            """返回刚好大于等于target的下标"""
             l, r = 0, len(nums) - 1
             while l < r:
                 m = l + (r - l) // 2
                 if nums[m] >= target:
-                    r = m
+                    r = m  # r 总是停留在大于等于target的位置上
                 else:
-                    l = m + 1
-            return l
+                    l = m + 1  # l 不断向 r 靠近
+            return l  # 最终 l == r, 停留在大于等于target的位置上
 
         if not nums: return 0
         dp = [nums[0]]
         for num in nums[1:]:
             if num > dp[-1]:
                 dp.append(num)
-            else:
+            elif num < dp[-1]:
                 dp[binarySearch(dp, num)] = num
+            # 等于 dp[-1] 时会更新dp[-1]，多此一举，跳过
         return len(dp)
 
 

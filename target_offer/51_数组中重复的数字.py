@@ -22,27 +22,25 @@ __date__ = '2018/2/20 17:41'
 
 class Solution:
     # 返回重复数字的列表，没有直接返回-1
-    def duplicate1(self, numbers):
-        if not numbers: return -1
-        res = []
-        for i in numbers:
-            if i < 0 or i > len(numbers) - 1: return -1
-        for i in range(len(numbers)):
-            # 当再次遍历到那个重复数字时该重复数字是在正确位置上的，所以不会进入while循环
-            while numbers[i] != i:  # 这里用while而不是if是因为交换过来的数字还没被检查过
-                if numbers[i] == numbers[numbers[i]]:
-                    res.append(numbers[i])
-                    break  # 找到了就跳到下一个，因为没有发生交换
-                else:
-                    index = numbers[i]  # 这里必须把numbers[i]抽出来而不能直接带入下面的表达式中
-                    numbers[i], numbers[index] = numbers[index], numbers[i]
+    def duplicate1(self, nums):
+        if not nums: return -1
+        i, res = 0, []
+        while i < len(nums):
+            idx = nums[i]
+            if i == idx:
+                i += 1
+            elif nums[i] == nums[idx]:
+                res.append(nums[i])
+                i += 1
+            else:  # 只是交换，i不移动，因为交换过来的数还未检测
+                nums[i], nums[idx] = nums[idx], nums[i]
         return res if res else -1
 
-    def duplicate2(self, numbers):
-        if not numbers: return -1
+    def duplicate2(self, nums):
+        if not nums: return -1
         seen = set()
         res = []
-        for num in numbers:
+        for num in nums:
             if num in seen:
                 res.append(num)
             seen.add(num)
@@ -72,9 +70,6 @@ class MyTest(Test):
 
         # 没有重复数字
         testArgs.append([[2, 1, 3, 0, 4], -1])
-
-        # 数字范围不符合
-        testArgs.append([[2, 1, 3, 5, 4], -1])
 
         # 空数组
         testArgs.append([[], -1])
