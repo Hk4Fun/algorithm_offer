@@ -35,20 +35,20 @@ class Solution:
     """
 
     def topKFrequent1(self, nums, k):
-        def partition(arr, l, r):
+        def partition(arr, l, r):  # 按从大到小排序
             pivot = arr[l]  # 选择首位作为枢轴
             while l < r:
-                while l < r and arr[r] >= pivot: r -= 1
+                while l < r and arr[r][1] <= pivot[1]: r -= 1
                 arr[l] = arr[r]
-                while l < r and arr[l] <= pivot: l += 1
+                while l < r and arr[l][1] > pivot[1]: l += 1
                 arr[r] = arr[l]
             arr[l] = pivot
             return l
 
-        tmp = {}
+        table = {}
         for num in nums:
-            tmp[num] = tmp.setdefault(num, 0) + 1  # 快速建立hashtable
-        items = list(tmp.items())
+            table[num] = table.setdefault(num, 0) + 1  # 快速建立hashtable
+        items = list(table.items())
         l, r = 0, len(items) - 1
         while l <= r:
             idx = partition(items, l, r)

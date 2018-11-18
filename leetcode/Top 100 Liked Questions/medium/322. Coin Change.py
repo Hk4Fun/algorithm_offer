@@ -23,9 +23,13 @@ You may assume that you have an infinite number of each kind of coin.
 设硬币种类个数为n
 思路1（时间O（n*amount），空间O（amount））：
 dp：https://leetcode.com/problems/coin-change/solution/
+Approach #3 (Dynamic programming - Bottom up) 
+https://ws1.sinaimg.cn/large/006giLD5ly1fxcbfzt70rj30hl0dv0ui.jpg
 
 思路2：
-bfs
+上面的思路在oj上TLE了，采用 bfs 试一下：
+https://ws1.sinaimg.cn/large/006giLD5ly1fxcbtc7etwj30s90a876j.jpg
+利用该思路，如果题目要求每种面额的硬币只有一个，那么不难画出对应的分支树
 '''
 
 
@@ -40,7 +44,7 @@ class Solution:
         dp = [0] + [float('inf')] * amount
         for i in range(1, amount + 1):
             for c in coins:
-                if i - c >= 0:  # 防止越界
+                if c <= i:  # 硬币面额不能超过目标金额，因为不能找零，保证 dp[i - c] 不越界
                     dp[i] = min(dp[i], dp[i - c] + 1)
         return dp[amount] if dp[amount] != float('inf') else -1
 
@@ -49,6 +53,7 @@ class Solution:
         count = 0
         while level:
             if amount in level: return count
+            # seen表示之前出现过的金额，在level中剪枝，表示可以用更少的硬币来获取该金额，不必继续累加
             level = {a + c for a in level for c in coins if a + c <= amount} - seen
             seen |= level
             count += 1
