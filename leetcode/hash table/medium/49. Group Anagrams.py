@@ -19,9 +19,10 @@ The order of your output does not matter.
 '''
 '''主要思路：
 时间O（NK*logK），空间O（N*k）, N表示strs的str个数，k表示最长str的长度
-利用sorted为每个单词排序，然后映射到dict中进行gruop，这样互为anagrams的排完序后一样，
-一定会映射到同一组。由于python的dict键必须可哈希，所以需要在sorted往后join回去或者用tuple来保证键的可哈希
+利用sorted为每个单词排序，然后映射到dict中进行gruop，这样互为anagrams的排完序后一样，一定会映射到同一组
 '''
+
+from collections import defaultdict
 
 
 class Solution:
@@ -30,13 +31,10 @@ class Solution:
         :type strs: List[str]
         :rtype: List[List[str]]
         """
-        res = {}
+        res = defaultdict(list)
         for s in strs:
-            key = ''.join(sorted(s)) # key must hashable
-            if key in res:
-                res[key].append(s)
-            else:
-                res[key] = [s]
+            key = ''.join(sorted(s))
+            res[key].append(s)
         return list(res.values())
 
 

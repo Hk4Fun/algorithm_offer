@@ -37,7 +37,7 @@ class Solution:
     def countSubstrings1(self, s):
         count = 0
         for i in range(2 * len(s) - 1):
-            l, r = i // 2, (i // 2) + (i % 2)
+            l, r = i >> 1, (i >> 1) + (i & 1)
             while l >= 0 and r < len(s) and s[l] == s[r]:
                 l -= 1
                 r += 1

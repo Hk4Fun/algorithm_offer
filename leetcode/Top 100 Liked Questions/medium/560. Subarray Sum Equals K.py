@@ -13,7 +13,7 @@ The range of numbers in the array is [-1000, 1000] and the range of the integer 
 '''
 '''主要思路：
 思路1：时间O（n^2），空间O（1）--TLE
-对于每个起始点，一边累加一遍检查是否达到k，当sum为k时count++，然后继续往下遍历即可（数组存在负数）
+对于每个起始点，一边累加一遍检查是否达到k，当sum为k时count++，然后继续往下遍历即可（数组可能存在负数）
 
 思路2：时间O（n），空间O（n）
 hash表存储从下标0到每个下标的和所出现的次数，则对于下标i和j，若sum(j)-sum(i)=k，即sum(j)-k=sum(i)

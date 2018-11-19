@@ -49,10 +49,10 @@ class Solution:
         s = sum(nums)
         if s & 1: return False  # 总和为奇数，这一定不存在
         target = sum(nums) // 2
-        dp = [1] + [0] * target
+        dp = [1] + [0] * target # 注意初始状态的设定
         for num in nums:
             for i in range(target, num - 1, -1):
-                dp[i] = dp[i] + dp[i - num]
+                dp[i] = dp[i] + dp[i - num] # 注意i的左边界为num，否则i-num越界
         return dp[target] > 0
 
     def canPartition2(self, nums):

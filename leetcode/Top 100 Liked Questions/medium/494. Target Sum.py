@@ -29,19 +29,20 @@ Your output answer is guaranteed to be fitted in a 32-bit integer.
 思路1：递归+缓存
 
 思路2：一维dp
-先使用数学思路，可以知道赋予标号后，集合中包含负数这正数，
+先使用数学思路，可以知道赋予标号后，集合中包含负数和正数，
 则有 sum(Positive)-sum(Negtive) = S
 因为sum(Positive)+sum(Negtive)=sum(nums)，
 则有2*sum(Positive)=sum(nums)+S，
 故sum(Positive)=(sum(nums)+S)/2，
-由于(sum(nums)+S)/2是固定的整数，所以只要从nums中找到和为它的组合数即可。
+由于(sum(nums)+S)/2是固定的整数，所以只要从nums中找到和为(sum(nums)+S)/2的组合数即可。
 经过上述解析，可以将问题转化为从nums中找到和为(sum(nums)+S)/2的组合个数。
 这个问题可以通过dp来解决，用dp[i][j]表示nums中前i项和为j的组合数，
-则dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i]] (0<=i<len(nums),0<=j<=(sum(nums)+S)/2)
+则dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i]] (0<=i<len(nums),nums[i]<=j<=(sum(nums)+S)/2)
 其中dp[i-1][j]表示不选择第i项，那么组合数就是前i-1项和为j的组合数
 dp[i-1][j-nums[i]]表示选择第i项，则组合数为前i-1项和为j-nums[i]的组合数
+如果 j-nums[i]<0，则dp[i-1][j-nums[i]]=0，即 dp[i][j] = dp[i-1][j]
 注意到dp[i]只与dp[i-1]，即只与上一层有关，因此优化空间后为：
-dp[i] = dp[i] + dp[i-nums[i]]，从右往左填充一维表格
+dp[i] = dp[i] + dp[i-nums[i]]，从右往左填充一维表格（滚动数组）
 '''
 
 
@@ -74,7 +75,7 @@ class Solution:
         if s < S: return 0
         if (S + s) % 2 == 1: return 0
         target = (S + s) // 2
-        dp = [1] + [0] * target # 初始状态
+        dp = [1] + [0] * target # 注意初始状态的设定
         for num in nums:
             for i in range(target, num - 1, -1): # 注意i的左边界为num，否则i-num越界
                 dp[i] = dp[i] + dp[i - num]
