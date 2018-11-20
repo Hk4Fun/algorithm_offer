@@ -69,7 +69,7 @@ class Solution:
         return last
 
     def findParent2(self, root, pNode1, pNode2):
-        if not root or root is pNode1 or root is pNode2: return root
+        if root in {None, pNode1, pNode2}: return root
         left = self.findParent2(root.left, pNode1, pNode2)
         right = self.findParent2(root.right, pNode1, pNode2)
         return root if left and right else left or right
