@@ -19,8 +19,9 @@ You may assume k is always valid, 1 ≤ k ≤ array's length.
 '''主要思路：
 时间O（n），空间O（1）
 https://leetcode.com/problems/kth-largest-element-in-an-array/discuss/60306/Python-different-solutions-with-comments-(bubble-sort-selection-sort-heap-sort-and-quick-sort).
+https://leetcode.com/problems/kth-largest-element-in-an-array/discuss/167837/Python-or-tm
 target_offer/30_最小的K个数.py 思路1
-基于partition的算法
+quickselect（基于partition的算法，https://en.wikipedia.org/wiki/Quickselect）
 '''
 
 
@@ -33,7 +34,7 @@ class Solution:
         """
 
         # def partition(self, nums, l, r):
-        # 荷兰国旗算法，基于交换，这里是顺序
+        # 基于交换：https://en.wikipedia.org/wiki/Quicksort#Lomuto_partition_scheme
         # nums[r]为pivot，[0,low) < pivot，[low,l) >= pivot，[l,r)为未知区域
         #     low = l
         #     while l < r:
@@ -46,17 +47,14 @@ class Solution:
 
         def partition(l, r):
             # 挖坑法，基于覆盖
+            # https://en.wikipedia.org/wiki/Quicksort#Hoare_partition_scheme
             i, j = l, r
             pivot = nums[l]
             while i < j:
-                while i < j and nums[j] < pivot: j -= 1  # 逆序
-                if i < j:
-                    nums[i] = nums[j]
-                    i += 1
+                while i < j and nums[j] <= pivot: j -= 1  # 逆序
+                nums[i] = nums[j]
                 while i < j and nums[i] > pivot: i += 1
-                if i < j:
-                    nums[j] = nums[i]
-                    j -= 1
+                nums[j] = nums[i]
             nums[i] = pivot
             return i
 
