@@ -66,7 +66,7 @@ class Solution:
         pair = {')': '(', ']': '[', '}': '{'}
         stack = []
         for ch in s:
-            if ch in pair:
+            if ch in pair.values():
                 stack.append(ch)
             elif not stack or pair[ch] != stack.pop():
                 return False
