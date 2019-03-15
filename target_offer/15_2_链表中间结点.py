@@ -25,6 +25,7 @@ class Solution:
         if not head: return
         slow = fast = head
         while fast.next and fast.next.next:  # 往后看两步
+            # 如果是 while fast and fast.next，那么但偶数结点时slow指向中间偏右的结点
             slow = slow.next
             fast = fast.next.next
         return slow
