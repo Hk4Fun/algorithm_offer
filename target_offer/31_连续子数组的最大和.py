@@ -15,12 +15,12 @@ __date__ = '2018/2/9 21:55'
 从后往前看，设f(0)={}，则：
 F(4) = max(f(4)) = max(d,f(3)+d) = max(d,F(3)+d)
 F(3) = max(f(3)) = max(c,f(2)+c) = max(c,F(2)+c)
-F(2) = max(f(2)) = max(d,f(1)+d) = max(d,F(1)+d)
+F(2) = max(f(2)) = max(b,f(1)+b) = max(b,F(1)+b)
 F(1) = max(f(1)) = max(a,f(0)+a) = max(a,F(0)+a)
 可以写出递归表达式：
-       array[i]        ,i=0 or F(i-1)<=0
+       array[i]        ,  i=0 or F(i-1)<=0
 F(i)={
-       F(i-1)+array[i] ,i!=0 and F(i-1)>0 
+       F(i-1)+array[i] ,  i!=0 and F(i-1)>0 
 则max(F(i))为所有子数组的和的最大值
 这个公式的意义是：当以第i-1个数字结尾的子数组中所有数字的和小于0时，
 如果把这个负数与第i个数累加，得到的结果比第i个数字本身还要小，所以
