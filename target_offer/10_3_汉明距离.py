@@ -2,7 +2,7 @@ __author__ = 'Hk4Fun'
 __date__ = '2018/1/4 15:14'
 
 '''题目描述：
-求两个整数的汉明距离（不相同的二进制位数）
+求两个二进制数的汉明距离（不相同的二进制位数）
 '''
 '''主要思路：
 先异或再统计异或结果中1的个数
@@ -11,11 +11,11 @@ __date__ = '2018/1/4 15:14'
 
 class Solution:
     def HammingDistance(self, n, m):
-        diff = m ^ n  # 异或后的结果对python来讲就是正数，即使首位为1（相当于无符号整数）
+        diff = m ^ n  # 由于 n，m都是二进制数，所以不用 & 0xffffffff
         count = 0
         while diff:
             count += 1
-            diff = diff & (diff - 1)
+            diff &= diff - 1
         return count
 
 
