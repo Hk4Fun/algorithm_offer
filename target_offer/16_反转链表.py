@@ -34,19 +34,14 @@ class Solution:
         return pre
 
     def ReverseList2(self, pHead):
-        if not pHead:
-            return
+        def recursive(pre, cur):
+            if not cur: return pre
+            next = cur.next
+            cur.next = pre
+            return recursive(cur, next)
 
-        def Recursive(pPrev, pNode):
-            if not pNode:
-                return pPrev
-            pNext = pNode.next
-            pNode.next = pPrev
-            return Recursive(pNode, pNext)
-
-        pReverseHead = Recursive(pHead, pHead.next)
-        pHead.next = None  # 反转后记得将头指针next指向None，否则最后两个结点成环
-        return pReverseHead
+        if not pHead: return
+        return recursive(None, pHead)
 
 
 # ================================测试代码================================
