@@ -7,39 +7,22 @@ __date__ = '2018/2/11 13:50'
 得到的结果是"W r stdnts."
 '''
 '''主要思路：
-思路1：遍历s1，检查s1的每个字符是否在s2中出现
-思路2：将s2建立一张哈希表，这样在检查s1的每个字符是否在s2中出现时可以O(1)
+思路1(时间O(n*m), 空间O(1)) ：遍历 s1，检查 s1 的每个字符是否在 s2 中出现
+思路2(时间O(n), 空间O(m)) ：将 s2 转换成一个集合，这样在检查 s1 的每个字符是否在 s2 中出现时可以 O(1)
 '''
 
 
 class Solution:
     def delete_char1(self, s1, s2):
-        if s1 == None or s2 == None:
-            return
-        return ''.join([i for i in s1 if i not in s2])
+        if s1 is None or s2 is None: return
+        return ''.join(ch for ch in s1 if ch not in s2)
 
     def delete_char2(self, s1, s2):
-        if s1 == None or s2 == None:
-            return
-        d = dict(zip(s2, [1] * len(s2)))
-        result = []
-        for i in s1:
-            try:
-                if d[i]:
-                    continue
-            except KeyError:
-                result.append(i)
-        return ''.join(result)
+        if s1 is None or s2 is None: return
+        s = set(s2)
+        return ''.join(ch for ch in s1 if ch not in s)
 
-    def delete_char3(self, s1, s2):
-        if s1 == None or s2 == None:
-            return
-        d = dict(zip(s2, [1] * len(s2)))
-        result = []
-        for i in s1:
-            if i not in d.keys():
-                result.append(i)
-        return ''.join(result)
+
 # ================================测试代码================================
 from Test import Test
 

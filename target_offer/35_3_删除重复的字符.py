@@ -6,31 +6,24 @@ __date__ = '2018/2/11 14:29'
 例如输入"google"，删除重复字符后的结果为"gole"
 '''
 '''主要思路：
-遍历字符串，用用列表或字典保存前面没出现过的字符
+思路1：pythonic，把 OrderedDict 当作 OrderedSet 来使用
+思路2：自己用字典来保存出现过的字符，注意，py3.6之后的字典都是有序字典了
 '''
+
+from collections import OrderedDict
 
 
 class Solution:
-    def del_dup1(self, s):  # 列表保存
-        if s == None:
-            return
-        result = []
-        for i in s:
-            if i not in result:
-                result.append(i)
-        return ''.join(result)
+    def del_dup1(self, s):
+        if s is None: return
+        return ''.join(OrderedDict.fromkeys(s).keys())
 
-    def del_dup2(self, s):  # 用字典保存，可索引字符
-        if s == None:
-            return
-        result = {}
-        for i in s:
-            try:
-                if result[i]:
-                    continue
-            except KeyError:
-                result[i] = True
-        return ''.join(result.keys())
+    def del_dup2(self, s):
+        if s is None: return
+        res = {}
+        for ch in s:
+            res[ch] = 1
+        return ''.join(res.keys())
 
 
 # ================================测试代码================================
