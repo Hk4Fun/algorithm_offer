@@ -17,9 +17,9 @@ __date__ = '2018/2/11 16:38'
        先把数组分隔成子数组，先统计出两个子数组内部的逆序对数，然后统计出两个相邻子数组之间的
        逆序对数，三者之和。
 思路3：先把原数组进行从小到大排序，得到一个排好序的数组。然后遍历排序数组，
-       找到每个数在原数组的索引，该索引就是这个数的在原数组中相对排好序的数组的偏移，
-       那么偏移多少就有多少由于该数的偏移造成的逆序对。记得每找一次索引就要把该数（比如a）从原数组中
-       移除，保证接下原数组每个数的偏移是正确的，因为对于排序数组接下来的数（比如b），a对于b并不是逆序对，
+       找到每个数在原数组的索引，该索引就是这个数在原数组中相对排好序的数组的偏移，
+       那么偏移多少就有多少由于该数的偏移造成的逆序对。记得每找一次索引就要把该数（比如a）从原数组中移除，
+       保证接下原数组每个数的偏移是正确的，因为对于排序数组接下来的数（比如b），a对于b并不是逆序对，
        而如果原数组中a出现在b之前就会多算一次，因此需要在原数组中移除该数。注意，排好序的数组一直在往后遍历，
        相当于排好序的数组也一直在更新，类似一个递归的过程，只不过用循环来完成。
 '''
@@ -44,23 +44,21 @@ class Solution:
             # 注意这里的copy和data位置交换了，这样就能保证递归回来时，上一层拿到的data是下一层已经排好序的copy
             left = merge(copy, data, l, m)  # 左区域的逆序对个数
             right = merge(copy, data, m + 1, r)  # 右区域的逆序对个数
-            leftIdx, rightIdx = m, r  # leftIdx初始化为前半段最后一个数字的下标，rightIdx初始化为后半段最后一个数字的下标
+            i, j = m, r  # i初始化为前半段最后一个数字的下标，j初始化为后半段最后一个数字的下标
             count, copyIdx = 0, r  # 从后往前复制， 因此copyIdx初始化为右边界
-            while leftIdx >= l and rightIdx >= m + 1:
+            while i >= l and j >= m + 1:
                 # 复制的时候统计两个子数组之间的逆序对数
-                if data[leftIdx] > data[rightIdx]:
-                    copy[copyIdx] = data[leftIdx]
-                    count += rightIdx - m  # 逆序对的数目等于rightIdx之前的元素个数(包括rightIdx指向的元素)
-                    leftIdx -= 1
+                if data[i] > data[j]:
+                    copy[copyIdx] = data[i]
+                    count += j - m  # 逆序对的数目等于j之前的元素个数(包括j指向的元素)
+                    i -= 1
                 else:
-                    copy[copyIdx] = data[rightIdx]
-                    rightIdx -= 1
+                    copy[copyIdx] = data[j]
+                    j -= 1
                 copyIdx -= 1
             # 将剩下的复制到辅助数组里，不用循环而使用切片时需要自己计算下标的左右边界
-            if leftIdx >= l:
-                copy[copyIdx - leftIdx + l:copyIdx + 1] = data[l:leftIdx + 1]
-            if rightIdx >= m + 1:
-                copy[copyIdx + 1 + m - rightIdx:copyIdx + 1] = data[m + 1:rightIdx + 1]
+            copy[copyIdx - i + l:copyIdx + 1] = data[l:i + 1]
+            copy[copyIdx + 1 + m - j:copyIdx + 1] = data[m + 1:j + 1]
             return left + right + count  # 总逆序对个数 = 左区域 + 右区域 + 合并
 
         if not data: return 0
@@ -68,8 +66,7 @@ class Solution:
 
     # 排序后利用下标的特点
     def InversePairs3(self, data):
-        count = 0
-        copy = sorted(data[:])
+        copy, count = sorted(data), 0
         for num in copy:
             count += data.index(num)
             data.remove(num)  # 记得从原数组中删除已经找过的数（如果要求不能改变原数组就需要复制一份了）
