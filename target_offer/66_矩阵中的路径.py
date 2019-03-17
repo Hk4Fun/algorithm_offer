@@ -11,56 +11,32 @@ __date__ = '2018/2/27 14:07'
 因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入该格子。
 '''
 '''主要思路：
-思路1：回溯法，用一个状态数组保存之前访问过的字符位置，然后再分别按上，下，左，右递归
-思路2：思路1的优化
+回溯法，用一个状态数组保存之前访问过的字符位置，然后再分别按上，下，左，右递归
 '''
 
 
 class Solution:
-    def hasPath1(self, matrix, rows, cols, path):
-        def hasPathCore(row, col, pathLength, visited):
-            if len(path) == pathLength:  # 来到末尾，成功找到路径
-                return True
-            hasPath = False
-            if 0 <= row < rows and 0 <= col < cols \
-                    and matrix[row * cols + col] == path[pathLength] \
-                    and not visited[row * cols + col]:
-                pathLength += 1
-                visited[row * cols + col] = True
-                hasPath = hasPathCore(row, col - 1, pathLength, visited) or \
-                          hasPathCore(row - 1, col, pathLength, visited) or \
-                          hasPathCore(row, col + 1, pathLength, visited) or \
-                          hasPathCore(row + 1, col, pathLength, visited)
-                if not hasPath:  # 上下左右都没找到路径，则回退
-                    pathLength -= 1
-                    visited[row * cols + col] = False
-            return hasPath
+    def hasPath(self, matrix, rows, cols, path):
+        def find(i, j, length):
+            if length == len(path): return True  # 来到末尾，成功找到路径
+            has_path = False
+            if 0 <= i < rows and 0 <= j < cols and not visited[i][j] and path[length] == matrix[i * cols + j]:
+                # 注意这里and判断条件的顺序，必须先判断 i, j 的有效性，否则直接访问 visited 数组有可能越界
+                length += 1
+                visited[i][j] = 1
+                has_path = find(i - 1, j, length) or \
+                           find(i + 1, j, length) or \
+                           find(i, j - 1, length) or \
+                           find(i, j + 1, length)
+                if not has_path:  # 上下左右都没找到路径，则回退
+                    visited[i][j] = 0
+            return has_path
 
-        if not matrix or not rows or not cols or not path or rows < 1 or cols < 1:
-            return False
-        visited = [False] * (rows * cols)  # 访问过的字符位置置1
-        pathLength = 0
-        for row in range(rows):  # 遍历以每个格子作为开头的路径
-            for col in range(cols):
-                if hasPathCore(row, col, pathLength, visited):
+        visited = [[False] * cols for _ in range(rows)]  # 状态数组保存访问过的字符位置
+        for i in range(rows):
+            for j in range(cols):  # 遍历以每个格子作为开头的路径
+                if find(i, j, 0):
                     return True
-        return False
-
-    def hasPath2(self, matrix, rows, cols, path):
-        def visit(steps, matrix, rows, cols, path):
-            if len(steps) == len(path):
-                return True
-            i, j = steps[-1]
-            next_steps = [(ii, jj) for ii, jj in [(i, j - 1), (i, j + 1), (i - 1, j), (i + 1, j)]
-                          if 0 <= ii < rows and 0 <= jj < cols and (ii, jj) not in steps
-                          and matrix[ii * cols + jj] == path[len(steps)]]
-            return sum([visit(steps + [step], matrix, rows, cols, path) for step in next_steps])
-
-        if not matrix or not rows or not cols or not path or rows < 1 or cols < 1:
-            return False
-        for i, s in enumerate(matrix):
-            if s == path[0] and visit([(i // cols, i % cols)], matrix, rows, cols, path):
-                return True
         return False
 
 

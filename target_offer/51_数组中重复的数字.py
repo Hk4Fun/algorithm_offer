@@ -24,27 +24,26 @@ class Solution:
     # 返回重复数字的列表，没有直接返回-1
     def duplicate1(self, nums):
         if not nums: return -1
-        i, res = 0, []
+        i, res = 0, set()
         while i < len(nums):
             idx = nums[i]
             if i == idx:
                 i += 1
             elif nums[i] == nums[idx]:
-                res.append(nums[i])
+                res.add(nums[i])
                 i += 1
             else:  # 只是交换，i不移动，因为交换过来的数还未检测
                 nums[i], nums[idx] = nums[idx], nums[i]
-        return res if res else -1
+        return list(res) if res else -1
 
     def duplicate2(self, nums):
         if not nums: return -1
-        seen = set()
-        res = []
+        seen, res = set(), set()
         for num in nums:
             if num in seen:
-                res.append(num)
+                res.add(num)
             seen.add(num)
-        return res if res else -1
+        return list(res) if res else -1
 
 
 # ================================测试代码================================
@@ -60,16 +59,19 @@ class MyTest(Test):
         testArgs = []
 
         # 重复数字是最小的数字
-        testArgs.append([[2, 1, 3, 1, 4], {1}])
+        testArgs.append([[2, 1, 3, 1, 4], [1]])
 
         # 重复数字是最大的数字
-        testArgs.append([[2, 4, 3, 1, 4], {4}])
+        testArgs.append([[2, 4, 3, 1, 4], [4]])
 
         # 多个重复数字
-        testArgs.append([[2, 4, 2, 1, 4], {2, 4}])
+        testArgs.append([[2, 4, 2, 1, 4], [2, 4]])
 
         # 没有重复数字
         testArgs.append([[2, 1, 3, 0, 4], -1])
+
+        # 重复数字的重复次数大于2
+        testArgs.append([[2, 2, 2, 2, 2], [2]])
 
         # 空数组
         testArgs.append([[], -1])
@@ -78,9 +80,6 @@ class MyTest(Test):
         testArgs.append([None, -1])
 
         return testArgs
-
-    def convert(self, result, *func_arg):
-        return set(result) if result != -1 else result
 
 
 if __name__ == '__main__':

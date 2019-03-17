@@ -8,18 +8,19 @@ __date__ = '2018/2/27 16:09'
 但是，它不能进入方格（35,38），因为3+5+3+8 = 19。请问该机器人能够达到多少个格子？
 '''
 '''主要思路：
-思路1：回溯法。
-       1.从(0,0)开始走，先判断四个方向是否满足条件，满足就把相应位置标记为True，
-       再递归，最终统计有几处标记为True
-       2.判断当前节点是否可达的标准为：
-       1）当前节点在矩阵内；
-       2）当前节点未被访问过；
-       3）当前节点满足题目要求。
-       注意，这里不是寻找路径，而是类似于扫雷，
-       走过的地方发现满足条件就算作能够到达，走不下去了也不必回退
-       注意这里若去遍历所有位置看是否满足条件是不行的，因为有可能出现单个‘孤岛’或者是连在一起的‘孤岛’，
-       即这些位置虽然满足条件，但四周并不满足条件，这样机器人是无法到达这些位置的
-思路2：将思路1改成非递归，多一个栈实现。对比两种写法的异同，体会递归和迭代互改的套路
+典型的DFS
+1.从(0,0)开始走，先判断四个方向是否满足条件，满足就把相应位置标记为True，
+再递归，最终统计有几处标记为True
+2.判断当前节点是否可达的标准为：
+1）当前节点在矩阵内；
+2）当前节点未被访问过；
+3）当前节点满足题目要求。
+注意，这里不是寻找路径，而是类似于扫雷，
+走过的地方发现满足条件就算作能够到达，走不下去了也不必回退
+注意这里若去遍历所有位置看是否满足条件是不行的，因为有可能出现单个‘孤岛’或者是连在一起的‘孤岛’，
+即这些位置虽然满足条件，但四周并不满足条件，这样机器人是无法到达这些位置的
+除了使用 visited 数组标记访问过的位置，还可以进行剪枝：
+由于我们从 (0, 0) 出发，因此整体的遍历方向是向右和向下的，不必向左向上遍历
 '''
 
 
@@ -41,36 +42,36 @@ class Solution:
                     visited[i * cols + j] = True
                     movingCountCore(i, j, visited)
 
-        if threshold == None or threshold < 0 or not cols or not rows:
+        if threshold is None or threshold < 0 or not cols or not rows:
             return 0
         visited = [False] * (rows * cols)
         visited[0] = True
         movingCountCore(0, 0, visited)  # 从（0，0）开始移动
         return sum(visited)
 
-    def movingCount2(self, threshold, rows, cols):
-        def canReach(row, col):
+    def movingCount(self, threshold, rows, cols):
+        def can_reach(i, j):
             sum = 0
-            while row or col:
-                sum += row % 10 + col % 10
-                row //= 10
-                col //= 10
+            while i or j:
+                sum += i % 10 + j % 10
+                i //= 10
+                j //= 10
             return sum <= threshold
 
-        if threshold == None or threshold < 0 or not cols or not rows:
-            return 0
-        visited = [False] * (rows * cols)
-        visited[0] = True
-        stack = [(0, 0)]  # 递归中传的是坐标，所以压栈时应压坐标，这里先压(0, 0)表示从（0, 0）开始移动
-        while stack:  # 递归改迭代的外循环控制
-            row, col = stack.pop()  # 模拟进入函数时的弹栈，弹出参数
-            for i, j in [(row, col - 1), (row, col + 1), (row - 1, col), (row + 1, col)]:
-                if 0 <= i < rows and 0 <= j < cols \
-                        and canReach(i, j) \
-                        and not visited[i * cols + j]:
-                    visited[i * cols + j] = True
-                    stack.append((i, j))  # 模拟调用函数时的压栈，压入参数
-        return sum(visited)
+        def search(i, j):
+            if 0 <= i < rows and 0 <= j < cols and not visited[i][j] and can_reach(i, j):
+                # 注意这里and判断条件的顺序，必须先判断 i, j 的有效性，否则直接访问 visited 数组有可能越界
+                # 而且把 can_reach 放最后判断，减少重复计算
+                visited[i][j] = True
+                # search(i - 1, j) # 剪枝
+                search(i + 1, j)
+                # search(i, j - 1) # 剪枝
+                search(i, j + 1)
+
+        if threshold is None or threshold < 0 or not cols or not rows: return 0
+        visited = [[False] * cols for _ in range(rows)]
+        search(0, 0)
+        return sum(sum(row) for row in visited)
 
 
 # ================================测试代码================================
