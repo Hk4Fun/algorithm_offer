@@ -10,29 +10,19 @@ __date__ = '2018/3/5 12:22'
 动态规划（时间O(n),空间O(n)）。定义函数f(i)表示从第i位数字开始的不同翻译的数目，则状态转移方程为：
 f(i) = f(i+1)+g(i,i+1)f(i+2)。当第i位和第i+1位两位数字拼接起来的数字在10~25的范围内时，
 g(i,i+1)的值为1，否则为0。自底向上，在这里为从右向左翻译
-注：f(n) = f(n-1) = 1
+注：f(n) = 1，f(n-1) = f(n) + g(n-1,n)f(n+1)，若 g(n-1,n) 为 1，则易知f(n-1)=2，因此推出f(n+1)=1
 该方程类似于9_2_青蛙跳台阶，只不过多了g(i,i+1)的限制
 '''
 
 
 class Solution:
     def TranslationCount(self, number):
-        if number == None or number < 0:
-            return
         numberStr = str(number)
         length = len(numberStr)
-        dp = [1] * length
-        for i in range(length - 1, -1, -1):
-            if i < length - 1:
-                count = dp[i + 1]
-            else:
-                count = 1
-            if i < length - 1 and 10 <= int(numberStr[i:i + 2]) <= 25:
-                if i < length - 2:
-                    count += dp[i + 2]
-                else:
-                    count += 1
-            dp[i] = count
+        if length == 1: return 1
+        dp = [1] * (length + 1) # 多一个辅助数，相当于 f(n + 1) = 1
+        for i in range(length - 2, -1, -1):
+            dp[i] = dp[i + 1] + (dp[i + 2] if (10 <= int(numberStr[i:i + 2]) <= 25) else 0)
         return dp[0]
 
 
@@ -56,8 +46,6 @@ class MyTest(Test):
         testArgs.append([100, 2])
         testArgs.append([101, 2])
         testArgs.append([12258, 5])
-        testArgs.append([-100, None])
-        testArgs.append([None, None])
 
         return testArgs
 

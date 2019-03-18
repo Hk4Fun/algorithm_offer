@@ -20,36 +20,24 @@ __date__ = '2018/3/4 0:15'
 
 class Solution:
     def cuttingRope1(self, length):
-        if length == None:
-            return
-        if length < 2:
-            return 0
-        if length == 2:
-            return 1
-        if length == 3:
-            return 2
+        if not length: return
+        if length < 2: return 0
+        if length == 2: return 1
+        if length == 3: return 2
         dp = [0] * (length + 1)
         dp[1], dp[2], dp[3] = 1, 2, 3  # 注意边界值的填写
 
         for i in range(4, length + 1):
-            max = 0
+            max_val = 0
             for j in range(1, (i >> 1) + 1):
-                mul = dp[j] * dp[i - j]
-                if mul > max:
-                    max = mul
-                dp[i] = max
+                dp[i] = max_val = max(max_val, dp[j] * dp[i - j])
         return dp[length]
 
-
     def cuttingRope2(self, length):
-        if not length:
-            return
-        if length < 2:
-            return 0
-        if length == 2:
-            return 1
-        if length == 3:
-            return 2
+        if not length: return
+        if length < 2: return 0
+        if length == 2: return 1
+        if length == 3: return 2
 
         numOf3 = length // 3
         if length - numOf3 * 3 == 1:

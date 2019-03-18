@@ -17,18 +17,15 @@ class Solution:
     def digitAtIndex1(self, index):
         def countDigits(number):
             # 统计每个数的位数
-            if number == 0:
-                return 1
+            if number == 0: return 1
             count = 0
             while number:
                 count += 1
                 number //= 10
             return count
 
-        if index == None or index < 0:
-            return
-        count = 0
-        number = 0
+        if index is None or index < 0: return
+        count = number = 0
         while True:
             count += countDigits(number)
             if count > index:
@@ -38,8 +35,7 @@ class Solution:
             number += 1
 
     def digitAtIndex2(self, index):
-        if index == None or index < 0:
-            return
+        if index is None or index < 0: return
         digits = 1  # 表示位数
         while True:
             numbers = 10 if digits == 1 else 9 * (10 ** (digits - 1))  # digits位数字总共有多少个

@@ -27,14 +27,13 @@ gift[i,j]表示坐标为(i,j)的格子里礼物的价值。
 
 class Solution:
     def getMaxValue(self, values):
-        if not values:
-            return 0
+        if not values: return 0
         cols = len(values[0])
         dp = [0] * cols
         for i in range(len(values)):
             for j in range(cols):
                 dp[j] = max(dp[j], dp[j - 1] if j > 0 else 0) + values[i][j]
-        return dp[cols - 1]
+        return dp[-1]
 
 
 # ================================测试代码================================

@@ -20,8 +20,7 @@ __date__ = '2018/3/6 14:31'
 
 class Solution:
     def MaxDiff1(self, numbers):
-        if not numbers or len(numbers) < 2:
-            return 0
+        if not numbers or len(numbers) < 2: return 0
         length = len(numbers)
         maxDiff = numbers[1] - numbers[0]
         for buy in range(length):
@@ -29,19 +28,17 @@ class Solution:
                 curDiff = numbers[sell] - numbers[buy]
                 if curDiff > maxDiff:
                     maxDiff = curDiff
-        return maxDiff
+        return max(maxDiff, 0)
 
     def MaxDiff2(self, numbers):
-        if not numbers or len(numbers) < 2:
-            return 0
-        minVal = numbers[0]
-        maxDiff = numbers[1] - minVal
-        for i in range(1, len(numbers)):
-            curDiff = numbers[i] - minVal
-            # 一边更新最大差值一边更新最小值
-            maxDiff = max(curDiff, maxDiff)
-            minVal = min(numbers[i], minVal)
-        return maxDiff
+        if not numbers or len(numbers) < 2: return 0
+        # 设置两个变量分别记录最小价格和最大利润
+        maxProfit, minPrice = 0, float('inf')  # 设maxProfit为0可以保证出现负利润时返回0
+        for price in numbers:
+            minPrice = min(minPrice, price)  # 看一下目前有没有更低的价格来买入
+            profit = price - minPrice  # 假如现在卖出能赚多少钱
+            maxProfit = max(maxProfit, profit)  # 记录下最大利润，以便后面作参考比较
+        return maxProfit
 
 
 # ================================测试代码================================
@@ -58,11 +55,11 @@ class MyTest(Test):
 
         testArgs.append([[4, 1, 3, 2, 5], 4])
         testArgs.append([[1, 2, 4, 7, 11, 16], 15])  # 价格递增
-        testArgs.append([[16, 11, 7, 4, 2, 1], -1])  # 价格递减
+        testArgs.append([[16, 11, 7, 4, 2, 1], 0])  # 价格递减，此时选择不买股票利润最高
         testArgs.append([[16, 16, 16, 16, 16], 0])  # 价格全部相同
         testArgs.append([[9, 11, 5, 7, 16, 1, 4, 2], 11])
         testArgs.append([[2, 4], 2])
-        testArgs.append([[4, 2], -2])
+        testArgs.append([[4, 2], 0])
         testArgs.append([[1], 0])
         testArgs.append([[], 0])
         testArgs.append([None, 0])
