@@ -33,7 +33,7 @@ class Solution:
     """
 
     def maxDepth1(self, root):
-        return 1 + max(self.maxDepth1(root.left), self.maxDepth1(root.right)) if root else 0
+        return (1 + max(self.maxDepth1(root.left), self.maxDepth1(root.right))) if root else 0
 
     def maxDepth2(self, root):
         if root is None: return 0

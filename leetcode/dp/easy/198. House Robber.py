@@ -25,15 +25,12 @@ class Solution:
         :type nums: List[int]
         :rtype: int
         """
-        if not nums: return 0 # 没有店可抢
-        if len(nums) == 1: return nums[0] # 只有一家店可抢
-        prepre = nums[0]
-        pre = max(nums[0], nums[1])
-        for x in nums[2:]:
-            cur = max(prepre + x, pre)
-            prepre = pre
-            pre = cur
-        return pre # 返回pre而不是cur是考虑到如果只有两家店，那么cur是不存在的
+        if not nums: return 0  # 没有店可抢
+        if len(nums) == 1: return nums[0]  # 只有一家店可抢
+        a, b = nums[0], max(nums[0], nums[1])
+        for num in nums[2:]:
+            a, b = b, max(a + num, b)
+        return b
 
 
 # ================================测试代码================================

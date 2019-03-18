@@ -41,8 +41,7 @@ class Solution:
         def convert(root):
             if root is None: return
             convert(root.right)
-            self.sum += root.val
-            root.val = self.sum
+            root.val = self.sum = self.sum + root.val
             convert(root.left)
             return root
 

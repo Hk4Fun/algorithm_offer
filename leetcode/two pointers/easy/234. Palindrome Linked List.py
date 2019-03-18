@@ -46,13 +46,14 @@ class Solution(object):
             # 是为了充分利用 pre 在返回时的统一性，从而简化代码的逻辑
             fast = fast.next.next
             slow.next, slow, pre = pre, slow.next, slow
-        right_half = slow.next if fast else slow
-        isPali = True
-        while pre:
-            isPali = isPali and pre.val == right_half.val
-            pre.next, pre, slow = slow, pre.next, pre  # 此时，slow和pre的角色调换了（对比之前反转的代码）
-            right_half = right_half.next
-        return isPali
+        # 偶数结点时, fast最后停在None，反之奇数结点时停在尾结点上
+        pre, left, right = slow, pre, slow if not fast else slow.next
+        res = True
+        while right:
+            res = res and (left.val == right.val)
+            right = right.next
+            left.next, left, pre = pre, left.next, left
+        return res
 
 
 # ================================测试代码================================

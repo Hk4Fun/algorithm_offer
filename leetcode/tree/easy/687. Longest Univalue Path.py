@@ -47,30 +47,32 @@ class TreeNode:
         self.left = None
         self.right = None
 
+
 class Solution:
     """
     :type root: TreeNode
     :rtype: int
     """
+
     def longestUnivaluePath(self, root):
-        def dfs(root):
-            if not root: return 0
-            l_longest, r_longest = dfs(root.left), dfs(root.right)
-            l_len = l_longest + 1 if root.left and root.left.val == root.val else 0
-            r_len = r_longest + 1 if root.right and root.right.val == root.val else 0
-            self.longest = max(self.longest, l_len + r_len)
-            return max(l_len, r_len) # 只返回一边最大值
+        def find(root):
+            if root is None: return 0
+            l, r = find(root.left), find(root.right)
+            l = (l + 1) if root.left and root.left.val == root.val else 0
+            r = (r + 1) if root.right and root.right.val == root.val else 0
+            self.longest = max(self.longest, l + r)
+            return max(l, r)  # 只返回一边最大值
 
         self.longest = 0
-        dfs(root)
+        find(root)
         return self.longest
 
-    def longestUnivaluePath_simple(self, root): # 上一思路的简化版
+    def longestUnivaluePath_simple(self, root):  # 上一思路的简化版
         def dfs(root, parent_val):
             if not root: return 0
-            l_longest, r_longest = dfs(root.left, root.val), dfs(root.right, root.val)
-            self.longest = max(self.longest, l_longest + r_longest)
-            return 1 + max(l_longest, r_longest) if root.val == parent_val else 0 # 只返回一边最大值
+            l, r = dfs(root.left, root.val), dfs(root.right, root.val)
+            self.longest = max(self.longest, l + r)
+            return (1 + max(l, r)) if root.val == parent_val else 0  # 只返回一边最大值
 
         self.longest = 0
         dfs(root, None)

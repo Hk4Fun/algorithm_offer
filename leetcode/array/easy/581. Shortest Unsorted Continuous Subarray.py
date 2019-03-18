@@ -35,21 +35,20 @@ Approach #4 Using Stack [Accepted]
 4、beg后退，来到首个比min小的数
 5、end后退，来到首个比max大的数
 6、end - beg - 1
-该算法在leetcode上beats 98.59%
 
 思路4（时间O（n），空间O（1））：
 最优解，是思路3的简化版
 可以一边找max一边更新end：
-从左到右看当前数是否比max还大，是的话更新max，否则更新end（end是下标），
+从左到右看当前数是否大于等于max，是的话更新max，否则更新end（end是下标），
 等于的情况下max和end都不更新
 min和beg同理：
-从右到左看当前数是否比min还小，是的话更新min，否则更新beg（beg是下标）
+从右到左看当前数是否大于等于min，是的话更新min，否则更新beg（beg是下标）
 等于的情况下min和beg都不更新
 最终end来到这样一个位置：
-它的左边存在比它还大的数，而右边都比它大，
+它的左边存在比它还大的数，而右边都大于等于它，
 且end不能再往右了，再往右则左边就不存在比它大的数了
 beg同理：
-它的右边存在比它还小的数，而左边都比它小，
+它的右边存在比它还小的数，而左边都小于等于它，
 且beg不能再往左了，再往左则右边就不存在比它小的数了
 返回end - beg + 1
 这里有一个特殊情况：
@@ -95,24 +94,23 @@ class Solution:
         while beg < len(nums) - 1 and nums[beg] <= nums[beg + 1]: beg += 1
         if beg == len(nums) - 1: return 0  # 已经排好序，直接返回0
         while end > 0 and nums[end] >= nums[end - 1]: end -= 1
-        minV, maxV = min(nums[beg: (end + 1)]), max(nums[beg:(end + 1)])
+        minV, maxV = min(nums[beg:(end + 1)]), max(nums[beg:(end + 1)])
         while beg >= 0 and nums[beg] > minV: beg -= 1
         while end <= len(nums) - 1 and nums[end] < maxV: end += 1
         return end - beg - 1
 
     def findUnsortedSubarray4(self, nums):
         beg, end = -1, -2
-        minV, maxV = nums[-1], nums[0]
-        n = len(nums)
-        for i in range(1, n):
+        maxV, minV = -float('inf'), float('inf')
+        for i in range(len(nums)):
             if nums[i] >= maxV:
                 maxV = nums[i]
             else:
                 end = i
-            if nums[-1 - i] <= minV:
-                minV = nums[-1 - i]
+            if nums[-i - 1] <= minV:
+                minV = nums[-i - 1]
             else:
-                beg = n - 1 - i
+                beg = len(nums) - i - 1
         return end - beg + 1
 
     def findUnsortedSubarray5(self, nums):  # pythonic

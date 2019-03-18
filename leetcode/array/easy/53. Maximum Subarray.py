@@ -25,8 +25,8 @@ class Solution:
         :type nums: List[int]
         :rtype: int
         """
-        curSum = maxSum = nums[0]
-        for num in nums[1:]:
+        curSum, maxSum = 0, -float('inf')
+        for num in nums:
             curSum = max(num, curSum + num)
             maxSum = max(maxSum, curSum)
         return maxSum

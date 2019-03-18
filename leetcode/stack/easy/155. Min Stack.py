@@ -31,38 +31,24 @@ class MinStack:
         """
         initialize your data structure here.
         """
-        self.stack = []
-        self.minStack = []
+        self.stack, self.minStack = [], []
 
-    def push(self, x):
-        """
-        :type x: int
-        :rtype: void
-        """
+    def push(self, x: int) -> None:
         self.stack.append(x)
-        if not self.stack or x < self.getMin():
+        if not self.minStack or self.getMin() > x:
             self.minStack.append(x)
         else:
             self.minStack.append(self.getMin())
 
-    def pop(self):
-        """
-        :rtype: void
-        """
+    def pop(self) -> None:
         if not self.stack: return
         self.minStack.pop()
         return self.stack.pop()
 
-    def top(self):
-        """
-        :rtype: int
-        """
+    def top(self) -> int:
         if not self.stack: return
         return self.stack[-1]
 
-    def getMin(self):
-        """
-        :rtype: int
-        """
+    def getMin(self) -> int:
         if not self.minStack: return
         return self.minStack[-1]

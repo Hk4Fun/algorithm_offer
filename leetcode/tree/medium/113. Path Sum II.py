@@ -46,17 +46,19 @@ class Solution:
     """
 
     def pathSum(self, root, sum):
-        def path(root, sum, res):
+        def find(root, curSum, path):
             if not root: return
-            if not root.left and not root.right and sum == root.val:
-                res.append(root.val)
-                self.res.append(res)
-            path(root.left, sum - root.val, res + [root.val])
-            path(root.right, sum - root.val, res + [root.val])
+            curSum += root.val
+            path.append(root.val)
+            if not root.left and not root.right and curSum == sum:
+                res.append(path[:])
+            find(root.left, curSum, path)
+            find(root.right, curSum, path)
+            path.pop()
 
-        self.res = []
-        path(root, sum, [])
-        return self.res
+        res = []
+        find(root, 0, [])
+        return res
 
 
 # ================================测试代码================================

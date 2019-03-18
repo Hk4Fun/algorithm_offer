@@ -45,7 +45,7 @@ target_offer/18_树的子结构.py，暴力前序遍历
 
 思路2（时间O（n），空间O（n），s--n，t--m，n>=m）：
 target_offer/62_二叉树的序列化和反序列化.py
-序列化该二叉树，然后用in判断（KMP）
+序列化该二叉树（不能用层序遍历序列化），然后用in判断（KMP）
 '''
 
 
@@ -58,7 +58,7 @@ class Solution:
 
     def isSubtree1(self, s, t):
         def sub(s, t):
-            if not s or not t: return s == t
+            if not s or not t: return s is t
             return s.val == t.val and sub(s.left, t.left) and sub(s.right, t.right)
 
         return True if (s and (sub(s, t) or self.isSubtree1(s.left, t) or self.isSubtree1(s.right, t))) else False

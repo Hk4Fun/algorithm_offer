@@ -57,9 +57,6 @@ class Solution:
         return path(root, sum) + self.pathSum1(root.left, sum) + self.pathSum1(root.right, sum)
 
     def pathSum2(self, root, sum):
-        self.count = 0
-        self.cache = {0: 1} # 保证从根节点出发的和被统计
-
         def findPaths(root, cur_sum):
             if not root: return
             cur_sum += root.val
@@ -70,6 +67,8 @@ class Solution:
             findPaths(root.right, cur_sum)
             self.cache[cur_sum] -= 1  # 记得减回去，因为其他节点不再以该结点为祖先
 
+        self.count = 0
+        self.cache = {0: 1}  # 保证从根节点出发的和被统计
         findPaths(root, 0)
         return self.count
 

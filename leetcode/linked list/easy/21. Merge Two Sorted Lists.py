@@ -11,7 +11,7 @@ Output: 1->1->2->3->4->4
 '''主要思路：
 target_offer/17_合并两个排序的链表.py
 时间O（n+m），空间O（1）
-迭代or递归
+迭代or递归，递归不用创建伪头结点
 '''
 
 
@@ -47,9 +47,8 @@ class Solution:
         if l1.val <= l2.val:
             l1.next = self.mergeTwoLists2(l1.next, l2)
             return l1
-        else:
-            l2.next = self.mergeTwoLists2(l1, l2.next)
-            return l2
+        l2.next = self.mergeTwoLists2(l1, l2.next)
+        return l2
 
 
 # ================================测试代码================================

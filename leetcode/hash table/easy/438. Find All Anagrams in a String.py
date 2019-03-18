@@ -43,15 +43,30 @@ The substring with start index = 2 is "ab", which is an anagram of "ab".
 
 
 class Solution:
-    def findAnagrams(self, s, p):
-        """
-        :type s: str
-        :type p: str
-        :rtype: List[int]
-        """
-        if len(s) < len(p): return []
+    """
+    :type s: str
+    :type p: str
+    :rtype: List[int]
+    """
+
+    def findAnagrams1(self, s, p): # 暴力解法，直接 TLE 了
+        def isAnagram(s1, s2):
+            d = [0] * 26
+            for ch in s1:
+                d[ord(ch) - ord('a')] += 1
+            for ch in s2:
+                d[ord(ch) - ord('a')] -= 1
+            return d == [0] * 26
+
         res = []
-        table_s, table_p = {}, {}
+        for i in range(0, len(s) - len(p) + 1):
+            if isAnagram(s[i:i + len(p)], p):
+                res.append(i)
+        return res
+
+    def findAnagrams2(self, s, p):
+        if len(s) < len(p): return []
+        table_s, table_p, res = {}, {}, []
         for i in range(len(p)):
             table_s[s[i]] = table_s.setdefault(s[i], 0) + 1
             table_p[p[i]] = table_p.setdefault(p[i], 0) + 1
