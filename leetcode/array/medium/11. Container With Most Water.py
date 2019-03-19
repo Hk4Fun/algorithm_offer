@@ -39,8 +39,10 @@ class Solution:
         while l < r:
             h = min(height[l], height[r])
             maxArea = max(maxArea, h * (r - l))
-            while height[l] <= h and l < r: l += 1  # 直到遇到比原来还高的高度
-            while height[r] <= h and l < r: r -= 1
+            while l < r and height[l] <= h: l += 1  # 直到遇到比原来还高的高度
+            while l < r and height[r] <= h: r -= 1
+            # 以上两句每次循环只会命中一句，因为 h = min(height[l], height[r])
+            # 只有当 height[l] = height[r] 时才会都命中
         return maxArea
 
 

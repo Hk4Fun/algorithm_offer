@@ -21,7 +21,7 @@ Output: "bb"
               True,  如果子串s(i,j)为回文串
 设 dp(i,j) =  
               False, 如果子串s(i,j)不为回文串
-则 dp(i,j) = dp(i+1,j-1) and s[i] == s[j]
+则 dp(i,j) = dp(i+1,j-1) and s[i] == s[j] (j >= i)
 base case: dp(i,i) = True, dp(i, i+1) = (s[i] == s[i+1])
 
 空间可以优化成O(n)，需要记录两行
@@ -82,8 +82,7 @@ class Solution:
         for i in range(len(s)):
             l1, r1 = extend(i, i)
             l2, r2 = extend(i, i + 1)
-            len1, len2 = r1 - l1 + 1, r2 - l2 + 1
-            maxLen = max(len1, len2)
+            maxLen = max(r1 - l1 + 1, r2 - l2 + 1)
             if maxLen > end - start:
                 start = i - (maxLen - 1) // 2
                 end = i + maxLen // 2
