@@ -39,7 +39,7 @@ class Solution:
             l, r = i + 1, len(nums) - 1  # 只考虑右边的数，左边已经检查过
             while l < r:
                 s = nums[l] + nums[r] + nums[i]
-                if s < 0:  # 不用跳过重复值，因为如果遇到重复值，那么下一循环自然还会命中这一行
+                if s < 0:  # 如果遇到重复值，那么下一循环自然还会命中这一行
                     l += 1
                 elif s > 0:
                     r -= 1
@@ -47,7 +47,7 @@ class Solution:
                     res += [nums[i], nums[l], nums[r]],
                     l += 1
                     while nums[l] == nums[l - 1] and l < r: l += 1  # 跳过重复值，否则会重复添加
-                    # r不用-1，因为下一循环一定是nums[l] + nums[r] + nums[i] > 0， 即s > 0, r -= 1
+                    # r不用-1，因为下一循环一定是nums[l] + nums[r] + nums[i] > 0， 即 s > 0, r -= 1
         return res
 
 
