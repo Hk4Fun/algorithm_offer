@@ -175,7 +175,7 @@ print([fib1(i) for i in range(10)])
 print(fib1.cache_info())
 
 ######################################################
-# 自己实现一个 lru_cache 装饰器
+# 自己实现一个简单的 lru_cache 装饰器
 print('- ' * 50)
 
 

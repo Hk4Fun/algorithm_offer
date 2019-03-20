@@ -45,7 +45,7 @@ class Solution:
 
         def find_idx():
             """从后往前找到逆序区的左边界idx，即nums[idx:]为逆序区，O(n)"""
-            for i in range(len(nums) - 1, 0, -1):
+            for i in range(len(nums) - 1, -1, -1):
                 if nums[i] > nums[i - 1]:
                     return i
             return 0

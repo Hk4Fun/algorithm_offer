@@ -18,18 +18,17 @@ class Solution:
     def sqrt_binary(self, num, accuracy):
         if (not isinstance(num, float) and not isinstance(num, int)) or num < 0:
             return
-        max = num
-        min = 0
-        mid = (min + max) / 2
-        while abs(mid * mid - num) > accuracy:
-            if mid * mid > num:
-                max = mid
-            elif mid * mid < num:
-                min = mid
+        l, r = 0, num
+        m = (l + r) / 2
+        while abs(m * m - num) > accuracy:
+            if m * m > num:
+                r = m
+            elif m * m < num:
+                l = m
             else:
-                return mid
-            mid = (min + max) / 2
-        return mid
+                return m
+            m = (l + r) / 2
+        return m
 
     def sqrt_newton(self, num, accuracy):
         if (not isinstance(num, float) and not isinstance(num, int)) or num < 0:
@@ -38,6 +37,17 @@ class Solution:
         while abs(x * x - num) > accuracy:
             x = (x + num / x) / 2
         return x
+
+    # 同样的思路，我们可以求pi的值
+    # from math import sin, tan
+    #
+    # def pi_newton(accuracy):
+    #     x = 3  # 设置初值，初值的设置影响到计算的次数
+    #     while abs(sin(x)) > accuracy:
+    #         x = x - tan(x) # 根据上面的思路推导
+    #     return x
+    #
+    # print(pi_newton(0.0000000000001))
 
 
 # ================================测试代码================================
