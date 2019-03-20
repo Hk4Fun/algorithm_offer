@@ -46,6 +46,7 @@ class Solution:
         min1 = min2 = float('inf')
         max1 = max2 = max3 = -float('inf')
         for num in nums:
+            # 注意这里的等于号
             if num <= min1: # num <= min1 <= min2
                 min2 = min1
                 min1 = num
