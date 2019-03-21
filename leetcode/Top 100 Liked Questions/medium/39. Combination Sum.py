@@ -49,7 +49,6 @@ class Solution:
                 dfs(path + [candidates[i]], i, target - candidates[i])
 
         res = []
-        candidates.sort()  # 先排序，避免重复
         dfs([], 0, target)
         return res
 
