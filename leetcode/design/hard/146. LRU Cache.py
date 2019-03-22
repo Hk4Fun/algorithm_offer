@@ -35,6 +35,8 @@ cache.get(4);       // returns 4
        然后首尾相连，构成双向环形链表
       
 思路3：collections.OrderedDict
+
+思路4：py3.6以后dict就是OrderedDict了
 '''
 from collections import OrderedDict
 
@@ -149,7 +151,27 @@ class LRUCache3:
         if key in self.cache:
             self.cache.pop(key)
         elif len(self.cache) == self.capacity:
-            self.cache.popitem(False)  # False表示删除字典尾部结点（默认删除头结点）
+            self.cache.popitem(last=False)  # False表示删除字典头结点（默认删除尾结点）
+        self.cache[key] = val
+
+
+class LRUCache4:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.cache = {}
+
+    def get(self, key):
+        if key in self.cache:
+            val = self.cache.pop(key)
+            self.cache[key] = val
+            return val
+        return -1
+
+    def put(self, key, val):
+        if key in self.cache:
+            self.cache.pop(key)
+        elif len(self.cache) == self.capacity:
+            self.cache.pop(list(self.cache.keys())[0])  # dict的popitem只能删除尾结点，没有last参数
         self.cache[key] = val
 
 
@@ -175,7 +197,7 @@ print([fib1(i) for i in range(10)])
 print(fib1.cache_info())
 
 ######################################################
-# 自己实现一个简单的 lru_cache 装饰器
+# 自己实现一个简单的 lru_cache 装饰器，没有空间限制，严格来讲根本不算是lru，就是一个cache
 print('- ' * 50)
 
 
