@@ -7,6 +7,8 @@ __date__ = '2018/3/15 23:15'
 
 '''
 
+from collections import deque
+
 
 class Solution:
     def bfs(self, graph, start):
@@ -16,17 +18,17 @@ class Solution:
         :param start: 遍历的起始顶点
         :return: list，按顺序遍历过的顶点的值
         '''
-        res = []
-        visited = set()
-        res.append(start)
-        visited.add(start)
-        queue = [start]
-        while queue:
-            cur = queue.pop(0)
-            for next in graph[cur] - visited:
-                res.append(next)  # 访问结点后才入队，不能反过来，否则会重复访问
-                visited.add(next)
-                queue.append(next)
+        res = [start]
+        level = [start]
+        visited = {start}
+        while level:
+            next_level = []
+            for cur in level:
+                for next in graph[cur] - visited:
+                    res.append(next)  # 访问结点后才入队，不能反过来，否则会重复访问
+                    visited.add(next)
+                    next_level.append(next)
+            level = next_level
         return res
 
 
