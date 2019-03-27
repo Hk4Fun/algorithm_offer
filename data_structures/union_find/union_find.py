@@ -9,6 +9,7 @@ log*n = 0 if n <= 1 else 1 + log*n  (递归定义)
 其复杂度低于logn，近乎是O(1)级别的
 '''
 
+
 class UnionFind:
     def __init__(self, n: int) -> None:
         self.n = n  # 分量个数，一开始每个触点还没相连，各自形成分量
@@ -50,7 +51,8 @@ class QuickFind(UnionFind):
         if pid == qid: return
         # 遍历整个数组，将所有和id[p]相等的元素的值变为id[q]的值，反之亦可
         for i, v in enumerate(self.id):
-            if v == pid: self.id[i] = qid
+            if v == pid:
+                self.id[i] = qid
         self.n -= 1
 
 
@@ -96,7 +98,7 @@ class DQuickUnion(QuickUnion):
         pid, qid = self.find(p), self.find(q)
         if pid == qid: return
         # 将深度小的树的根节点连接到深度大的树的根节点
-        # 当一个深度比另一个大是，连接后深度大的树其深度不会改变
+        # 当一个深度比另一个大时，连接后深度大的树其深度不会改变
         # 但如果两个深度一样，则连接后深度+1
         if self.depth[pid] < self.depth[qid]:
             self.id[pid] = qid
