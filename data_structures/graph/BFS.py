@@ -7,8 +7,6 @@ __date__ = '2018/3/15 23:15'
 
 '''
 
-from collections import deque
-
 
 class Solution:
     def bfs(self, graph, start):
