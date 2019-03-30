@@ -25,12 +25,12 @@ target_offer/61_按之字型顺序打印二叉树.py
 '''
 
 
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
 
 class Solution:
     def zigzagLevelOrder(self, root):
@@ -46,8 +46,10 @@ class Solution:
             res.append([])
             for cur in level:
                 res[-1].append(cur.val)
-                if cur.left: next_level.append(cur.left)
-                if cur.right: next_level.append(cur.right)
+                if cur.left:
+                    next_level.append(cur.left)
+                if cur.right:
+                    next_level.append(cur.right)
             if next == 1: res[-1] = res[-1][::-1]  # 偶数行会多遍历一遍
             level = next_level
             next = 1 - next

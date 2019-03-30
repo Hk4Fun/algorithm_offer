@@ -242,8 +242,8 @@ class BinaryTree:
         left = self._is_balanced(node.left)
         if left < 0: return -1
         right = self._is_balanced(node.right)
-        if right < 0: return -1
-        return -1 if abs(left - right) > 1 else max(left, right) + 1
+        if right < 0 or abs(left - right) > 1: return -1
+        return max(left, right) + 1
 
     def max_distance(self):
         if self.root is None:

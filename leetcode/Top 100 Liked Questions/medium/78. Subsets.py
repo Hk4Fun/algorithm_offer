@@ -67,20 +67,14 @@ class Solution:
 
     def subsets2(self, nums):
         res = [[]]
-        for i, n in enumerate(nums):
-            # for r in res[:len(res)]:
-            #     res.append([n] + r)
-            res += [[n] + r for r in res]
+        for num in nums:
+            res += [[num] + r for r in res]
         return res
 
     def subsets3(self, nums):
         res = []
         for i in range(1 << len(nums)):
-            tmp = []
-            for j in range(len(nums)):
-                if (1 << j) & i:
-                    tmp.append(nums[j])
-            res.append(tmp)
+            res.append([nums[j] for j in range(len(nums)) if (1 << j) & i])
         return res
 
     def subsets3_oneline(self, nums):

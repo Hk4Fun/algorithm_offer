@@ -20,7 +20,6 @@ return its bottom-up level order traversal as:
 '''主要思路：
 target_offer/60_把二叉树打印成多行.py, 只不过最后要逆序输出
 时间O（n），空间O（n）
-recursively(dfs) and iteratively(bfs)
 '''
 
 
@@ -38,22 +37,19 @@ class Solution:
     """
 
     def levelOrderBottom_bfs(self, root):
-        # 不用insert(0, list), 该操作为O(n)
-        if not root: return []
-        res = [[root.val]]
-        cur_level = [root]
-        while cur_level:  # 这里用cur_level和next_level而不用一个queue是为了避免使用pop(0)，该操作为O(n)
+        if root is None: return []
+        level, res = [root], []
+        while level:
             next_level = []
             res.append([])
-            for node in cur_level:
+            for node in level:
+                res[-1].append(node.val)
                 if node.left:
                     next_level.append(node.left)
-                    res[-1].append(node.left.val)
                 if node.right:
                     next_level.append(node.right)
-                    res[-1].append(node.right.val)
-            cur_level = next_level
-        return res[-2::-1]  # 最后一个为[]，应去掉
+            level = next_level
+        return res[::-1]
 
     def levelOrderBottom_bfs_pythonic(self, root):  # 上一思路的简化版，相当精妙，来自lee215
         res, queue = [], [root]

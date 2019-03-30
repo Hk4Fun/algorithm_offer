@@ -143,8 +143,7 @@ def quick(arr):
 def quick_3way(arr):
     def partition(l, r):
         pivot = arr[l]
-        lt, gt = l, r
-        i = l + 1
+        lt, i, gt,  = l, l, r
         while i <= gt:
             if arr[i] < pivot:
                 _swap(arr, lt, i)

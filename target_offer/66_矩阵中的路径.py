@@ -29,7 +29,7 @@ class Solution:
                            find(i, j - 1, length) or \
                            find(i, j + 1, length)
                 if not has_path:  # 上下左右都没找到路径，则回退
-                    visited[i][j] = 0
+                    visited[i][j] = False
             return has_path
 
         visited = [[False] * cols for _ in range(rows)]  # 状态数组保存访问过的字符位置

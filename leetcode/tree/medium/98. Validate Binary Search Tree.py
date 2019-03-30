@@ -28,8 +28,11 @@ Explanation: The input is: [5,1,4,null,null,3,6]. The root node's value
 '''
 '''主要思路：
 时间O（n），空间O（n）
-中序遍历，判断是否为严格递增序列
-也可以一边遍历一边判断，这可以只遍历一次，但需要保存前一个数
+思路1：中序遍历（递归），判断是否为严格递增序列
+思路2：中序遍历（递归），一边遍历一边判断，这样可以只遍历一次，但需要保存前一个数
+思路3：中序遍历（迭代），一边迭代一边判断，这样可以只遍历一次，但需要保存前一个数
+思路4：前序遍历（递归），传递每个结点值的上下界，左结点的上界和右结点的下界是当前结点的值
+
 '''
 
 
@@ -70,6 +73,30 @@ class Solution:
         self.pre = -float('inf')
         return in_order(root)
 
+    def isValidBST3(self, root):
+        stack, last = [], -float('inf')
+        cur = root
+        while stack or cur:
+            if cur:
+                stack.append(cur)
+                cur = cur.left
+            else:
+                cur = stack.pop()
+                if last >= cur.val:
+                    return False
+                last = cur.val
+                cur = cur.right
+        return True
+
+    def isValidBST4(self, root):
+        def is_bst(node, min_val, max_val):
+            if node is None: return True
+            return (min_val < node.val < max_val
+                    and is_bst(node.left, min_val, node.val)
+                    and is_bst(node.right, node.val, max_val))
+
+        return is_bst(root, -float('inf'), float('inf'))
+
 
 # ================================测试代码================================
 from Test import Test
@@ -84,14 +111,6 @@ class MyTest(Test):
         # testArgs中每一项是一次测试，每一项由两部分构成
         # 第一部分为被测试函数的参数，第二部分只有最后一个，为正确答案
 
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
-        testArgs.append([])
         testArgs.append([])
         testArgs.append([])
 
