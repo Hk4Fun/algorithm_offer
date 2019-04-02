@@ -43,7 +43,7 @@ class Solution:
         dp = [False] * len(s)
         for i in range(len(s)):
             for w in wordDict:
-                if (w == s[i - len(w) + 1:i + 1]) and (dp[i - len(w)] or i - len(w) == -1):
+                if (w == s[i - len(w) + 1:i + 1]) and (i - len(w) == -1 or dp[i - len(w)]):
                     dp[i] = True
                     break
         return dp[-1]
